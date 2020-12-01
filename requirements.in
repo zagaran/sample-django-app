@@ -1,0 +1,10 @@
+Django==2.2.*
+django-environ
+requests
+psycopg2
+social-auth-app-django
+django-extensions
+
+# Convinience
+ipython
+werkzeug
