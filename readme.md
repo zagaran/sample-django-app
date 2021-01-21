@@ -30,6 +30,11 @@ django_social
 crispy_forms
 ```
 
+The codebase also has a number of reference examples.  These are all marked with the comment:
+```
+# TODO: delete me; this is just a reference example
+```
+
 # TODO
 
 
