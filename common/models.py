@@ -16,7 +16,7 @@ class TimestampedModel(models.Model):
         if not update_dict:
             update_dict = kwargs
         update_fields = {"updated_on"}
-        for k, v in update_dict.iteritems():
+        for k, v in update_dict.items():
             setattr(self, k, v)
             update_fields.add(k)
         self.save(update_fields=update_fields)
