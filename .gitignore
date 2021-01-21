@@ -31,8 +31,8 @@ cover/
 
 # Django stuff:
 *.log
-db.sqlite3
-db.sqlite3-journal
+*.sqlite3
+*.sqlite3-journal
 
 
 # Environments

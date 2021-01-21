@@ -19,11 +19,14 @@
       </form>
     {% else %}
       <div class="nav-item">
+        {# START_FEATURE django_social #}
         <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-primary navbar-btn">Log in with Google</a>
+        {# END_FEATURE django_social #}
       </div>
     {% endif %}
     </div>
     </nav>
+    {# START_FEATURE bootstrap_messages #}
     <div class="container">
       {% for message in messages %}
         <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %} alert-dismissible" role="alert">
@@ -35,5 +38,6 @@
       {% endfor %}
       {% block body %}{% endblock %}
     </div>
+    {# END_FEATRUE bootstrap_messages #}
   </body>
 </html>

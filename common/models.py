@@ -27,12 +27,14 @@ class TimestampedModel(models.Model):
 
 # Create your models here.
 class User(AbstractUser, TimestampedModel):
-    username = None  # disable the AbstractUser.username field
     email = models.EmailField(unique=True)
+    # START_FEATURE django_social
+    username = None  # disable the AbstractUser.username field
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
     
     objects = UserManager()
+    # END_FEATURE django_social
     
     def __str__(self):
         return self.email

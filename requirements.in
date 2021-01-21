@@ -1,9 +1,16 @@
 Django==2.2.*
 django-environ
+django-extensions
 requests
 psycopg2
+
+# START_FEATURE django_social
 social-auth-app-django
-django-extensions
+# END_FEATURE django_social
+
+# START_FEATURE crispy_forms
+django-crispy-forms
+# END_FEATURE crispy_forms
 
 # Convinience
 ipython
