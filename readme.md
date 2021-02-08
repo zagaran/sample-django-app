@@ -1,5 +1,6 @@
 # Local Project Setup
 
+
 ```
 pip install -r requirements.txt
 cp config/.env.example config/.env
@@ -12,7 +13,9 @@ To run the project, use `python manage.py runserver_plus`
 
 To access the database, use `python manage.py shell_plus`
 
+
 # Features
+
 
 There are a number of optional features that have been included in this sample.
 The code related to each sits between comments
@@ -38,25 +41,22 @@ The codebase also has a number of reference examples.  These are all marked with
 # TODO: delete me; this is just a reference example
 ```
 
-# TODO
 
+# Feature Descriptions
 
-Write a setup script that does the following:
-
-* prompts the user for a project name and replaces instances of `[PROJECT]` with that name
-* prompts the user with each feature tag and removes the code between those feature tags or not
-* runs pip-compile
-* remakes migrations
-
-# Features
 
 ## Django-React
 
+
 ### Additional Setup
+
+
 When using this feature, make sure to install the Node.js requirements using the manager of your choice 
 (either `npm install` or `yarn install` will work) before proceeding with development.
 
+
 ### Special Consideration for Running
+
 
 For development on localhost when using Django-React, you should run the following command in a separate terminal to
 your standard `runserver` command.
@@ -66,7 +66,9 @@ your standard `runserver` command.
 If you have configured everything correctly, you should see each command complete and notify you
 that the project is ready to be viewed.
 
+
 ### Adding a new React component
+
 
 In this paradigm, React components are compiled and injected into the standard Django template. This means we can take 
 advantage of the built-in templating functionality of Django and, with a bit of elbow grease, use the power of React to
@@ -80,13 +82,17 @@ make those templates responsive.
 3. Finally, load your React component on the page. `{% react_component 'Home' id='home' %}`
     - You can add any number of props as named keywords, e.g. `{% react_component 'Home' id='home' prop1=value_from_context %}`
 
+
 ### Preparing for deployment
+
 
 To prepare the application for deployment, run `nwb build --no-vendor`. This will generate a `webpack_bundles` folder
 in your `/static` folder populated with the compiled React components. You may now deploy the app as you would any standard
 Django application. 
 
+
 ### Other Notes
+
 
 - If you use `nwb serve` in your local development environment, you may see a persistent XHR error in the console -- a 
 request by the app to something like `http://localhost:8000/sockjs-node/info?t=123456789`. This is normal and will 
@@ -99,3 +105,14 @@ needs to be.
    - If you find that the number of files collected by `python manage.py collectstatic` continues to grow, this may be
     a sign that you should consider deleting the generated files and the `staticfiles` directory and starting with a
      fresh `python manage.py collectstatic`.
+     
+
+# TODO
+
+
+Write a setup script that does the following:
+
+* prompts the user for a project name and replaces instances of `[PROJECT]` with that name
+* prompts the user with each feature tag and removes the code between those feature tags or not
+* runs pip-compile
+* remakes migrations
