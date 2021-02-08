@@ -7,7 +7,6 @@ psycopg2
 # START_FEATURE django_react
 django-react-components
 django-webpack-loader
-whitenoise
 # END_FEATURE django_react
 
 
