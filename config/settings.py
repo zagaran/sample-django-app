@@ -12,9 +12,14 @@ import os
 import environ
 from django.contrib.messages import constants as messages
 
+# START_FEATURE sentry
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+# END_FEATURE sentry
 
 env = environ.Env(
-    DEBUG=(bool, False)
+    DEBUG=(bool, False),
+    DEBUG_TOOLBAR=(bool, False),
 )
 environ.Env.read_env()
 
@@ -28,8 +33,45 @@ SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
+DEBUG_TOOLBAR = DEBUG and env("DEBUG_TOOLBAR")
+
+if not DEBUG:
+    sentry_sdk.init(
+        dsn=env('SENTRY_DSN'),
+        integrations=[DjangoIntegration()],
+        traces_sample_rate=1.0,
+        # If you wish to associate users to errors (assuming you are using
+        # django.contrib.auth) you may enable sending PII data.
+        send_default_pii=True
+    )
 
 ALLOWED_HOSTS = []
+
+# START_FEATURE debug_toolbar
+INTERNAL_IPS = ['127.0.0.1']
+# END_FEATURE debug_toolbar
+
+# START_FEATURE django_react
+WEBPACK_LOADER_HOTLOAD = env('WEBPACK_LOADER_HOTLOAD')
+if WEBPACK_LOADER_HOTLOAD:
+    WEBPACK_LOADER = {
+        'DEFAULT': {
+            'LOADER_CLASS': "config.webpack_loader.DynamicWebpackLoader"
+        }
+    }
+else:
+    WEBPACK_LOADER = {
+        'DEFAULT': {
+            'CACHE': not DEBUG,
+            'BUNDLE_DIR_NAME': 'webpack_bundles/',  # must end with slash
+            'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+            'POLL_INTERVAL': 0.1,
+            'TIMEOUT': None,
+            'IGNORE': [r'.+\.hot-update.js', r'.+\.map'],
+            'LOADER_CLASS': 'webpack_loader.loader.WebpackLoader',
+        }
+    }
+# END_FEATURE django_react
 
 
 # Application definition
@@ -48,8 +90,13 @@ INSTALLED_APPS = [
     # START_FEATURE crispy_forms
     'crispy_forms',
     # END_FEATURE crispy_forms
+    # START_FEATURE django_react
+    'django_react_components',
+    'webpack_loader',
+    # END_FEATURE django_react
     'common',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -60,6 +107,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# START_FEATURE debug_toolbar
+if DEBUG_TOOLBAR:
+    INSTALLED_APPS.append('debug_toolbar')
+    MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
+# END_FEATURE debug_toolbar
 
 ROOT_URLCONF = 'config.urls'
 
@@ -124,7 +177,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
 
 AUTH_USER_MODEL = "common.User"
@@ -155,4 +210,4 @@ MESSAGE_TAGS = {
     messages.WARNING: "alert-warning",
     messages.ERROR: "alert-danger",
 }
-# END_FEATRUE bootstrap_messages
+# END_FEATURE bootstrap_messages

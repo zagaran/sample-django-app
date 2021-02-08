@@ -1,3 +1,8 @@
+# START_FEATURE django_react
+node_modules/
+# END_FEATURE
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

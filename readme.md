@@ -22,12 +22,15 @@ of the code between the tags for that feature.  Following that, you should remov
 `# START_FEATURE` and `# END_FEATURE` comments from the codebase.
 Following that, you should run `pip-compile`.
 
-The follwing is a list of tagged features in this repo:
+The following is a list of tagged features in this repo:
 
 ```
 bootstrap_messages
 django_social
 crispy_forms
+django_react
+debug_toolbar
+sentry
 ```
 
 The codebase also has a number of reference examples.  These are all marked with the comment:
@@ -40,7 +43,7 @@ The codebase also has a number of reference examples.  These are all marked with
 
 Write a setup script that does the following:
 
-* promps the user for a project name and replaces instances of `[PROJECT]` with that name
+* prompts the user for a project name and replaces instances of `[PROJECT]` with that name
 * prompts the user with each feature tag and removes the code between those feature tags or not
 * runs pip-compile
 * remakes migrations

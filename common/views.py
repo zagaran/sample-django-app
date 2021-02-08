@@ -16,6 +16,20 @@ class LogoutView(View):
         logout(request)
         return redirect("index")
 
+# START_FEATURE django_react
+
+
+class DjangreView(TemplateView):
+    template_name = 'common/sample_djangre.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['hello_msg'] = 'Component'
+        context['message'] = 'Page'
+        return context
+
+
+# END_FEATURE django_react
 
 # START_FEATURE crispy_forms
 class SampleFormView(FormView):
