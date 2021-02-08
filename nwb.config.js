@@ -9,6 +9,7 @@ const BundleTracker = require('webpack-bundle-tracker')
  */
 
 const ENTRIES = {
+  // TODO delete me; this is just a reference example
   Home: './src/Pages/Home.js',
   Hello: './src/Components/Hello.js'
 }
