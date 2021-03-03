@@ -7,12 +7,19 @@ nano config/.env  # Fill in missing env vars
 python manage.py migrate
 ```
 
-
 To run the project, use `python manage.py runserver_plus`
 
 To access the database, use `python manage.py shell_plus`
 
-# Features
+# Project Template Setup
+```
+pip install pip-tools
+nano requirements.in  # Choose project requirements. Update version as necessary for security.
+pip-compile  # Generate project-specific requirements.txt
+nano readme.md  # replace this README with project relevant details
+```
+
+## Included Optional Features
 
 There are a number of optional features that have been included in this sample.
 The code related to each sits between comments
@@ -22,7 +29,7 @@ of the code between the tags for that feature.  Following that, you should remov
 `# START_FEATURE` and `# END_FEATURE` comments from the codebase.
 Following that, you should run `pip-compile`.
 
-The follwing is a list of tagged features in this repo:
+The following is a list of tagged features in this repo:
 
 ```
 bootstrap_messages
@@ -35,12 +42,11 @@ The codebase also has a number of reference examples.  These are all marked with
 # TODO: delete me; this is just a reference example
 ```
 
-# TODO
-
+# sample-django-app TODO
 
 Write a setup script that does the following:
 
-* promps the user for a project name and replaces instances of `[PROJECT]` with that name
+* prompts the user for a project name and replaces instances of `[PROJECT]` with that name
 * prompts the user with each feature tag and removes the code between those feature tags or not
 * runs pip-compile
 * remakes migrations
