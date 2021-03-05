@@ -9,7 +9,7 @@ backcall==0.2.0           # via ipython
 certifi==2020.11.8        # via requests
 cffi==1.14.4              # via cryptography
 chardet==3.0.4            # via requests
-cryptography==3.2.1       # via social-auth-core
+cryptography==3.4.6
 decorator==4.4.2          # via ipython, traitlets
 defusedxml==0.6.0         # via python3-openid, social-auth-core
 django-crispy-forms==1.11.1
@@ -35,7 +35,7 @@ python3-openid==3.2.0     # via social-auth-core
 pytz==2020.4              # via django
 requests-oauthlib==1.3.0  # via social-auth-core
 requests==2.25.0
-six==1.15.0               # via cryptography, social-auth-app-django, social-auth-core, traitlets
+six==1.15.0               # via social-auth-app-django, social-auth-core, traitlets
 social-auth-app-django==4.0.0
 social-auth-core==3.3.3   # via social-auth-app-django
 sqlparse==0.4.1           # via django
