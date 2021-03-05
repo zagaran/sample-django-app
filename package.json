@@ -12,7 +12,6 @@
     "babel": "^6.23.0",
     "babel-loader": "^8.1.0",
     "babel-preset-proposals": "^0.3.0",
-    "bootstrap": "^4.5.3",
     "django-react-loader": "^0.1.4",
     "react": "^16.13.1",
     "react-app-polyfill": "^2.0.0",
