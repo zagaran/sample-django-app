@@ -38,3 +38,30 @@ class User(AbstractUser, TimestampedModel):
     
     def __str__(self):
         return self.email
+
+# START_FEATURE django_storages
+# from django.conf import settings
+# from django.core.files.storage import FileSystemStorage
+# from storages.backends.s3boto3 import S3Boto3Storage
+# 
+# def get_file_storage():
+#     if not settings.DEBUG:
+#         return S3Boto3Storage(bucket=settings.AWS_STORAGE_BUCKET_NAME)
+#     else:
+#         return FileSystemStorage(location='media/uploads/')
+# 
+# def get_s3_path(instance, filename):
+#     return "%s/%s/%s" % (
+#         "uploads",
+#         instance.user_id,
+#         filename,
+#     )
+# 
+# class UploadFile(TimestampedModel):
+#     user = models.ForeignKey(User, related_name="files", on_delete=models.PROTECT)
+#     file = models.FileField(
+#         max_length=1024,
+#         storage=get_file_storage(),
+#         upload_to=get_s3_path
+#     )
+# END_FEATURE django_storages
