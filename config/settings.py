@@ -106,6 +106,38 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# Logging
+# https://docs.djangoproject.com/en/dev/topics/logging/#django-security
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    "handlers": {
+        'console': {
+            'level': 'WARNING',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+        "null": {
+            "class": "logging.NullHandler",
+        },
+    },
+    "loggers": {
+        "django.security.DisallowedHost": {
+            "handlers": ["null"],
+            "propagate": False,
+        },
+    },
+}
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
