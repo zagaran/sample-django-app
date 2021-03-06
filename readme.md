@@ -11,7 +11,7 @@ To run the project, use `python manage.py runserver_plus`
 
 To access the database, use `python manage.py shell_plus`
 
-To add a new dependency to requirements, add requirements.in and run `pip-compile` to generate requirements.txt
+To add a new dependency to requirements, add the entry to requirements.in and run `pip-compile` to generate requirements.txt
 
 # Project Template Setup
 ```
