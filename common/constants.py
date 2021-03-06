@@ -10,5 +10,5 @@ class ChoicesEnum(object):
 
 class ExampleEnum(ChoicesEnum):
     # TODO: delete me; this is just a reference example
-    active = "actvie"
+    active = "active"
     completed = "completed"

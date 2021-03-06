@@ -35,6 +35,7 @@ The following is a list of tagged features in this repo:
 bootstrap_messages
 django_social
 crispy_forms
+django_storages
 ```
 
 The codebase also has a number of reference examples.  These are all marked with the comment:

@@ -4,6 +4,7 @@ django-extensions
 requests
 psycopg2
 
+####### OPTIONAL FEATURES #######
 # START_FEATURE django_social
 social-auth-app-django
 # END_FEATURE django_social
@@ -12,6 +13,14 @@ social-auth-app-django
 django-crispy-forms
 # END_FEATURE crispy_forms
 
-# Convinience
+# START_FEATURE django_storages
+django-storages
+# END_FEATURE django_storages
+################################
+
+# Convenience
 ipython
 werkzeug
+
+# Security
+cryptography>=3.3.2  # 2021-3-4
