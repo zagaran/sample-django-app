@@ -195,5 +195,8 @@ if DEBUG is False:
     AWS_DEFAULT_ACL = "private"
     AWS_S3_FILE_OVERWRITE = False
     AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
+else:
+    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+    MEDIA_ROOT = ""
 # END_FEATURE django_storages
 
