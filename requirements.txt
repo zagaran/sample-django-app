@@ -9,6 +9,7 @@ backcall==0.2.0           # via ipython
 certifi==2020.11.8        # via requests
 cffi==1.14.4              # via cryptography
 chardet==3.0.4            # via requests
+click==7.1.2              # via pip-tools
 cryptography==3.4.6
 decorator==4.4.2          # via ipython, traitlets
 defusedxml==0.6.0         # via python3-openid, social-auth-core
@@ -25,6 +26,7 @@ oauthlib==3.1.0           # via requests-oauthlib, social-auth-core
 parso==0.7.1              # via jedi
 pexpect==4.8.0            # via ipython
 pickleshare==0.7.5        # via ipython
+pip-tools==5.5.0
 prompt-toolkit==3.0.8     # via ipython
 psycopg2==2.8.6
 ptyprocess==0.6.0         # via pexpect
@@ -45,4 +47,5 @@ wcwidth==0.2.5            # via prompt-toolkit
 werkzeug==1.0.1
 
 # The following packages are considered to be unsafe in a requirements file:
+# pip
 # setuptools
