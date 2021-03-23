@@ -1,7 +1,6 @@
 # START_FEATURE django_react
 node_modules/
 webpack-stats.json
-yarn.lock
 # END_FEATURE
 
 

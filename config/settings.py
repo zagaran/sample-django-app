@@ -33,8 +33,12 @@ SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
-DEBUG_TOOLBAR = DEBUG and env("DEBUG_TOOLBAR")
 
+# START_FEATURE debug_toolbar
+DEBUG_TOOLBAR = DEBUG and env("DEBUG_TOOLBAR")
+# END_FEATURE debug_toolbar
+
+# START_FEATURE sentry
 if not DEBUG:
     sentry_sdk.init(
         dsn=env('SENTRY_DSN'),
@@ -42,8 +46,9 @@ if not DEBUG:
         traces_sample_rate=1.0,
         # If you wish to associate users to errors (assuming you are using
         # django.contrib.auth) you may enable sending PII data.
-        send_default_pii=True
+        send_default_pii=False
     )
+# END_FEATURE sentry
 
 ALLOWED_HOSTS = []
 

@@ -1,13 +1,11 @@
 {% extends 'base_templates/base.html' %}
 {% load django_react_components %}
 {% load render_bundle from webpack_loader %}
-{% block head %}
-    {% render_bundle 'runtime' %}
-    {% render_bundle 'Home' %}
-    {% render_bundle 'Hello' %}
-{% endblock %}
 
 {% block body %}
+  {% render_bundle 'runtime' %}
+  {% render_bundle 'Home' %}
+  {% render_bundle 'Hello' %}
   {% react_component 'Home' id='home' message=message %}
-  {% react_component 'Hello' id='hello' msg=hello_msg %}
+  {% react_component 'Hello' id='hello' props=sample_props %}
 {% endblock %}

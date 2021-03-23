@@ -81,14 +81,15 @@ make those templates responsive.
    - Note that you only have to do this once per page where React components will be used. 
 3. Finally, load your React component on the page. `{% react_component 'Home' id='home' %}`
     - You can add any number of props as named keywords, e.g. `{% react_component 'Home' id='home' prop1=value_from_context %}`
-
+    - You can also choose to pass props as an object instead of individual kwargs.
 
 ### Preparing for deployment
 
 
-To prepare the application for deployment, run `nwb build --no-vendor`. This will generate a `webpack_bundles` folder
-in your `/static` folder populated with the compiled React components. You may now deploy the app as you would any standard
-Django application. 
+The preferred option for deployment is to add the below compilation step to the deployment configuration rather than 
+building it locally. However, if you wish to build the app locally:
+
+- run `nwb build --no-vendor`. This will generate or replace a `webpack_bundles` folder in your `/static` folder populated with the compiled React components.
 
 
 ### Other Notes
@@ -104,7 +105,8 @@ request by the app to something like `http://localhost:8000/sockjs-node/info?t=1
 needs to be.
    - If you find that the number of files collected by `python manage.py collectstatic` continues to grow, this may be
     a sign that you should consider deleting the generated files and the `staticfiles` directory and starting with a
-     fresh `python manage.py collectstatic`.
+     fresh `python manage.py collectstatic`. This is another reason to prefer adding a compilation step to your deployment
+     pipeline rather than running it locally.
      
 
 # TODO

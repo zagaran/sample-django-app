@@ -25,7 +25,7 @@ class DjangreView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['hello_msg'] = 'Component'
-        context['message'] = 'Page'
+        context['sample_props'] = {'msg': 'sample props'}
         return context
 
 
