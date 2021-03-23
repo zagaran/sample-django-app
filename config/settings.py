@@ -63,18 +63,6 @@ if WEBPACK_LOADER_HOTLOAD:
             'LOADER_CLASS': "config.webpack_loader.DynamicWebpackLoader"
         }
     }
-else:
-    WEBPACK_LOADER = {
-        'DEFAULT': {
-            'CACHE': not DEBUG,
-            'BUNDLE_DIR_NAME': 'webpack_bundles/',  # must end with slash
-            'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
-            'POLL_INTERVAL': 0.1,
-            'TIMEOUT': None,
-            'IGNORE': [r'.+\.hot-update.js', r'.+\.map'],
-            'LOADER_CLASS': 'webpack_loader.loader.WebpackLoader',
-        }
-    }
 # END_FEATURE django_react
 
 
@@ -101,6 +89,11 @@ INSTALLED_APPS = [
     'common',
 ]
 
+# START_FEATURE debug_toolbar
+if DEBUG_TOOLBAR:
+    INSTALLED_APPS.append('debug_toolbar')
+# END_FEATURE debug_toolbar
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -114,7 +107,6 @@ MIDDLEWARE = [
 
 # START_FEATURE debug_toolbar
 if DEBUG_TOOLBAR:
-    INSTALLED_APPS.append('debug_toolbar')
     MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
 # END_FEATURE debug_toolbar
 

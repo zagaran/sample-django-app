@@ -79,6 +79,8 @@ your standard `runserver` command.
 If you have configured everything correctly, you should see each command complete and notify you
 that the project is ready to be viewed.
 
+- If you include `nwb` as a dependency, you can use the locally-installed `nwb` by running `node_modules/.bin/nwb server --no-vendor` instead of relying on a globally installed `nwb`.
+
 
 ### Adding a new React component
 
