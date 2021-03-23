@@ -8,13 +8,26 @@ nano config/.env  # Fill in missing env vars
 python manage.py migrate
 ```
 
-
 To run the project, use `python manage.py runserver_plus`
 
 To access the database, use `python manage.py shell_plus`
 
-
 # Features
+
+
+To add a new dependency to requirements, add the entry to requirements.in and run `pip-compile` to generate requirements.txt
+
+# Project Template Setup
+
+
+```
+pip install pip-tools
+nano requirements.in  # Choose project requirements. Update version as necessary for security.
+pip-compile  # Generate project-specific requirements.txt
+nano readme.md  # replace this README with project relevant details
+```
+
+## Included Optional Features
 
 
 There are a number of optional features that have been included in this sample.
@@ -34,13 +47,13 @@ crispy_forms
 django_react
 debug_toolbar
 sentry
+django_storages
 ```
 
 The codebase also has a number of reference examples.  These are all marked with the comment:
 ```
 # TODO: delete me; this is just a reference example
 ```
-
 
 # Feature Descriptions
 

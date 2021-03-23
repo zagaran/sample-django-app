@@ -40,7 +40,6 @@ cover/
 *.sqlite3
 *.sqlite3-journal
 
-
 # Environments
 .env
 .venv
@@ -49,3 +48,10 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+# Editors
+.idea
+.vscode
+
+# Operating systems
+.DS_Store

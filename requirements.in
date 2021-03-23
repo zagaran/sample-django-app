@@ -4,12 +4,7 @@ django-extensions
 requests
 psycopg2
 
-# START_FEATURE django_react
-django-react-components
-django-webpack-loader
-# END_FEATURE django_react
-
-
+####### OPTIONAL FEATURES #######
 # START_FEATURE django_social
 social-auth-app-django
 # END_FEATURE django_social
@@ -17,6 +12,12 @@ social-auth-app-django
 # START_FEATURE crispy_forms
 django-crispy-forms
 # END_FEATURE crispy_forms
+
+# START_FEATURE django_react
+django-react-components
+django-webpack-loader
+# END_FEATURE django_react
+
 
 # START_FEATURE debug_toolbar
 django-debug-toolbar
@@ -26,6 +27,15 @@ django-debug-toolbar
 sentry-sdk
 # END_FEATURE sentry
 
+# START_FEATURE django_storages
+django-storages
+# END_FEATURE django_storages
+################################
+
 # Convenience
 ipython
 werkzeug
+pip-tools
+
+# Security
+cryptography>=3.3.2  # 2021-3-4

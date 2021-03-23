@@ -38,3 +38,21 @@ class User(AbstractUser, TimestampedModel):
     
     def __str__(self):
         return self.email
+
+
+# START_FEATURE django_storages
+# TODO: delete me; this is just a reference example
+def get_s3_path(instance, filename):
+    return "%s/%s/%s" % (
+        "uploads",
+        instance.user_id,
+        filename,
+    )
+
+class UploadFile(TimestampedModel):
+    user = models.ForeignKey(User, related_name="files", on_delete=models.PROTECT)
+    file = models.FileField(
+        max_length=1024,
+        upload_to=get_s3_path
+    )
+# END_FEATURE django_storages
