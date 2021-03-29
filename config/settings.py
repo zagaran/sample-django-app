@@ -12,9 +12,15 @@ import os
 import environ
 from django.contrib.messages import constants as messages
 
+# START_FEATURE sentry
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+# END_FEATURE sentry
 
 env = environ.Env(
     DEBUG=(bool, False),
+    DEBUG_TOOLBAR=(bool, False),
+    WEBPACK_LOADER_HOTLOAD=(bool, False),
     HOST=(str, "localhost"),
 )
 environ.Env.read_env()
@@ -27,6 +33,18 @@ SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: do not run with debug turned on in production!
 DEBUG = env("DEBUG")
+
+# START_FEATURE sentry
+if not DEBUG:
+    sentry_sdk.init(
+        dsn=env('SENTRY_DSN'),
+        integrations=[DjangoIntegration()],
+        traces_sample_rate=1.0,
+        # If you wish to associate users to errors (assuming you are using
+        # django.contrib.auth) you may enable sending PII data.
+        send_default_pii=False
+    )
+# END_FEATURE sentry
 
 ALLOWED_HOSTS = [env("HOST")]
 
@@ -47,7 +65,11 @@ INSTALLED_APPS = [
     # START_FEATURE crispy_forms
     "crispy_forms",
     # END_FEATURE crispy_forms
-    "common",
+    # START_FEATURE django_react
+    'django_react_components',
+    'webpack_loader',
+    # END_FEATURE django_react
+    'common',
 ]
 
 MIDDLEWARE = [
@@ -60,7 +82,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "config.urls"
+ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
     {
@@ -156,6 +178,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
 
 AUTH_USER_MODEL = "common.User"
@@ -200,3 +224,22 @@ else:
     MEDIA_ROOT = ""
 # END_FEATURE django_storages
 
+
+# START_FEATURE debug_toolbar
+DEBUG_TOOLBAR = DEBUG and env("DEBUG_TOOLBAR")
+INTERNAL_IPS = ['127.0.0.1']
+if DEBUG_TOOLBAR:
+    MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
+# END_FEATURE debug_toolbar
+
+
+# START_FEATURE django_react
+if DEBUG:
+    WEBPACK_LOADER_HOTLOAD = env('WEBPACK_LOADER_HOTLOAD')
+    if WEBPACK_LOADER_HOTLOAD:
+        WEBPACK_LOADER = {
+            'DEFAULT': {
+                'LOADER_CLASS': "config.webpack_loader.DynamicWebpackLoader"
+            }
+        }
+# END_FEATURE django_react
