@@ -6,7 +6,8 @@ from django.conf import settings
 urlpatterns = [
     path("", views.IndexView.as_view(), name="index"),
     # START_FEATURE django_react
-    path("djangre", views.DjangreView.as_view(), name='djangre-demo'),
+    # TODO: delete me; this is just a reference example
+    path("django_react", views.DjangoReactView.as_view(), name='django-react-demo'),
     # END_FEATURE django_react
     path("logout", views.LogoutView.as_view(), name="logout")
 ]

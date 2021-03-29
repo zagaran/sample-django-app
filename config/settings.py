@@ -20,6 +20,7 @@ from sentry_sdk.integrations.django import DjangoIntegration
 env = environ.Env(
     DEBUG=(bool, False),
     DEBUG_TOOLBAR=(bool, False),
+    WEBPACK_LOADER_HOTLOAD=(bool, False),
     HOST=(str, "localhost"),
 )
 environ.Env.read_env()
@@ -32,10 +33,6 @@ SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: do not run with debug turned on in production!
 DEBUG = env("DEBUG")
-
-# START_FEATURE debug_toolbar
-DEBUG_TOOLBAR = DEBUG and env("DEBUG_TOOLBAR")
-# END_FEATURE debug_toolbar
 
 # START_FEATURE sentry
 if not DEBUG:
@@ -50,20 +47,6 @@ if not DEBUG:
 # END_FEATURE sentry
 
 ALLOWED_HOSTS = [env("HOST")]
-
-# START_FEATURE debug_toolbar
-INTERNAL_IPS = ['127.0.0.1']
-# END_FEATURE debug_toolbar
-
-# START_FEATURE django_react
-WEBPACK_LOADER_HOTLOAD = env('WEBPACK_LOADER_HOTLOAD')
-if WEBPACK_LOADER_HOTLOAD:
-    WEBPACK_LOADER = {
-        'DEFAULT': {
-            'LOADER_CLASS': "config.webpack_loader.DynamicWebpackLoader"
-        }
-    }
-# END_FEATURE django_react
 
 
 # Application definition
@@ -89,12 +72,6 @@ INSTALLED_APPS = [
     'common',
 ]
 
-# START_FEATURE debug_toolbar
-if DEBUG_TOOLBAR:
-    INSTALLED_APPS.append('debug_toolbar')
-# END_FEATURE debug_toolbar
-
-
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -104,11 +81,6 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
-
-# START_FEATURE debug_toolbar
-if DEBUG_TOOLBAR:
-    MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
-# END_FEATURE debug_toolbar
 
 ROOT_URLCONF = 'config.urls'
 
@@ -251,3 +223,23 @@ else:
     DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
     MEDIA_ROOT = ""
 # END_FEATURE django_storages
+
+
+# START_FEATURE debug_toolbar
+DEBUG_TOOLBAR = DEBUG and env("DEBUG_TOOLBAR")
+INTERNAL_IPS = ['127.0.0.1']
+if DEBUG_TOOLBAR:
+    MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
+# END_FEATURE debug_toolbar
+
+
+# START_FEATURE django_react
+if DEBUG:
+    WEBPACK_LOADER_HOTLOAD = env('WEBPACK_LOADER_HOTLOAD')
+    if WEBPACK_LOADER_HOTLOAD:
+        WEBPACK_LOADER = {
+            'DEFAULT': {
+                'LOADER_CLASS': "config.webpack_loader.DynamicWebpackLoader"
+            }
+        }
+# END_FEATURE django_react

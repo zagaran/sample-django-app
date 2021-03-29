@@ -1,3 +1,7 @@
+/*
+ * # TODO: delete me; this is just a reference example
+ */
+
 import React from 'react';
 
 function Hello(props) {

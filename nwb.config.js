@@ -1,3 +1,8 @@
+/*
+ * START_FEATURE django_react
+ */
+
+
 const path = require('path')
 const BundleTracker = require('webpack-bundle-tracker')
 
@@ -88,3 +93,7 @@ module.exports = function({command}) {
   }
   return config
 }
+
+/*
+ * END_FEATURE django_react
+ */

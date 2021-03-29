@@ -1,8 +1,11 @@
-# START_FEATURE django_react
-node_modules/
 webpack-stats.json
-# END_FEATURE
+node_modules/
+yarn.lock
+package-lock.json
+*.log
 
+# TODO: resolve desired features, generate requirements, and remove this line
+requirements.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

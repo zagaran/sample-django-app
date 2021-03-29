@@ -1,3 +1,5 @@
+# START_FEATURE django_react
+
 from webpack_loader.loader import WebpackLoader
 
 from django.conf import settings
@@ -13,3 +15,5 @@ class DynamicWebpackLoader(WebpackLoader):
         if settings.WEBPACK_LOADER_HOTLOAD:
             path = f"http://localhost:3000{path}"
         return path
+
+# END_FEATURE django_react
