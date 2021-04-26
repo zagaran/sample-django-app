@@ -20,7 +20,10 @@ const ENTRIES = {
 }
 
 const SHARED_ENTRIES = [
-  './node_modules/react-app-polyfill/ie11.js',
+  // we have not included react-app-polyfill in this sample application because it is not technically required for
+  // projects which do not require polyfill. However, we do recommend installing and uncommenting this line of code
+  // for projects which will need to have guaranteed functionality on older browsers.
+  // './node_modules/react-app-polyfill/ie11.js',
 ]
 
 /**
@@ -50,34 +53,6 @@ module.exports = function({command}) {
       },
       module: {
         rules: [
-          {
-            test: /\.js$/,
-            loader: 'babel-loader',
-            include: /node_modules/,
-            options: {
-              // babelrc: false,
-              // cacheDirectory: true,
-              presets: [
-                ['@babel/preset-env', {'loose': true, 'modules': false,}],
-                ['@babel/preset-react', {'development': false}],
-                ['babel-preset-proposals', {
-                  'loose': true,
-                  'decorators': true,
-                  'classProperties': true,
-                  'exportDefaultFrom': true,
-                  'exportNamespaceFrom': true,
-                  'absolutePaths': true,
-                }],
-              ],
-              plugins: [
-                '@babel/plugin-transform-react-constant-elements',
-                'babel-plugin-transform-react-remove-prop-types',
-                ['@babel/plugin-transform-runtime', {useESModules: true,}],
-                '@babel/plugin-syntax-dynamic-import',
-                '@babel/plugin-transform-modules-commonjs',
-              ],
-            },
-          },
           {
             test: /\.js$/,
             exclude: /node_modules/,
