@@ -3,25 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@babel/core": "^7.12.10",
-    "@babel/plugin-transform-runtime": "^7.12.10",
-    "@babel/runtime": "^7.12.5",
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "babel": "^6.23.0",
-    "babel-loader": "^8.1.0",
-    "babel-preset-proposals": "^0.3.0",
-    "django-react-loader": "^0.1.4",
+    "django-react-loader": "^0.1.7",
     "nwb": "^0.24.7",
     "react": "^16.13.1",
-    "react-app-polyfill": "^2.0.0",
     "react-dom": "^16.13.1",
-    "react-icons": "^4.1.0",
-    "react-scripts": "4.0.1",
-    "web-vitals": "^0.2.4",
-    "webpack-bundle-tracker": "0.4.3",
-    "yarn": "^1.22.10"
+    "webpack-bundle-tracker": "^0.4.3"
   },
   "scripts": {
     "start": "react-scripts start",

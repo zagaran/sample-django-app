@@ -121,7 +121,9 @@ make those templates responsive.
 The preferred option for deployment is to add the below compilation step to the deployment configuration rather than 
 building it locally. However, if you wish to build the app locally:
 
-- run `nwb build --no-vendor`. This will generate or replace a `webpack_bundles` folder in your `/static` folder populated with the compiled React components.
+- run `nwb build --no-vendor`. This will generate or replace a `webpack_bundles` folder in your `/static` folder 
+  populated with the compiled React components. This then allows `collectstatic` to collect these static assets and 
+  make them available via the usual static assets pipeline set up in the deploy configuration.
 
 
 ### Other Notes
