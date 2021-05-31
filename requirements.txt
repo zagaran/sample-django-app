@@ -6,37 +6,36 @@
 #
 backcall==0.2.0
     # via ipython
-certifi==2020.11.8
+certifi==2021.5.30
     # via requests
-cffi==1.14.4
+cffi==1.14.5
     # via cryptography
-chardet==3.0.4
+chardet==4.0.0
     # via requests
-click==7.1.2
+click==8.0.1
     # via pip-tools
 cryptography==3.3.2
     # via
     #   -r requirements.in
     #   social-auth-core
-decorator==4.4.2
-    # via
-    #   ipython
-    #   traitlets
-defusedxml==0.6.0
+decorator==5.0.9
+    # via ipython
+defusedxml==0.7.1
     # via
     #   python3-openid
     #   social-auth-core
-django-crispy-forms==1.11.1
+django-crispy-forms==1.11.2
     # via -r requirements.in
 django-environ==0.4.5
     # via -r requirements.in
-django-extensions==3.1.0
+django-extensions==3.1.3
     # via -r requirements.in
 django-storages==1.11.1
     # via -r requirements.in
-django==2.2.17
+django==2.2.23
     # via
     #   -r requirements.in
+    #   django-extensions
     #   django-storages
 gunicorn==20.1.0
     # via -r requirements.in
@@ -44,64 +43,70 @@ idna==2.10
     # via requests
 ipython-genutils==0.2.0
     # via traitlets
-ipython==7.16.1
+ipython==7.24.0
     # via -r requirements.in
-jedi==0.17.2
+jedi==0.18.0
+    # via ipython
+matplotlib-inline==0.1.2
     # via ipython
 oauthlib==3.1.0
     # via
     #   requests-oauthlib
     #   social-auth-core
-parso==0.7.1
+parso==0.8.2
     # via jedi
+pep517==0.10.0
+    # via pip-tools
 pexpect==4.8.0
     # via ipython
 pickleshare==0.7.5
     # via ipython
-pip-tools==5.5.0
+pip-tools==6.1.0
     # via -r requirements.in
-prompt-toolkit==3.0.8
+prompt-toolkit==3.0.18
     # via ipython
 psycopg2==2.8.6
     # via -r requirements.in
-ptyprocess==0.6.0
+ptyprocess==0.7.0
     # via pexpect
 pycparser==2.20
     # via cffi
-pygments==2.7.2
+pygments==2.9.0
     # via ipython
-pyjwt==1.7.1
+pyjwt==2.1.0
     # via social-auth-core
 python3-openid==3.2.0
     # via social-auth-core
-pytz==2020.4
+pytz==2021.1
     # via django
 requests-oauthlib==1.3.0
     # via social-auth-core
-requests==2.25.0
+requests==2.25.1
     # via
     #   -r requirements.in
     #   requests-oauthlib
     #   social-auth-core
-six==1.15.0
+six==1.16.0
     # via
     #   cryptography
     #   social-auth-app-django
-    #   social-auth-core
-    #   traitlets
 social-auth-app-django==4.0.0
     # via -r requirements.in
-social-auth-core==3.3.3
+social-auth-core==4.1.0
     # via social-auth-app-django
 sqlparse==0.4.1
     # via django
-traitlets==4.3.3
-    # via ipython
-urllib3==1.26.2
+toml==0.10.2
+    # via pep517
+traitlets==5.0.5
+    # via
+    #   ipython
+    #   matplotlib-inline
+urllib3==1.26.5
     # via requests
 wcwidth==0.2.5
     # via prompt-toolkit
-werkzeug==1.0.1
+werkzeug==2.0.1
     # via -r requirements.in
 
 # The following packages are considered to be unsafe in a requirements file:
