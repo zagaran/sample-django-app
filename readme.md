@@ -16,8 +16,8 @@ To add a new dependency to requirements, add the entry to requirements.in and ru
 # Project Template Setup
 ```
 pip install pip-tools
-nano requirements.in  # Choose project requirements. Update version as necessary for security.
-pip-compile  # Generate project-specific requirements.txt
+nano requirements.in  # Choose project requirements
+pip-compile --upgrade  # Generate project-specific requirements.txt with updated dependencies
 nano readme.md  # replace this README with project relevant details
 ```
 
