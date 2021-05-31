@@ -38,6 +38,7 @@ bootstrap_messages
 django_social
 crispy_forms
 django_storages
+docker
 ```
 
 The codebase also has a number of reference examples.  These are all marked with the comment:
