@@ -1,4 +1,4 @@
-Django==3.2.*
+Django==3.2.*  # Latest LTS version
 django-environ
 django-extensions
 requests
@@ -24,6 +24,4 @@ werkzeug
 pip-tools
 
 # Security
-cryptography>=3.3.2  # 2021-3-4
-
-gunicorn
+cryptography==3.3.2  # Lock to 3.3.2 if running into "No module named 'setuptools_rust'" error
