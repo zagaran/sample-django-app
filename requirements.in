@@ -1,4 +1,4 @@
-Django==2.2.*
+Django==3.2.*
 django-environ
 django-extensions
 requests
@@ -25,3 +25,5 @@ pip-tools
 
 # Security
 cryptography>=3.3.2  # 2021-3-4
+
+gunicorn

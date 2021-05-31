@@ -4,6 +4,8 @@
 #
 #    pip-compile
 #
+asgiref==3.3.4
+    # via django
 backcall==0.2.0
     # via ipython
 certifi==2020.11.8
@@ -34,10 +36,12 @@ django-extensions==3.1.0
     # via -r requirements.in
 django-storages==1.11.1
     # via -r requirements.in
-django==2.2.17
+django==3.2.3
     # via
     #   -r requirements.in
     #   django-storages
+gunicorn==20.0.4
+    # via -r requirements.in
 idna==2.10
     # via requests
 ipython-genutils==0.2.0
