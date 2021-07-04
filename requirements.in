@@ -16,6 +16,10 @@ django-crispy-forms
 # START_FEATURE django_storages
 django-storages
 # END_FEATURE django_storages
+
+# START_FEATURE docker
+gunicorn
+# END_FEATURE docker
 ################################
 
 # Convenience
