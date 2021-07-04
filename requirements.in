@@ -1,4 +1,4 @@
-Django==2.2.*  # Latest LTS version
+Django==3.2.*  # Latest LTS version
 django-environ
 django-extensions
 requests
