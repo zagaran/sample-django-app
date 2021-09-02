@@ -16,9 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include
+from django.http import HttpResponse
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("oauth/", include("social_django.urls", namespace="social")),
     path('', include("common.urls")),
+    path("health_check/", lambda request: HttpResponse("ok")),
 ]
