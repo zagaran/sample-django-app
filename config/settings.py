@@ -29,11 +29,17 @@ SECRET_KEY = env("SECRET_KEY")
 DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = [env("HOST")]
-
+if DEBUG:
+    ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+else:
+    # START_FEATURE recommended_production_settings
+    # if using AWS hosting
+    from ec2_metadata import ec2_metadata
+    ALLOWED_HOSTS.append(ec2_metadata.private_ipv4)
+    # END_FEATURE recommended_production_settings
 
 # Application definition
-
-INSTALLED_APPS = [
+THIRD_PARTY_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -47,8 +53,13 @@ INSTALLED_APPS = [
     # START_FEATURE crispy_forms
     "crispy_forms",
     # END_FEATURE crispy_forms
+]
+
+LOCAL_APPS = [
     "common",
 ]
+
+INSTALLED_APPS = THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -158,6 +169,7 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"), os.path.join(BASE_DIR, "dist/static")]
 
 AUTH_USER_MODEL = "common.User"
 
@@ -201,3 +213,33 @@ else:
     MEDIA_ROOT = ""
 # END_FEATURE django_storages
 
+# START_FEATURE recommended_production_settings
+if not DEBUG:
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
+    sentry_sdk.init(
+        dsn=env("SENTRY_DSN"),
+        integrations=[DjangoIntegration()],
+        traces_sample_rate=1.0,
+    )
+
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+    USE_X_FORWARDED_HOST = True
+    X_FRAME_OPTIONS = "DENY"
+    SECURE_REFERRER_POLICY = "same-origin"
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+
+    SECURE_HSTS_SECONDS = 60 * 60 * 1  # 1 hour
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+
+    SESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_AGE = 60 * 60 * 3  # 3 hours
+    CSRF_COOKIE_SECURE = True
+    CSRF_COOKIE_HTTPONLY = True  # Only do this if you are not accessing the CSRF cookie with JS
+# END_FEATURE recommended_production_settings
