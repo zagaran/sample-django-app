@@ -16,6 +16,7 @@ from django.contrib.messages import constants as messages
 env = environ.Env(
     DEBUG=(bool, False),
     HOST=(str, "localhost"),
+    LOCAL=(bool, True)
 )
 environ.Env.read_env()
 
@@ -28,8 +29,13 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: do not run with debug turned on in production!
 DEBUG = env("DEBUG")
 
+# run with this set to False in production
+LOCAL = env("LOCAL")
+
+SENTRY_DSN = env("SENTRY_DSN")
+
 ALLOWED_HOSTS = [env("HOST")]
-if DEBUG:
+if LOCAL is True:
     ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 else:
     # START_FEATURE recommended_production_settings
@@ -203,18 +209,18 @@ MESSAGE_TAGS = {
 
 
 # START_FEATURE django_storages
-if DEBUG is False:
+if LOCAL is True:
+    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+    MEDIA_ROOT = ""
+else:
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
     AWS_DEFAULT_ACL = "private"
     AWS_S3_FILE_OVERWRITE = False
     AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
-else:
-    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
-    MEDIA_ROOT = ""
 # END_FEATURE django_storages
 
-# START_FEATURE recommended_production_settings
-if not DEBUG:
+# START_FEATURE sentry
+if LOCAL is False and SENTRY_DSN:
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
     sentry_sdk.init(
@@ -222,8 +228,10 @@ if not DEBUG:
         integrations=[DjangoIntegration()],
         traces_sample_rate=1.0,
     )
+# END_FEATURE sentry
 
-if not DEBUG:
+# START_FEATURE recommended_production_security_settings
+if LOCAL is False:
     SECURE_SSL_REDIRECT = True
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
@@ -242,4 +250,5 @@ if not DEBUG:
     SESSION_COOKIE_AGE = 60 * 60 * 3  # 3 hours
     CSRF_COOKIE_SECURE = True
     CSRF_COOKIE_HTTPONLY = True  # Only do this if you are not accessing the CSRF cookie with JS
-# END_FEATURE recommended_production_settings
+# END_FEATURE recommended_production_security_settings
+
