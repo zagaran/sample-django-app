@@ -15,8 +15,8 @@ from django.contrib.messages import constants as messages
 
 env = environ.Env(
     DEBUG=(bool, False),
+    LOCALHOST=(bool, False),
     HOST=(str, "localhost"),
-    LOCAL=(bool, True)
 )
 environ.Env.read_env()
 
@@ -30,12 +30,12 @@ SECRET_KEY = env("SECRET_KEY")
 DEBUG = env("DEBUG")
 
 # run with this set to False in production
-LOCAL = env("LOCAL")
+LOCALHOST = env("LOCALHOST")
 
 SENTRY_DSN = env("SENTRY_DSN")
 
 ALLOWED_HOSTS = [env("HOST")]
-if LOCAL is True:
+if LOCALHOST is True:
     ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 else:
     # START_FEATURE recommended_production_settings
@@ -209,7 +209,7 @@ MESSAGE_TAGS = {
 
 
 # START_FEATURE django_storages
-if LOCAL is True:
+if LOCALHOST is True:
     DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
     MEDIA_ROOT = ""
 else:
@@ -220,7 +220,7 @@ else:
 # END_FEATURE django_storages
 
 # START_FEATURE sentry
-if LOCAL is False and SENTRY_DSN:
+if LOCALHOST is False and SENTRY_DSN:
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
     sentry_sdk.init(
@@ -231,7 +231,7 @@ if LOCAL is False and SENTRY_DSN:
 # END_FEATURE sentry
 
 # START_FEATURE recommended_production_security_settings
-if LOCAL is False:
+if LOCALHOST is False:
     SECURE_SSL_REDIRECT = True
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
