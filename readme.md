@@ -40,12 +40,17 @@ crispy_forms
 django_storages
 docker
 django_ses
+sentry
 ```
 
 The codebase also has a number of reference examples.  These are all marked with the comment:
 ```
 # TODO: delete me; this is just a reference example
 ```
+
+## Optional Settings
+
+`MAINTENANCE_MODE`: Set this flag on a server environment to stop all user requests to the site, such as when you need to make substantial server updates or run a complex database migration.
 
 # sample-django-app TODO
 

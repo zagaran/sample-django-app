@@ -17,8 +17,10 @@ env = environ.Env(
     DEBUG=(bool, False),
     LOCALHOST=(bool, False),
     HOST=(str, "localhost"),
-    SENTRY_DSN=(str, None),
     MAINTENANCE_MODE=(bool, False),
+    # START_FEATURE sentry
+    SENTRY_DSN=(str, None),
+    # END_FEATURE sentry
     # START_FEATURE django_ses
     AWS_SES_REGION_NAME=(str, "us-east-1"),
     AWS_SES_REGION_ENDPOINT=(str, "email.us-east-1.amazonaws.com"),
@@ -37,8 +39,6 @@ DEBUG = env("DEBUG")
 
 # run with this set to False in production
 LOCALHOST = env("LOCALHOST")
-
-SENTRY_DSN = env("SENTRY_DSN")
 
 ALLOWED_HOSTS = [env("HOST")]
 if LOCALHOST is True:
@@ -241,6 +241,7 @@ else:
 # END_FEATURE django_storages
 
 # START_FEATURE sentry
+SENTRY_DSN = env("SENTRY_DSN")
 if LOCALHOST is False and SENTRY_DSN:
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
