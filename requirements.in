@@ -20,6 +20,10 @@ django-storages
 # START_FEATURE docker
 gunicorn
 # END_FEATURE docker
+
+# START_FEATURE django_ses
+django_ses
+# END_FEATURE django_ses
 ################################
 
 # Convenience

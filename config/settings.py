@@ -19,6 +19,10 @@ env = environ.Env(
     HOST=(str, "localhost"),
     SENTRY_DSN=(str, None),
     MAINTENANCE_MODE=(bool, False),
+    # START_FEATURE django_ses
+    AWS_SES_REGION_NAME=(str, "us-east-1"),
+    AWS_SES_REGION_ENDPOINT=(str, "email.us-east-1.amazonaws.com"),
+    # END_FEATURE django_ses
 )
 environ.Env.read_env()
 
@@ -128,6 +132,15 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+# START_FEATURE django_ses
+if LOCALHOST:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+else:
+    EMAIL_BACKEND = "django_ses.SESBackend"
+    AWS_SES_REGION_NAME = env("AWS_SES_REGION_NAME")
+    AWS_SES_REGION_ENDPOINT = env("AWS_SES_REGION_ENDPOINT")
+# END_FEATURE django_ses
 
 # Logging
 # https://docs.djangoproject.com/en/dev/topics/logging/#django-security
