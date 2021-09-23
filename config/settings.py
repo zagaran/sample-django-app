@@ -17,6 +17,8 @@ env = environ.Env(
     DEBUG=(bool, False),
     LOCALHOST=(bool, False),
     HOST=(str, "localhost"),
+    SENTRY_DSN=(str, None),
+    MAINTENANCE_MODE=(bool, False),
 )
 environ.Env.read_env()
 
@@ -71,11 +73,14 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
+    "common.middleware.MaintenanceModeMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+MAINTENANCE_MODE = env("MAINTENANCE_MODE")
 
 ROOT_URLCONF = "config.urls"
 
