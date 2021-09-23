@@ -136,10 +136,13 @@ AUTH_PASSWORD_VALIDATORS = [
 # START_FEATURE django_ses
 if LOCALHOST:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+    DEFAULT_FROM_EMAIL = "webmaster@localhost"
 else:
     EMAIL_BACKEND = "django_ses.SESBackend"
     AWS_SES_REGION_NAME = env("AWS_SES_REGION_NAME")
     AWS_SES_REGION_ENDPOINT = env("AWS_SES_REGION_ENDPOINT")
+    AWS_SES_RETURN_PATH = env("DEFAULT_FROM_EMAIL")
+    DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
 # END_FEATURE django_ses
 
 # Logging
