@@ -17,8 +17,14 @@ env = environ.Env(
     DEBUG=(bool, False),
     LOCALHOST=(bool, False),
     HOST=(str, "localhost"),
-    SENTRY_DSN=(str, None),
     MAINTENANCE_MODE=(bool, False),
+    # START_FEATURE sentry
+    SENTRY_DSN=(str, None),
+    # END_FEATURE sentry
+    # START_FEATURE django_ses
+    AWS_SES_REGION_NAME=(str, "us-east-1"),
+    AWS_SES_REGION_ENDPOINT=(str, "email.us-east-1.amazonaws.com"),
+    # END_FEATURE django_ses
 )
 environ.Env.read_env()
 
@@ -33,8 +39,6 @@ DEBUG = env("DEBUG")
 
 # run with this set to False in production
 LOCALHOST = env("LOCALHOST")
-
-SENTRY_DSN = env("SENTRY_DSN")
 
 ALLOWED_HOSTS = [env("HOST")]
 if LOCALHOST is True:
@@ -128,6 +132,18 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+# START_FEATURE django_ses
+if LOCALHOST:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+    DEFAULT_FROM_EMAIL = "webmaster@localhost"
+else:
+    EMAIL_BACKEND = "django_ses.SESBackend"
+    AWS_SES_REGION_NAME = env("AWS_SES_REGION_NAME")
+    AWS_SES_REGION_ENDPOINT = env("AWS_SES_REGION_ENDPOINT")
+    AWS_SES_RETURN_PATH = env("DEFAULT_FROM_EMAIL")
+    DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
+# END_FEATURE django_ses
 
 # Logging
 # https://docs.djangoproject.com/en/dev/topics/logging/#django-security
@@ -225,6 +241,7 @@ else:
 # END_FEATURE django_storages
 
 # START_FEATURE sentry
+SENTRY_DSN = env("SENTRY_DSN")
 if LOCALHOST is False and SENTRY_DSN:
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
