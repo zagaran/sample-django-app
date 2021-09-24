@@ -300,7 +300,7 @@ if LOCALHOST is False and SENTRY_DSN:
     )
 # END_FEATURE sentry
 
-# START_FEATURE recommended_production_security_settings
+# START_FEATURE security_settings
 if LOCALHOST is False:
     SECURE_SSL_REDIRECT = True
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
@@ -320,7 +320,7 @@ if LOCALHOST is False:
     SESSION_COOKIE_AGE = 60 * 60 * 3  # 3 hours
     CSRF_COOKIE_SECURE = True
     CSRF_COOKIE_HTTPONLY = True  # Only do this if you are not accessing the CSRF cookie with JS
-# END_FEATURE recommended_production_security_settings
+# END_FEATURE security_settings
 
 # START_FEATURE sass_bootstrap
 SASS_PRECISION = 8  # Bootstrap's sass requires a precision of at least 8 to prevent layout errors

@@ -26,20 +26,15 @@ To run test suite:
 ```
 python manage.py test
 ```
+To get test coverage report:
+```
+coverage run --source='.' manage.py test; coverage report
+```
 To add a new dependency to or update requirements, add the entry to requirements.in and run `pip-compile` to generate requirements.txt:
 ```
 vim requirements.in  # Updating Python dependencies as needed
 pip-compile --upgrade  # Generate requirements.txt with updated dependencies
 ```
-To run style checks and desired formatters:
-```
-pre-commit run --all-files
-```
-If wish to install pre-commit as a pre-commit git hook, you can run (optional):
-```
-pre-commit install
-```
-
 
 # How To Use This Template
 
@@ -57,7 +52,7 @@ git push -u origin main
 2. Decide which optional features you'd like to use.
 
 
-## Included Optional Features
+### Included Optional Features
 
 There are a number of optional features that have been included in this sample.
 The code related to each sits between comments
@@ -81,20 +76,20 @@ The codebase also has a number of reference examples.  These are all marked with
 ```
 
 
-# Feature Descriptions
+## Feature Descriptions
 
-## Django messages integration with Bootstrap (`bootstrap_messages`)
-
-
-## Crispy Forms integration (`crispy_forms`)
+### Django messages integration with Bootstrap (`bootstrap_messages`)
 
 
-## Debug Toolbar integration (`debug_toolbar`)
+### Crispy Forms integration (`crispy_forms`)
 
 
-## Django-React integration, aka Djangre (`django_react`)
+### Debug Toolbar integration (`debug_toolbar`)
 
-### Files
+
+### Django-React integration, aka Djangre (`django_react`)
+
+#### Files
 
 The following files and folders are only needed if `django_react` is a desired feature in your app and can be safely
 deleted from projects which do not leverage the feature.
@@ -105,12 +100,12 @@ deleted from projects which do not leverage the feature.
 - `config/webpack_loader.py`
 - `src/`
 
-### Additional Setup
+#### Additional Setup
 
 When using this feature, make sure to install the Node.js requirements using the manager of your choice 
 (either `npm install` or `yarn install` will work) before proceeding with development.
 
-### Special Consideration for Running
+#### Special Consideration for Running
 
 For development on localhost when using Django-React, you should run the following command in a separate terminal to
 your standard `runserver` command.
@@ -124,7 +119,7 @@ that the project is ready to be viewed.
 
 - If you include `nwb` as a dependency, you can use the locally-installed `nwb` by running `node_modules/.bin/nwb serve --no-vendor` instead of relying on a globally installed `nwb`.
 
-### Adding a new React component
+#### Adding a new React component
 
 In this paradigm, React components are compiled and injected into the standard Django template. This means we can take 
 advantage of the built-in templating functionality of Django and, with a bit of elbow grease, use the power of React to
@@ -139,7 +134,7 @@ make those templates responsive.
     - You can add any number of props as named keywords, e.g. `{% react_component 'Home' id='home' prop1=value_from_context %}`
     - You can also choose to pass props as an object instead of individual kwargs, e.g. `{% react_component 'Hello' id='hello' props=sample_props %}`.
 
-### Preparing for deployment
+#### Preparing for deployment
 
 The preferred option for deployment is to add the below compilation step to the deployment configuration rather than 
 building it locally. However, if you wish to build the app locally:
@@ -148,7 +143,7 @@ building it locally. However, if you wish to build the app locally:
   populated with the compiled React components. This then allows `collectstatic` to collect these static assets and 
   make them available via the usual static assets pipeline set up in the deploy configuration.
 
-### Other notes
+#### Other notes
 
 - If you use `nwb serve` in your local development environment, you may see a persistent XHR error in the console -- a 
 request by the app to something like `http://localhost:8000/sockjs-node/info?t=123456789`. This is normal and will 
@@ -164,28 +159,15 @@ needs to be.
      pipeline rather than running it locally.
 
 
-## AWS SES integration (`django_ses`)
+### AWS SES integration (`django_ses`)
 
 
-## Third-party authentication integrations (`django_social`)
+### Third-party authentication integrations (`django_social`)
 
 
-## AWS S3 (or other cloud blob storage) integration (`django_storages`)
+### AWS S3 (or other cloud blob storage) integration (`django_storages`)
 
-
-## Docker integration (`docker`)
-
-
-## Elastic Beanstalk deployment (`elastic_beanstalk`)
-
-
-## Pre-commit hooks (`pre-commit`)
-
-
-## Production security settings (`recommended_production_security_settings`)
-
-
-## Sass compilation (`sass_bootstrap`)
+### Sass compilation (`sass_bootstrap`)
 
 Use this feature to enable Sass processing and Bootstrap styling.
 
@@ -204,13 +186,10 @@ install Bootstrap source code using just python.
 
 ## Sentry integration (`sentry`)
 
-
-# Optional Settings
-
-`MAINTENANCE_MODE`: Set this flag on a server environment to stop all user requests to the site, such as when you need to make substantial server updates or run a complex database migration.
+### Docker integration (`docker`)
 
 
-# Deployment
+### Elastic Beanstalk deployment (`elastic_beanstalk`)
 As a default for web applications, we strongly recommend using Elastic Beanstalk. To create a new deployment, [set up your local AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html) e.g. ~/.aws/config,
 and then
 
@@ -230,6 +209,27 @@ Use [eb-ssm](https://github.com/zagaran/eb-ssm/):
 ```
 eb-ssm [ENVIRONMENT_NAME]
 ```
+
+### Pre-commit hooks (`pre-commit`)
+To run style checks and desired formatters:
+```
+pre-commit run --all-files
+```
+If wish to install pre-commit as a pre-commit git hook, you can run (optional):
+```
+pre-commit install
+```
+
+### Security settings (`security_settings`)
+
+
+### Sentry integration (`sentry`)
+
+
+## Optional Settings
+
+`MAINTENANCE_MODE`: Set this flag on a server environment to stop all user requests to the site, such as when you need to make substantial server updates or run a complex database migration.
+
 
 # sample-django-app todo
 

@@ -1,3 +1,4 @@
+# START_FEATURE pre-commit
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
 default_language_version:
@@ -23,3 +24,4 @@ repos:
     hooks:
     -   id: isort
         types: [file, python]
+# END_FEATURE pre-commit
