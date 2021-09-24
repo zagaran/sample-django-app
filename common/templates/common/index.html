@@ -1,5 +1,17 @@
 {% extends "base_templates/base.html" %}
+
+{% load sass_tags %}
+
 {% block title %}Home{% endblock %}
+
+{% block head %}
+  <link href="{% sass_src 'styles/pages/index.scss' %}" rel="stylesheet">
+{% endblock %}
+
 {% block body %}
-Welcome to [PROJECT].  Please log in to continue.
+  <div class="container">
+    <p>Welcome to [PROJECT]. Please log in to continue.</p>
+    {# TODO: delete me; this is just a reference example #}
+    <button class="btn btn-primary does-nothing-button">This button does nothing</button>
+  </div>
 {% endblock %}

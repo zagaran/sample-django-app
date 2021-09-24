@@ -76,6 +76,8 @@ The codebase also has a number of reference examples.  These are all marked with
 
 ```
 # TODO: delete me; this is just a reference example
+// TODO: delete me; this is just a reference example
+{# TODO: delete me; this is just a reference example #}
 ```
 
 
@@ -181,6 +183,23 @@ needs to be.
 
 
 ## Production security settings (`recommended_production_security_settings`)
+
+
+## Sass compilation (`sass_bootstrap`)
+
+Use this feature to enable Sass processing and Bootstrap styling.
+
+While you can just include Bootstrap's styling/js via a CDN, using this feature allows you to customize Bootstrap to the
+style guide of your project, as well as define custom styling in a cleaner and more maintainable way (compared to plain
+CSS). The Bootstrap part of this integration could be swapped out for any other frontend styling framework that also
+uses Sass, but there really is no reason to write vanilla CSS.
+
+In local development, you can simply write scss files and include them using `sass_tags` and your stylesheets should
+automatically recompile in reload. This also works seamlessly with `collectstatic` for deploys.
+
+Note: If you aren't already using npm to install bootstrap, you can alternatively clone the contents of Bootstrap's sass
+files directly into your static directory and change your references to point there. There is currently no good way to
+install Bootstrap source code using just python.
 
 
 ## Sentry integration (`sentry`)
