@@ -1,3 +1,10 @@
+webpack-stats.json
+node_modules/
+yarn.lock
+package-lock.json
+*.log
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

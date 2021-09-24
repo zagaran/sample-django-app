@@ -15,6 +15,8 @@ from django.contrib.messages import constants as messages
 
 env = environ.Env(
     DEBUG=(bool, False),
+    DEBUG_TOOLBAR=(bool, False),
+    WEBPACK_LOADER_HOTLOAD=(bool, False),
     LOCALHOST=(bool, False),
     HOST=(str, "localhost"),
     MAINTENANCE_MODE=(bool, False),
@@ -65,6 +67,13 @@ THIRD_PARTY_APPS = [
     # START_FEATURE crispy_forms
     "crispy_forms",
     # END_FEATURE crispy_forms
+    # START_FEATURE django_react
+    "django_react_components",
+    "webpack_loader",
+    # END_FEATURE django_react
+    # START_FEATURE debug_toolbar
+    "debug_toolbar",
+    # END_FEATURE debug_toolbar
 ]
 
 LOCAL_APPS = [
@@ -240,6 +249,27 @@ else:
     AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
 # END_FEATURE django_storages
 
+
+# START_FEATURE debug_toolbar
+DEBUG_TOOLBAR = DEBUG and env("DEBUG_TOOLBAR")
+INTERNAL_IPS = ['127.0.0.1']
+if DEBUG_TOOLBAR:
+    MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
+# END_FEATURE debug_toolbar
+
+
+# START_FEATURE django_react
+if DEBUG:
+    WEBPACK_LOADER_HOTLOAD = env('WEBPACK_LOADER_HOTLOAD')
+    if WEBPACK_LOADER_HOTLOAD:
+        WEBPACK_LOADER = {
+            'DEFAULT': {
+                'LOADER_CLASS': "config.webpack_loader.DynamicWebpackLoader"
+            }
+        }
+# END_FEATURE django_react
+
+
 # START_FEATURE sentry
 SENTRY_DSN = env("SENTRY_DSN")
 if LOCALHOST is False and SENTRY_DSN:
@@ -273,4 +303,3 @@ if LOCALHOST is False:
     CSRF_COOKIE_SECURE = True
     CSRF_COOKIE_HTTPONLY = True  # Only do this if you are not accessing the CSRF cookie with JS
 # END_FEATURE recommended_production_security_settings
-

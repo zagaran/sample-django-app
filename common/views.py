@@ -17,6 +17,19 @@ class LogoutView(View):
         return redirect("index")
 
 
+# START_FEATURE django_react
+class DjangoReactView(TemplateView):
+    # TODO: delete me; this is just a reference example
+    template_name = 'common/sample_django_react.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['hello_msg'] = 'Component'
+        context['sample_props'] = {'msg': 'sample props'}
+        return context
+# END_FEATURE django_react
+
+
 # START_FEATURE crispy_forms
 class SampleFormView(FormView):
     # TODO: delete me; this is just a reference example
