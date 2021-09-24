@@ -68,9 +68,12 @@ THIRD_PARTY_APPS = [
     "crispy_forms",
     # END_FEATURE crispy_forms
     # START_FEATURE django_react
-    'django_react_components',
-    'webpack_loader',
+    "django_react_components",
+    "webpack_loader",
     # END_FEATURE django_react
+    # START_FEATURE debug_toolbar
+    "debug_toolbar",
+    # END_FEATURE debug_toolbar
 ]
 
 LOCAL_APPS = [
