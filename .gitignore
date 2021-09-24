@@ -60,3 +60,7 @@ venv.bak/
 # Compiled Files
 staticfiles/
 staticfiles/*
+# START_FEATURE sass_bootstrap
+/static/styles/**/*.css
+/static/styles/**/*.map
+# END_FEATURE sass_bootstrap
