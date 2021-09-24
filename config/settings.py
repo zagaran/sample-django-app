@@ -9,9 +9,10 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-import environ
+
 from django.contrib.messages import constants as messages
 
+import environ
 
 env = environ.Env(
     ALLOWED_HOSTS=(list, []),

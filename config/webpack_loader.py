@@ -1,8 +1,8 @@
 # START_FEATURE django_react
 
-from webpack_loader.loader import WebpackLoader
-
 from django.conf import settings
+
+from webpack_loader.loader import WebpackLoader
 
 
 class DynamicWebpackLoader(WebpackLoader):

@@ -1,9 +1,11 @@
+from django.contrib.auth import logout
 from django.shortcuts import redirect
 from django.views.generic.base import TemplateView, View
-from django.contrib.auth import logout
 # START_FEATURE crispy_forms
 from django.views.generic.edit import FormView
+
 from crispy_forms.tests.forms import SampleForm
+
 # END_FEATURE crispy_forms
 
 

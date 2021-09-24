@@ -1,16 +1,17 @@
 import uuid
 
-from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db import models
+
 from common.managers import UserManager
 
 
 class TimestampedModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    
+
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
-    
+
     def update(self, update_dict=None, **kwargs):
         """ Helper method to update objects """
         if not update_dict:
@@ -20,7 +21,7 @@ class TimestampedModel(models.Model):
             setattr(self, k, v)
             update_fields.add(k)
         self.save(update_fields=update_fields)
-    
+
     class Meta:
         abstract = True
 
@@ -32,10 +33,10 @@ class User(AbstractUser, TimestampedModel):
     username = None  # disable the AbstractUser.username field
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
-    
+
     objects = UserManager()
     # END_FEATURE django_social
-    
+
     def __str__(self):
         return self.email
 
