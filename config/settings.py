@@ -86,6 +86,10 @@ THIRD_PARTY_APPS = [
     # START_FEATURE debug_toolbar
     "debug_toolbar",
     # END_FEATURE debug_toolbar
+
+    # START_FEATURE sass_bootstrap
+    "sass_processor",
+    # END_FEATURE sass_bootstrap
 ]
 
 LOCAL_APPS = [
@@ -217,7 +221,9 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"), os.path.join(BASE_DIR, "dist/static")]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
 
 AUTH_USER_MODEL = "common.User"
 
@@ -315,3 +321,16 @@ if LOCALHOST is False:
     CSRF_COOKIE_SECURE = True
     CSRF_COOKIE_HTTPONLY = True  # Only do this if you are not accessing the CSRF cookie with JS
 # END_FEATURE recommended_production_security_settings
+
+# START_FEATURE sass_bootstrap
+SASS_PRECISION = 8  # Bootstrap's sass requires a precision of at least 8 to prevent layout errors
+SASS_PROCESSOR_CUSTOM_FUNCTIONS = {
+    'django-static': 'django.templatetags.static.static',
+}
+SASS_PROCESSOR_INCLUDE_DIRS = [
+    os.path.join(BASE_DIR, 'static/styles'),
+    os.path.join(BASE_DIR, 'node_modules'),
+]
+SASS_PROCESSOR_ROOT = os.path.join(BASE_DIR, 'static')
+COMPRESS_ROOT = SASS_PROCESSOR_ROOT
+# END_FEATURE sass_bootstrap

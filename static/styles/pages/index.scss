@@ -1,0 +1,31 @@
+// TODO: delete me; this is just a reference example
+.does-nothing-button {
+  &:focus {
+    -webkit-animation: rainbow 2s ease-in-out infinite;
+    animation: rainbow 2s ease-in-out infinite;
+    background: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet);
+    background-size: 1000% 1000%;
+
+    &:after {
+      content: "... just kidding!";
+    }
+  }
+
+  @keyframes rainbow {
+    0% {
+      background-position: 0% 80%;
+    }
+    25% {
+      background-position: 50% 50%;
+    }
+    50% {
+      background-position: 100% 20%;
+    }
+    75% {
+      background-position: 50% 50%;
+    }
+    100% {
+      background-position: 0% 80%;
+    }
+  }
+}

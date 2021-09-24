@@ -54,6 +54,13 @@ pre-commit
 flake8
 isort
 # END_FEATURE pre-commit
+
+# START_FEATURE sass_bootstrap
+django-compressor
+django-sass-processor
+libsass
+# END_FEATURE sass_bootstrap
+
 ################################
 
 # Convenience
