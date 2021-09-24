@@ -5,6 +5,13 @@ requests
 psycopg2
 
 ####### OPTIONAL FEATURES #######
+# START_FEATURE elastic_beanstalk
+awscli
+awsebcli
+eb-create-environment
+eb-ssm
+# END_FEATURE elastic_beanstalk
+
 # START_FEATURE django_social
 social-auth-app-django
 # END_FEATURE django_social
@@ -17,7 +24,6 @@ django-crispy-forms
 django-react-components
 django-webpack-loader
 # END_FEATURE django_react
-
 
 # START_FEATURE debug_toolbar
 django-debug-toolbar

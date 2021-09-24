@@ -67,6 +67,8 @@ preferred package manager -- `package-lock.json` for `npm` and `yarn.lock` for `
 The following is a list of tagged features in this repo:
 
 ```
+elastic_beanstalk
+recommended_production_security_settings
 bootstrap_messages
 django_social
 crispy_forms
@@ -170,6 +172,30 @@ needs to be.
 
 `MAINTENANCE_MODE`: Set this flag on a server environment to stop all user requests to the site, such as when you need to make substantial server updates or run a complex database migration.
 
+
+## Deployment
+Prerequisites:
+- AWS CLI
+```
+pip install awscli
+pip install awsebcli
+```
+
+#### Create a new deployment
+[Set up your local AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html) e.g. ~/.aws/config
+Then use [eb-create-environment](https://github.com/zagaran/eb-create-environment/)
+```
+eb-create-environment
+```
+#### Update an existing deployment
+```
+eb deploy [ENVIRONMENT_NAME]
+```
+####  SSH into an existing deployment
+Use [eb-ssm](https://github.com/zagaran/eb-ssm/)
+```
+eb-ssm [ENVIRONMENT_NAME]
+```
 
 # sample-django-app TODO
 
