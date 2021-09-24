@@ -2,28 +2,49 @@
 
 
 ```
-pip install -r requirements.txt
+# Create environment config file.
 cp config/.env.example config/.env
-nano config/.env  # Fill in missing env vars
+
+# Fill in appropriate environment values.
+nano config/.env
+
+# Install pip requirements.
+pip install -r requirements.txt
+
+# Apply migrations and sync database schema.
 python manage.py migrate
 ```
 
-To run the project, use `python manage.py runserver_plus`
+To run the project:
+```
+python manage.py runserver_plus
+```
+To access the database:
+```
+python manage.py shell_plus
+```
+To run test suite:
+```
+python manage.py test
+```
+To run style checks and desired formatters:
+```
+pre-commit run --all-files
+```
+To add a new dependency to or update requirements, add the entry to requirements.in and run `pip-compile` to generate requirements.txt:
+```
+vim requirements.in  # Updating Python dependencies as needed
+pip-compile --upgrade  # Generate requirements.txt with updated dependencies
+```
 
-To access the database, use `python manage.py shell_plus`
-
-# Features
-
-
-To add a new dependency to requirements, add the entry to requirements.in and run `pip-compile` to generate requirements.txt
 
 # Project Template Setup
 
 
 ```
 pip install pip-tools
-nano requirements.in  # Choose project requirements. Update version as necessary for security.
-pip-compile  # Generate project-specific requirements.txt
+nano requirements.in  # Choose project requirements
+pip-compile --upgrade  # Generate project-specific requirements.txt with updated dependencies
 nano readme.md  # replace this README with project relevant details
 ```
 
@@ -53,13 +74,15 @@ django_react
 debug_toolbar
 sentry
 django_storages
+docker
+django_ses
+sentry
 ```
 
 The codebase also has a number of reference examples.  These are all marked with the comment:
 ```
 # TODO: delete me; this is just a reference example
 ```
-
 
 # Feature Descriptions
 
@@ -143,8 +166,12 @@ needs to be.
      pipeline rather than running it locally.
      
 
-# TODO
+## Optional Settings
 
+`MAINTENANCE_MODE`: Set this flag on a server environment to stop all user requests to the site, such as when you need to make substantial server updates or run a complex database migration.
+
+
+# sample-django-app TODO
 
 Write a setup script that does the following:
 

@@ -56,3 +56,8 @@ venv.bak/
 
 # Operating systems
 .DS_Store
+
+# Compiled Files
+staticfiles/
+staticfiles/*
+

@@ -1,0 +1,18 @@
+# Ignore pyc files
+**/*.pyc
+
+# Ignore local databases
+**/*.sqlite3
+
+# Local environment files
+*/.env
+
+# Environments
+.venv
+
+# Editors
+.idea/
+.vscode/
+
+# Operating system metafiles
+.DS_Store

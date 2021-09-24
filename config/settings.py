@@ -12,16 +12,21 @@ import os
 import environ
 from django.contrib.messages import constants as messages
 
-# START_FEATURE sentry
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
-# END_FEATURE sentry
 
 env = environ.Env(
     DEBUG=(bool, False),
     DEBUG_TOOLBAR=(bool, False),
     WEBPACK_LOADER_HOTLOAD=(bool, False),
+    LOCALHOST=(bool, False),
     HOST=(str, "localhost"),
+    MAINTENANCE_MODE=(bool, False),
+    # START_FEATURE sentry
+    SENTRY_DSN=(str, None),
+    # END_FEATURE sentry
+    # START_FEATURE django_ses
+    AWS_SES_REGION_NAME=(str, "us-east-1"),
+    AWS_SES_REGION_ENDPOINT=(str, "email.us-east-1.amazonaws.com"),
+    # END_FEATURE django_ses
 )
 environ.Env.read_env()
 
@@ -34,24 +39,21 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: do not run with debug turned on in production!
 DEBUG = env("DEBUG")
 
-# START_FEATURE sentry
-if not DEBUG:
-    sentry_sdk.init(
-        dsn=env('SENTRY_DSN'),
-        integrations=[DjangoIntegration()],
-        traces_sample_rate=1.0,
-        # If you wish to associate users to errors (assuming you are using
-        # django.contrib.auth) you may enable sending PII data.
-        send_default_pii=False
-    )
-# END_FEATURE sentry
+# run with this set to False in production
+LOCALHOST = env("LOCALHOST")
 
 ALLOWED_HOSTS = [env("HOST")]
-
+if LOCALHOST is True:
+    ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+else:
+    # START_FEATURE recommended_production_settings
+    # if using AWS hosting
+    from ec2_metadata import ec2_metadata
+    ALLOWED_HOSTS.append(ec2_metadata.private_ipv4)
+    # END_FEATURE recommended_production_settings
 
 # Application definition
-
-INSTALLED_APPS = [
+THIRD_PARTY_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -69,20 +71,28 @@ INSTALLED_APPS = [
     'django_react_components',
     'webpack_loader',
     # END_FEATURE django_react
-    'common',
 ]
+
+LOCAL_APPS = [
+    "common",
+]
+
+INSTALLED_APPS = THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
+    "common.middleware.MaintenanceModeMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = 'config.urls'
+MAINTENANCE_MODE = env("MAINTENANCE_MODE")
+
+ROOT_URLCONF = "config.urls"
 
 TEMPLATES = [
     {
@@ -108,6 +118,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 DATABASES = {"default": env.db()}
 
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -127,6 +138,18 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+# START_FEATURE django_ses
+if LOCALHOST:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+    DEFAULT_FROM_EMAIL = "webmaster@localhost"
+else:
+    EMAIL_BACKEND = "django_ses.SESBackend"
+    AWS_SES_REGION_NAME = env("AWS_SES_REGION_NAME")
+    AWS_SES_REGION_ENDPOINT = env("AWS_SES_REGION_ENDPOINT")
+    AWS_SES_RETURN_PATH = env("DEFAULT_FROM_EMAIL")
+    DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
+# END_FEATURE django_ses
 
 # Logging
 # https://docs.djangoproject.com/en/dev/topics/logging/#django-security
@@ -179,8 +202,7 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
-
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"), os.path.join(BASE_DIR, "dist/static")]
 
 AUTH_USER_MODEL = "common.User"
 
@@ -214,14 +236,14 @@ MESSAGE_TAGS = {
 
 
 # START_FEATURE django_storages
-if DEBUG is False:
+if LOCALHOST is True:
+    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+    MEDIA_ROOT = ""
+else:
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
     AWS_DEFAULT_ACL = "private"
     AWS_S3_FILE_OVERWRITE = False
     AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
-else:
-    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
-    MEDIA_ROOT = ""
 # END_FEATURE django_storages
 
 
@@ -243,3 +265,38 @@ if DEBUG:
             }
         }
 # END_FEATURE django_react
+
+
+# START_FEATURE sentry
+SENTRY_DSN = env("SENTRY_DSN")
+if LOCALHOST is False and SENTRY_DSN:
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
+    sentry_sdk.init(
+        dsn=env("SENTRY_DSN"),
+        integrations=[DjangoIntegration()],
+        traces_sample_rate=1.0,
+    )
+# END_FEATURE sentry
+
+# START_FEATURE recommended_production_security_settings
+if LOCALHOST is False:
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+    USE_X_FORWARDED_HOST = True
+    X_FRAME_OPTIONS = "DENY"
+    SECURE_REFERRER_POLICY = "same-origin"
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+
+    SECURE_HSTS_SECONDS = 60 * 60 * 1  # 1 hour
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+
+    SESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_AGE = 60 * 60 * 3  # 3 hours
+    CSRF_COOKIE_SECURE = True
+    CSRF_COOKIE_HTTPONLY = True  # Only do this if you are not accessing the CSRF cookie with JS
+# END_FEATURE recommended_production_security_settings
