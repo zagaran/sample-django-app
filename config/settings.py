@@ -14,19 +14,27 @@ from django.contrib.messages import constants as messages
 
 
 env = environ.Env(
+    ALLOWED_HOSTS=(list, []),
     DEBUG=(bool, False),
-    DEBUG_TOOLBAR=(bool, False),
-    WEBPACK_LOADER_HOTLOAD=(bool, False),
     LOCALHOST=(bool, False),
-    HOST=(str, "localhost"),
     MAINTENANCE_MODE=(bool, False),
-    # START_FEATURE sentry
-    SENTRY_DSN=(str, None),
-    # END_FEATURE sentry
+
+    # START_FEATURE django_react
+    WEBPACK_LOADER_HOTLOAD=(bool, False),
+    # END_FEATURE django_react
+
     # START_FEATURE django_ses
     AWS_SES_REGION_NAME=(str, "us-east-1"),
     AWS_SES_REGION_ENDPOINT=(str, "email.us-east-1.amazonaws.com"),
     # END_FEATURE django_ses
+
+    # START_FEATURE sentry
+    SENTRY_DSN=(str, None),
+    # END_FEATURE sentry
+
+    # START_FEATURE debug_toolbar
+    DEBUG_TOOLBAR=(bool, False),
+    # END_FEATURE debug_toolbar
 )
 environ.Env.read_env()
 
@@ -42,7 +50,7 @@ DEBUG = env("DEBUG")
 # run with this set to False in production
 LOCALHOST = env("LOCALHOST")
 
-ALLOWED_HOSTS = [env("HOST")]
+ALLOWED_HOSTS = env("ALLOWED_HOSTS")
 if LOCALHOST is True:
     ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 else:
@@ -61,16 +69,20 @@ THIRD_PARTY_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
+
     # START_FEATURE django_social
     "social_django",
     # END_FEATURE django_social
+
     # START_FEATURE crispy_forms
     "crispy_forms",
     # END_FEATURE crispy_forms
+
     # START_FEATURE django_react
     "django_react_components",
     "webpack_loader",
     # END_FEATURE django_react
+
     # START_FEATURE debug_toolbar
     "debug_toolbar",
     # END_FEATURE debug_toolbar
