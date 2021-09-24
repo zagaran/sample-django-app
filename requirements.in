@@ -28,15 +28,18 @@ sentry-sdk
 # START_FEATURE django_ses
 django-ses
 # END_FEATURE django_ses
+
+# START_FEATURE pre-commit
+pre-commit
+flake8
+isort
+# END_FEATURE pre-commit
 ################################
 
 # Convenience
 ipython
 werkzeug
 pip-tools
-flake8
-isort
-pre-commit
 
 # Security
 cryptography==3.3.2  # Lock to 3.3.2 if running into "No module named 'setuptools_rust'" error
