@@ -4,13 +4,17 @@
 #
 #    pip-compile
 #
+appnope==0.1.2
+    # via ipython
 asgiref==3.4.1
     # via django
 backcall==0.2.0
     # via ipython
-boto3==1.18.47
+backports.entry-points-selectable==1.1.0
+    # via virtualenv
+boto3==1.18.48
     # via django-ses
-botocore==1.21.47
+botocore==1.21.48
     # via
     #   boto3
     #   s3transfer
@@ -20,6 +24,8 @@ certifi==2021.5.30
     #   sentry-sdk
 cffi==1.14.6
     # via cryptography
+cfgv==3.3.1
+    # via pre-commit
 charset-normalizer==2.0.6
     # via requests
 click==8.0.1
@@ -34,6 +40,8 @@ defusedxml==0.7.1
     # via
     #   python3-openid
     #   social-auth-core
+distlib==0.3.3
+    # via virtualenv
 django==3.2.7
     # via
     #   -r requirements.in
@@ -46,17 +54,25 @@ django-environ==0.7.0
     # via -r requirements.in
 django-extensions==3.1.3
     # via -r requirements.in
-django-ses==2.2.1
+django-ses==2.2.2
     # via -r requirements.in
 django-storages==1.11.1
+    # via -r requirements.in
+filelock==3.0.12
+    # via virtualenv
+flake8==3.9.2
     # via -r requirements.in
 future==0.18.2
     # via django-ses
 gunicorn==20.1.0
     # via -r requirements.in
+identify==2.2.15
+    # via pre-commit
 idna==3.2
     # via requests
 ipython==7.27.0
+    # via -r requirements.in
+isort==5.9.3
     # via -r requirements.in
 jedi==0.18.0
     # via ipython
@@ -66,6 +82,10 @@ jmespath==0.10.0
     #   botocore
 matplotlib-inline==0.1.3
     # via ipython
+mccabe==0.6.1
+    # via flake8
+nodeenv==1.6.0
+    # via pre-commit
 oauthlib==3.1.1
     # via
     #   requests-oauthlib
@@ -80,14 +100,22 @@ pickleshare==0.7.5
     # via ipython
 pip-tools==6.3.0
     # via -r requirements.in
+platformdirs==2.3.0
+    # via virtualenv
+pre-commit==2.15.0
+    # via -r requirements.in
 prompt-toolkit==3.0.20
     # via ipython
 psycopg2==2.9.1
     # via -r requirements.in
 ptyprocess==0.7.0
     # via pexpect
+pycodestyle==2.7.0
+    # via flake8
 pycparser==2.20
     # via cffi
+pyflakes==2.3.1
+    # via flake8
 pygments==2.10.0
     # via ipython
 pyjwt==2.1.0
@@ -100,6 +128,8 @@ pytz==2021.1
     # via
     #   django
     #   django-ses
+pyyaml==5.4.1
+    # via pre-commit
 requests==2.26.0
     # via
     #   -r requirements.in
@@ -115,12 +145,15 @@ six==1.16.0
     # via
     #   cryptography
     #   python-dateutil
+    #   virtualenv
 social-auth-app-django==5.0.0
     # via -r requirements.in
 social-auth-core==4.1.0
     # via social-auth-app-django
 sqlparse==0.4.2
     # via django
+toml==0.10.2
+    # via pre-commit
 tomli==1.2.1
     # via pep517
 traitlets==5.1.0
@@ -132,6 +165,8 @@ urllib3==1.26.7
     #   botocore
     #   requests
     #   sentry-sdk
+virtualenv==20.8.1
+    # via pre-commit
 wcwidth==0.2.5
     # via prompt-toolkit
 werkzeug==2.0.1

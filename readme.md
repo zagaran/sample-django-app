@@ -30,6 +30,11 @@ To run style checks and desired formatters:
 ```
 pre-commit run --all-files
 ```
+If wish to install pre-commit as a pre-commit git hook, you can run (optional):
+```
+pre-commit install
+```
+ 
 To add a new dependency to or update requirements, add the entry to requirements.in and run `pip-compile` to generate requirements.txt:
 ```
 vim requirements.in  # Updating Python dependencies as needed
