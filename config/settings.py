@@ -44,11 +44,11 @@ ALLOWED_HOSTS = [env("HOST")]
 if LOCALHOST is True:
     ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 else:
-    # START_FEATURE recommended_production_settings
+    # START_FEATURE elastic_beanstalk
     # if using AWS hosting
     from ec2_metadata import ec2_metadata
     ALLOWED_HOSTS.append(ec2_metadata.private_ipv4)
-    # END_FEATURE recommended_production_settings
+    # END_FEATURE elastic_beanstalk
 
 # Application definition
 THIRD_PARTY_APPS = [

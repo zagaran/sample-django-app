@@ -57,6 +57,8 @@ Following that, you should run `pip-compile`.
 The following is a list of tagged features in this repo:
 
 ```
+elastic_beanstalk
+recommended_production_security_settings
 bootstrap_messages
 django_social
 crispy_forms
@@ -85,15 +87,10 @@ pip install awsebcli
 ```
 
 #### Create a new deployment
-Use [eb-create-environment](https://github.com/zagaran/eb-create-environment/)
+[Set up your local AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html) e.g. ~/.aws/config
+Then use [eb-create-environment](https://github.com/zagaran/eb-create-environment/)
 ```
-pip install eb-create-environment
 eb-create-environment
-```
-#### Initialize local EB config
-Create local `.elasticbeanstalk/config.yml` file:
-```
-eb init
 ```
 #### Update an existing deployment
 ```
@@ -102,7 +99,6 @@ eb deploy [ENVIRONMENT_NAME]
 ####  SSH into an existing deployment
 Use [eb-ssm](https://github.com/zagaran/eb-ssm/)
 ```
-pip install eb-ssm
 eb-ssm [ENVIRONMENT_NAME]
 ```
 
