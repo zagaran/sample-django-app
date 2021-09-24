@@ -48,6 +48,12 @@ sentry-sdk
 # START_FEATURE django_ses
 django-ses
 # END_FEATURE django_ses
+
+# START_FEATURE pre-commit
+pre-commit
+flake8
+isort
+# END_FEATURE pre-commit
 ################################
 
 # Convenience

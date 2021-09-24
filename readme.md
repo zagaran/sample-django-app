@@ -26,15 +26,19 @@ python manage.py shell_plus
 To run test suite:
 ```
 python manage.py test
+``` 
+To add a new dependency to or update requirements, add the entry to requirements.in and run `pip-compile` to generate requirements.txt:
+```
+vim requirements.in  # Updating Python dependencies as needed
+pip-compile --upgrade  # Generate requirements.txt with updated dependencies
 ```
 To run style checks and desired formatters:
 ```
 pre-commit run --all-files
 ```
-To add a new dependency to or update requirements, add the entry to requirements.in and run `pip-compile` to generate requirements.txt:
+If wish to install pre-commit as a pre-commit git hook, you can run (optional):
 ```
-vim requirements.in  # Updating Python dependencies as needed
-pip-compile --upgrade  # Generate requirements.txt with updated dependencies
+pre-commit install
 ```
 
 
@@ -79,6 +83,7 @@ django_storages
 docker
 django_ses
 sentry
+pre-commit
 ```
 
 The codebase also has a number of reference examples.  These are all marked with the comment:
