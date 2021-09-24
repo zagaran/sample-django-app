@@ -4,6 +4,8 @@
 #
 #    pip-compile
 #
+appnope==0.1.2
+    # via ipython
 asgiref==3.4.1
     # via django
 attrs==21.2.0

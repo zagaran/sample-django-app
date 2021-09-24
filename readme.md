@@ -22,11 +22,11 @@ To access the database:
 ```
 python manage.py shell_plus
 ```
-To run test suite:
+To run the test suite:
 ```
 python manage.py test
 ```
-To get test coverage report:
+To get a test coverage report:
 ```
 coverage run --source='.' manage.py test; coverage report
 ```
@@ -76,7 +76,7 @@ The codebase also has a number of reference examples.  These are all marked with
 ```
 
 
-## Feature Descriptions
+## Descriptions of Optional Features
 
 ### Django messages integration with Bootstrap (`bootstrap_messages`)
 
@@ -190,12 +190,15 @@ install Bootstrap source code using just python.
 
 
 ### Elastic Beanstalk deployment (`elastic_beanstalk`)
-As a default for web applications, we strongly recommend using Elastic Beanstalk. To create a new deployment, [set up your local AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html) e.g. ~/.aws/config,
-and then
+As a default for web applications, we strongly recommend using Elastic Beanstalk.
+
+To create a new deployment, [set up your local AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html) e.g. ~/.aws/config,
+
+Set desired parameters `.elasticbeanstalk/eb-create-environment.yml`
 
 Use [eb-create-environment](https://github.com/zagaran/eb-create-environment/):
 ```
-eb-create-environment
+eb-create-environment --config .elasticbeanstalk/eb-create-environment.yml
 ```
 
 To update an existing deployment
@@ -211,6 +214,10 @@ eb-ssm [ENVIRONMENT_NAME]
 ```
 
 ### Pre-commit hooks (`pre-commit`)
+You can configure pre-commit with `.pre-commit-config.yaml`
+
+See https://pre-commit.com/hooks.html for more hook options.
+
 To run style checks and desired formatters:
 ```
 pre-commit run --all-files
@@ -221,7 +228,7 @@ pre-commit install
 ```
 
 ### Security settings (`security_settings`)
-
+These are the recommended security settings. [Explanations for all Django settings can be found here](https://docs.djangoproject.com/en/3.2/ref/settings/). Please pay particular note to what are appropriate cookie and subdomain settings for your application.
 
 ### Sentry integration (`sentry`)
 
