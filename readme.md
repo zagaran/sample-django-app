@@ -41,17 +41,6 @@ If wish to install pre-commit as a pre-commit git hook, you can run (optional):
 pre-commit install
 ```
 
-
-# Project Template Setup
-
-
-```
-pip install pip-tools
-nano requirements.in  # Choose project requirements
-pip-compile --upgrade  # Generate project-specific requirements.txt with updated dependencies
-nano readme.md  # replace this README with project relevant details
-```
-
 ## Included Optional Features
 
 
@@ -74,15 +63,14 @@ The following is a list of tagged features in this repo:
 elastic_beanstalk
 recommended_production_security_settings
 bootstrap_messages
-django_social
-crispy_forms
-django_react
-debug_toolbar
 sentry
+crispy_forms
+django_ses
+django_social
+django_react
 django_storages
 docker
-django_ses
-sentry
+debug_toolbar
 pre-commit
 ```
 
@@ -179,25 +167,21 @@ needs to be.
 
 
 ## Deployment
-Prerequisites:
-- AWS CLI
-```
-pip install awscli
-pip install awsebcli
-```
 
-#### Create a new deployment
-[Set up your local AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html) e.g. ~/.aws/config
-Then use [eb-create-environment](https://github.com/zagaran/eb-create-environment/)
+To create a new deployment, [set up your local AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html) e.g. ~/.aws/config,
+and then
+
+Use [eb-create-environment](https://github.com/zagaran/eb-create-environment/):
 ```
 eb-create-environment
 ```
-#### Update an existing deployment
+To update an existing deployment
 ```
 eb deploy [ENVIRONMENT_NAME]
 ```
-####  SSH into an existing deployment
-Use [eb-ssm](https://github.com/zagaran/eb-ssm/)
+To SSH into a deployment
+
+Use [eb-ssm](https://github.com/zagaran/eb-ssm/):
 ```
 eb-ssm [ENVIRONMENT_NAME]
 ```
