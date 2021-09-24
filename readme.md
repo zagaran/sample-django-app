@@ -75,6 +75,37 @@ The codebase also has a number of reference examples.  These are all marked with
 
 `MAINTENANCE_MODE`: Set this flag on a server environment to stop all user requests to the site, such as when you need to make substantial server updates or run a complex database migration.
 
+
+## Deployment
+Prerequisites:
+- AWS CLI
+```
+pip install awscli
+pip install awsebcli
+```
+
+#### Create a new deployment
+Use [eb-create-environment](https://github.com/zagaran/eb-create-environment/)
+```
+pip install eb-create-environment
+eb-create-environment
+```
+#### Initialize local EB config
+Create local `.elasticbeanstalk/config.yml` file:
+```
+eb init
+```
+#### Update an existing deployment
+```
+eb deploy [ENVIRONMENT_NAME]
+```
+####  SSH into an existing deployment
+Use [eb-ssm](https://github.com/zagaran/eb-ssm/)
+```
+pip install eb-ssm
+eb-ssm [ENVIRONMENT_NAME]
+```
+
 # sample-django-app TODO
 
 Write a setup script that does the following:
