@@ -1,6 +1,4 @@
 # Local Project Setup
-
-
 ```
 # Create environment config file.
 cp config/.env.example config/.env
@@ -41,9 +39,20 @@ If wish to install pre-commit as a pre-commit git hook, you can run (optional):
 pre-commit install
 ```
 
+# How To Use This Template
+1. Reset the git history to start your project.
+```
+# reset the git history
+rm -rf .git
+git init
+git branch -M main
+git add .
+git commit -m "init"
+git remote add origin [REMOTE_URL]
+git push -u origin main
+```
+2. Decide which optional features you'd like to use.
 ## Included Optional Features
-
-
 There are a number of optional features that have been included in this sample.
 The code related to each sits between comments
 `# START_FEATURE feature_name` and `# END_FEATURE feature_name`.
@@ -79,13 +88,13 @@ The codebase also has a number of reference examples.  These are all marked with
 # TODO: delete me; this is just a reference example
 ```
 
-# Feature Descriptions
+## Feature Descriptions
 
 
-## Django-React (django_react)
+### Django-React (django_react)
 
 
-### Files
+#### Files
 
 The following files and folders are only needed if `django_react` is a desired feature in your app and can be safely
 deleted from projects which do not leverage the feature.
@@ -96,14 +105,14 @@ deleted from projects which do not leverage the feature.
 - `config/webpack_loader.py`
 - `src/`
 
-### Additional Setup
+#### Additional Setup
 
 
 When using this feature, make sure to install the Node.js requirements using the manager of your choice 
 (either `npm install` or `yarn install` will work) before proceeding with development.
 
 
-### Special Consideration for Running
+#### Special Consideration for Running
 
 
 For development on localhost when using Django-React, you should run the following command in a separate terminal to
@@ -117,7 +126,7 @@ that the project is ready to be viewed.
 - If you include `nwb` as a dependency, you can use the locally-installed `nwb` by running `node_modules/.bin/nwb serve --no-vendor` instead of relying on a globally installed `nwb`.
 
 
-### Adding a new React component
+#### Adding a new React component
 
 
 In this paradigm, React components are compiled and injected into the standard Django template. This means we can take 
@@ -133,7 +142,7 @@ make those templates responsive.
     - You can add any number of props as named keywords, e.g. `{% react_component 'Home' id='home' prop1=value_from_context %}`
     - You can also choose to pass props as an object instead of individual kwargs, e.g. `{% react_component 'Hello' id='hello' props=sample_props %}`.
 
-### Preparing for deployment
+#### Preparing for deployment
 
 
 The preferred option for deployment is to add the below compilation step to the deployment configuration rather than 
@@ -144,7 +153,7 @@ building it locally. However, if you wish to build the app locally:
   make them available via the usual static assets pipeline set up in the deploy configuration.
 
 
-### Other Notes
+#### Other Notes
 
 
 - If you use `nwb serve` in your local development environment, you may see a persistent XHR error in the console -- a 
@@ -161,14 +170,13 @@ needs to be.
      pipeline rather than running it locally.
      
 
-## Optional Settings
+### Optional Settings
 
 `MAINTENANCE_MODE`: Set this flag on a server environment to stop all user requests to the site, such as when you need to make substantial server updates or run a complex database migration.
 
 
-## Deployment
-
-To create a new deployment, [set up your local AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html) e.g. ~/.aws/config,
+# Deployment
+As a default for web applications, we strongly recommend using Elastic Beanstalk. To create a new deployment, [set up your local AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html) e.g. ~/.aws/config,
 and then
 
 Use [eb-create-environment](https://github.com/zagaran/eb-create-environment/):
@@ -186,7 +194,7 @@ Use [eb-ssm](https://github.com/zagaran/eb-ssm/):
 eb-ssm [ENVIRONMENT_NAME]
 ```
 
-# sample-django-app TODO
+# sample-django-app todo
 
 Write a setup script that does the following:
 
