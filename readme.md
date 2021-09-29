@@ -183,8 +183,14 @@ Note: If you aren't already using npm to install bootstrap, you can alternativel
 files directly into your static directory and change your references to point there. There is currently no good way to
 install Bootstrap source code using just python.
 
+#### Production notes
 
-## Sentry integration (`sentry`)
+In development, `.scss` files are compiled on the fly. However, when deploying, these files must be manually generated
+using `python manage.py compilescss`. Also note that if your styles folder is in a directory that's collected with
+`collectstatic`, you should add the `--ignore *.scss` flag to avoid exposing the raw `.scss` files as staticfiles.
+
+
+### Sentry integration (`sentry`)
 
 ### Docker integration (`docker`)
 
