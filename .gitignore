@@ -3,7 +3,7 @@ node_modules/
 yarn.lock
 package-lock.json
 *.log
-
+static/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
