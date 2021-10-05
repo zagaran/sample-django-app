@@ -1,10 +1,3 @@
-webpack-stats.json
-node_modules/
-yarn.lock
-package-lock.json
-*.log
-
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -57,6 +50,9 @@ venv.bak/
 # Operating systems
 .DS_Store
 
+# Installed packages
+node_modules/
+
 # Compiled Files
 staticfiles/
 staticfiles/*
@@ -64,3 +60,6 @@ staticfiles/*
 /static/styles/**/*.css
 /static/styles/**/*.map
 # END_FEATURE sass_bootstrap
+# START_FEATURE django_react
+webpack-stats.json
+# END_FEATURE django_react
