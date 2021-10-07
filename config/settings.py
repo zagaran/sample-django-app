@@ -108,9 +108,17 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # START_FEATURE user_action_tracking
+    "common.middleware.UserActionTrackingMiddleware"
+    # END_FEATURE user_action_tracking
 ]
 
 MAINTENANCE_MODE = env("MAINTENANCE_MODE")
+
+# START_FEATURE user_action_tracking
+USER_TRACKING_EXEMPT_ROUTES = []
+# END_FEATURE user_action_tracking
+
 
 ROOT_URLCONF = "config.urls"
 

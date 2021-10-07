@@ -57,3 +57,14 @@ class UploadFile(TimestampedModel):
         upload_to=get_s3_path
     )
 # END_FEATURE django_storages
+
+
+# START_FEATURE user_action_tracking
+class UserAction(TimestampedModel):
+    user = models.ForeignKey(User, related_name="user_actions", on_delete=models.PROTECT)
+    url = models.URLField(max_length=2083)
+    method = models.CharField(max_length=64)
+    url_name = models.CharField(max_length=256, null=True)
+    status_code = models.IntegerField()
+    user_agent = models.TextField(null=True)
+# END_FEATURE user_action_tracking

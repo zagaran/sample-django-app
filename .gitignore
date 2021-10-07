@@ -61,5 +61,6 @@ staticfiles/*
 /static/styles/**/*.map
 # END_FEATURE sass_bootstrap
 # START_FEATURE django_react
+static/webpack_bundles/
 webpack-stats.json
 # END_FEATURE django_react
