@@ -256,6 +256,12 @@ These are the recommended security settings. [Explanations for all Django settin
 
 ## User Action Tracking (`user_action_tracking`)
 
+This feature tracks all URLs accessed by users (along with the status code and user agent) in a table called `UserAction`.
+This can be useful for debugging, for analytics, or for auditing.  There is a setting `USER_TRACKING_EXEMPT_ROUTES` where
+you can add the names of routes that should be excluded from action tracking because they would not be useful
+(for example, if your site has a keep_alive route that the frontend regulalry hits automatically).  Note that only
+actions by authenticated users are tracked.
+
 # Optional Settings
 
 `MAINTENANCE_MODE`: Set this flag on a server environment to stop all user requests to the site, such as when you need to make substantial server updates or run a complex database migration.
