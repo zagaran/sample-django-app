@@ -3,7 +3,6 @@ node_modules/
 yarn.lock
 package-lock.json
 *.log
-static/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -60,6 +59,7 @@ venv.bak/
 # Compiled Files
 staticfiles/
 staticfiles/*
+static/webpack_bundles/
 # START_FEATURE sass_bootstrap
 /static/styles/**/*.css
 /static/styles/**/*.map
