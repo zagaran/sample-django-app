@@ -1,8 +1,10 @@
-#
+# Project Template and Optional Features
 
 This project was created using https://github.com/zagaran/django-template
 
-See the readme on django-template for an explanation of included features.
+See the readme on [django-template](https://github.com/zagaran/django-template) for:
+* Instructions on starting your own project
+* An explanation of included features.
 
 # Local Project Setup
 
