@@ -1,4 +1,3 @@
-
 # START_FEATURE user_action_tracking
 from django.conf import settings
 from common.models import UserAction
