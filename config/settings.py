@@ -115,6 +115,7 @@ MIDDLEWARE = [
 
 MAINTENANCE_MODE = env("MAINTENANCE_MODE")
 
+
 # START_FEATURE user_action_tracking
 USER_TRACKING_EXEMPT_ROUTES = []
 # END_FEATURE user_action_tracking
@@ -249,9 +250,11 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = env("GOOGLE_OAUTH2_KEY")
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env("GOOGLE_OAUTH2_SECRET")
 # END_FEATURE django_social
 
+
 # START_FEATURE crispy_forms
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 # END_FEATURE crispy_forms
+
 
 # START_FEATURE bootstrap_messages
 # Bootstrap styling for Django messages
@@ -309,6 +312,7 @@ if LOCALHOST is False and SENTRY_DSN:
     )
 # END_FEATURE sentry
 
+
 # START_FEATURE security_settings
 if LOCALHOST is False:
     SECURE_SSL_REDIRECT = True
@@ -330,6 +334,7 @@ if LOCALHOST is False:
     CSRF_COOKIE_SECURE = True
     CSRF_COOKIE_HTTPONLY = True  # Only do this if you are not accessing the CSRF cookie with JS
 # END_FEATURE security_settings
+
 
 # START_FEATURE sass_bootstrap
 SASS_PRECISION = 8  # Bootstrap's sass requires a precision of at least 8 to prevent layout errors

@@ -5,7 +5,6 @@ from django.views.generic.base import TemplateView, View
 from django.views.generic.edit import FormView
 
 from crispy_forms.tests.forms import SampleForm
-
 # END_FEATURE crispy_forms
 
 

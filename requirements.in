@@ -49,11 +49,11 @@ sentry-sdk
 django-ses
 # END_FEATURE django_ses
 
-# START_FEATURE pre-commit
+# START_FEATURE pre_commit
 pre-commit
 flake8
 isort
-# END_FEATURE pre-commit
+# END_FEATURE pre_commit
 
 # START_FEATURE sass_bootstrap
 django-compressor
