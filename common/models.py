@@ -56,6 +56,9 @@ class UploadFile(TimestampedModel):
         max_length=1024,
         upload_to=get_s3_path
     )
+
+    class Meta:
+        abstract = True
 # END_FEATURE django_storages
 
 
