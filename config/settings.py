@@ -305,11 +305,14 @@ SENTRY_DSN = env("SENTRY_DSN")
 if LOCALHOST is False and SENTRY_DSN:
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
+    from sentry_sdk.integrations.logging import ignore_logger
     sentry_sdk.init(
         dsn=env("SENTRY_DSN"),
         integrations=[DjangoIntegration()],
         traces_sample_rate=1.0,
     )
+    # Silence "invalid HTTP_HOST" errors
+    ignore_logger("django.security.DisallowedHost")
 # END_FEATURE sentry
 
 
