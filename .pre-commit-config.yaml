@@ -26,3 +26,4 @@ repos:
     -   id: isort
         types: [file, python]
 # END_FEATURE pre_commit
+s
