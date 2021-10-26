@@ -1,6 +1,7 @@
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 from django.views.generic.base import TemplateView, View
+from django.http.response import HttpResponse
 # START_FEATURE crispy_forms
 from django.views.generic.edit import FormView
 
@@ -12,8 +13,8 @@ class IndexView(TemplateView):
     template_name = "common/index.html"
 
 
-def HealthCheckView(View):
-    def get():
+class HealthCheckView(View):
+    def get(self, request):
         return HttpResponse("ok")
 
 
