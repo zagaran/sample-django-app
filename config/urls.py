@@ -24,3 +24,6 @@ urlpatterns = [
     path('', include("common.urls")),
     path("health_check/", lambda request: HttpResponse("ok")),
 ]
+
+handler404 = "common.views.error_404"
+handler500 = "common.views.error_500"

@@ -204,6 +204,9 @@ LOGGING = {
         },
     },
     "loggers": {
+        "django.request": {
+            "handlers": ["console"]
+        },
         "django.security.DisallowedHost": {
             "handlers": ["null"],
             "propagate": False,
