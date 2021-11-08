@@ -1,0 +1,11 @@
+{% extends "base_templates/base.html" %}
+
+{% block title %}Not Found (404){% endblock %}
+
+{% block body %}
+  <div class="container">
+    <h1>Page not found (404)</h1>
+    <p>The page you are looking for doesn't exist.</p>
+    <a class="btn btn-primary" href="{% url 'index' %}">Back to home</a>
+  </div>
+{% endblock %}

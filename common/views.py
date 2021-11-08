@@ -1,5 +1,5 @@
 from django.contrib.auth import logout
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.views.generic.base import TemplateView, View
 from django.http.response import HttpResponse
 # START_FEATURE crispy_forms
@@ -42,3 +42,9 @@ class SampleFormView(FormView):
     # TODO: delete me; this is just a reference example
     form_class = SampleForm
 # END_FEATURE crispy_forms
+
+def error_404(request, exception):
+    return render(request, "errors/404.html", status=404)
+
+def error_500(request):
+    return render(request, "errors/500.html", status=500)
