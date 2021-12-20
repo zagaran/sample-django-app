@@ -22,7 +22,28 @@ RUN set -ex \
 ENV VIRTUAL_ENV /env
 ENV PATH /env/bin:$PATH
 
+# START_FEATURE django_react
+COPY ./nwb.config.js /app/nwb.config.js
+COPY ./package.json /app/package.json
+COPY ./package-lock.json /app/package-lock.json
+
+RUN npm install
+# END_FEATURE django_react
+
 COPY . /app/
+COPY ./config/.env.example /app/config/.env
+
+# START_FEATURE django_react
+RUN ./node_modules/.bin/nwb build --no-vendor
+# END_FEATURE django_react
+
+# START_FEATURE sass_bootstrap
+RUN python manage.py compilescss
+# END_FEATURE sass_bootstrap
+
+RUN python manage.py collectstatic --noinput
+
+RUN rm /app/config/.env
 
 EXPOSE 8000
 
