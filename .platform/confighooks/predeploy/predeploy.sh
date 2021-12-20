@@ -3,7 +3,6 @@
 source $PYTHONPATH/activate
 
 # START_FEATURE django_react
-npm install -G nwb
 npm install
 ./node_modules/.bin/nwb build --no-vendor
 # END_FEATURE django_react
