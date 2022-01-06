@@ -8,7 +8,7 @@
     "nwb": "^0.24.7",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "webpack-bundle-tracker": "^0.4.3"
+    "webpack-bundle-tracker": "^1.4.0"
   },
   "scripts": {
     "start": "react-scripts start",
