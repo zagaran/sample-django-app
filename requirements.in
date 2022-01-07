@@ -6,7 +6,6 @@ psycopg2
 
 ####### OPTIONAL FEATURES #######
 # START_FEATURE elastic_beanstalk
-awscli
 awsebcli
 eb-create-environment
 eb-ssm
