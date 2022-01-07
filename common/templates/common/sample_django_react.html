@@ -4,10 +4,10 @@
 
 {% extends 'base_templates/base.html' %}
 {% load django_react_components %}
-{% load render_bundle webpack_static from webpack_loader %}
+{% load render_bundle from webpack_loader %}
 
 {% block body %}
-  <script src="{% webpack_static 'runtime.js' %}"></script>
+  {% render_bundle 'runtime' %}
   {% render_bundle 'Home' %}
   {% render_bundle 'Hello' %}
   {% react_component 'Home' id='home' message=message %}
