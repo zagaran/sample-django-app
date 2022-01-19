@@ -10,6 +10,7 @@ awscli
 awsebcli
 eb-create-environment
 eb-ssm
+ec2_metadata
 # END_FEATURE elastic_beanstalk
 
 # START_FEATURE django_social

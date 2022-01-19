@@ -13,11 +13,6 @@ class IndexView(TemplateView):
     template_name = "common/index.html"
 
 
-class HealthCheckView(View):
-    def get(self, request):
-        return HttpResponse("ok")
-
-
 class LogoutView(View):
     def post(self, request):
         logout(request)
