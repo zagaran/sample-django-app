@@ -77,6 +77,7 @@ THIRD_PARTY_APPS = [
 
     # START_FEATURE crispy_forms
     "crispy_forms",
+    "crispy_bootstrap5",
     # END_FEATURE crispy_forms
 
     # START_FEATURE django_react
@@ -255,7 +256,8 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env("GOOGLE_OAUTH2_SECRET")
 
 
 # START_FEATURE crispy_forms
-CRISPY_TEMPLATE_PACK = "bootstrap4"
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 # END_FEATURE crispy_forms
 
 

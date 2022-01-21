@@ -6,10 +6,17 @@ psycopg2
 
 ####### OPTIONAL FEATURES #######
 # START_FEATURE elastic_beanstalk
-awscli
-awsebcli
-eb-create-environment
-eb-ssm
+# The following packages are useful tools for interacting with AWS and Elastic Beanstalk. Please install these
+# as necessary.
+#
+# For interacting with general AWS services (note, this package often has conflicts with its botocore dependency)
+# awscli
+# For interacting with Elastic Beanstalk (note, this package often has conflicts with its botocore dependency)
+# awsebcli
+# For automating the creation of Elastic Beanstalk applications
+# eb-create-environment
+# For Elastic Beanstalk SSH functionality without requiring shared private keys
+# eb-ssm
 ec2_metadata
 # END_FEATURE elastic_beanstalk
 
@@ -19,6 +26,7 @@ social-auth-app-django
 
 # START_FEATURE crispy_forms
 django-crispy-forms
+crispy-bootstrap5
 # END_FEATURE crispy_forms
 
 # START_FEATURE django_react
