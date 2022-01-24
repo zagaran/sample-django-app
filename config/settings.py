@@ -332,7 +332,7 @@ if LOCALHOST is False:
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
 
-    SECURE_HSTS_SECONDS = 3600 * 1  # 1 hour
+    SECURE_HSTS_SECONDS = 3600  # 1 hour
     # TODO: increase SECURE_HSTS_SECONDS and register with hstspreload.org once production deploy is stable
     # SECURE_HSTS_SECONDS = 3600 * 24 * 365 * 2  # 2 years
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
