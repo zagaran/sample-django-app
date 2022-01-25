@@ -1,6 +1,5 @@
 # START_FEATURE elastic_beanstalk
 #!/bin/bash
-/opt/elasticbeanstalk/bin/get-config environment | jq -r 'to_entries | .[] | "export \(.key)=\"\(.value)\""' > /etc/profile.d/sh.local
 source $PYTHONPATH/activate
 
 # START_FEATURE django_react

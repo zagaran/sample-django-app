@@ -61,7 +61,7 @@ django-appconf==1.0.5
     # via django-compressor
 django-compressor==3.1
     # via -r requirements.in
-django-crispy-forms==1.13.0
+django-crispy-forms==1.14.0
     # via
     #   -r requirements.in
     #   crispy-bootstrap5
@@ -181,7 +181,7 @@ rjsmin==1.2.0
     # via django-compressor
 s3transfer==0.5.0
     # via boto3
-sentry-sdk==1.5.3
+sentry-sdk==1.5.4
     # via -r requirements.in
 six==1.16.0
     # via
