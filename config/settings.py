@@ -77,6 +77,7 @@ THIRD_PARTY_APPS = [
 
     # START_FEATURE crispy_forms
     "crispy_forms",
+    "crispy_bootstrap5",
     # END_FEATURE crispy_forms
 
     # START_FEATURE django_react
@@ -255,7 +256,8 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env("GOOGLE_OAUTH2_SECRET")
 
 
 # START_FEATURE crispy_forms
-CRISPY_TEMPLATE_PACK = "bootstrap4"
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 # END_FEATURE crispy_forms
 
 
@@ -330,7 +332,9 @@ if LOCALHOST is False:
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
 
-    SECURE_HSTS_SECONDS = 60 * 60 * 1  # 1 hour
+    SECURE_HSTS_SECONDS = 3600  # 1 hour
+    # TODO: increase SECURE_HSTS_SECONDS and register with hstspreload.org once production deploy is stable
+    # SECURE_HSTS_SECONDS = 3600 * 24 * 365 * 2  # 2 years
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
 
