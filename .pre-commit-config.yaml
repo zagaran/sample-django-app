@@ -1,4 +1,3 @@
-
 # START_FEATURE pre_commit
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
@@ -14,13 +13,13 @@ repos:
   - id: check-yaml
   - id: check-merge-conflict
   - id: check-added-large-files
--   repo: https://gitlab.com/PyCQA/flake8
+- repo: https://gitlab.com/PyCQA/flake8
     rev: 3.9.0
     hooks:
     -   id: flake8
         types: [file, python]
         args: ['--config=config/setup.cfg']
--   repo: https://github.com/pycqa/isort
+- repo: https://github.com/pycqa/isort
     rev: 5.8.0
     hooks:
     -   id: isort

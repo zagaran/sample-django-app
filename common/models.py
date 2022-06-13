@@ -37,9 +37,6 @@ class User(AbstractUser, TimestampedModel):
     objects = UserManager()
     # END_FEATURE django_social
 
-    def __str__(self):
-        return self.email
-
 
 # START_FEATURE django_storages
 # TODO: delete me; this is just a reference example

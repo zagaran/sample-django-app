@@ -1,5 +1,5 @@
 {
-  "name": "django-react-template",
+  "name": "sample-django-app",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -21,8 +21,7 @@
       "react-app",
       "react-app/jest"
     ]
-  },
-  "browserslist": {
+  },"browserslist": {
     "production": [
       ">0.2%",
       "not dead",

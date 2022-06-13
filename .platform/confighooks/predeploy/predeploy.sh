@@ -1,10 +1,13 @@
-# START_FEATURE elastic_beanstalk
 #!/bin/bash
+# START_FEATURE elastic_beanstalk
 source $PYTHONPATH/activate
 
+# START_FEATURE django_react, sass_bootstrap
+npm install --production
+# END_FEATURE django_react, sass_bootstrap
+
 # START_FEATURE django_react
-npm install
-./node_modules/.bin/nwb build --no-vendor
+$(npm bin)/nwb build --no-vendor
 # END_FEATURE django_react
 
 # START_FEATURE sass_bootstrap

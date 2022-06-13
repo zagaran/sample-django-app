@@ -26,7 +26,6 @@ ENV PATH /env/bin:$PATH
 COPY ./nwb.config.js /app/nwb.config.js
 COPY ./package.json /app/package.json
 COPY ./package-lock.json /app/package-lock.json
-
 RUN npm install
 # END_FEATURE django_react
 

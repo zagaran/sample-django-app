@@ -14,6 +14,7 @@ from django.contrib.messages import constants as messages
 
 import environ
 
+
 env = environ.Env(
     ALLOWED_HOSTS=(list, []),
     DEBUG=(bool, False),
