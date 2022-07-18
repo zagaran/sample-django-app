@@ -2,7 +2,7 @@
 # https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/command-options-general.html
 ElasticBeanstalk:
   # aws elasticbeanstalk list-available-solution-stacks --region us-east-1
-  SolutionStackName: "64bit Amazon Linux 2 v3.2.0 running Python 3.8"
+  SolutionStackName: "64bit Amazon Linux 2 * Python 3.8"
   NumProcesses: "1"
   InstanceTypes: "t3.micro"
   IamInstanceProfile: "aws-elasticbeanstalk-ec2-role"
