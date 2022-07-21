@@ -9,7 +9,8 @@ pip install cookiecutter
 # Note: this python scripts assumes your branch names on both `django-template` and `sample-django-app` are the same
 echo 'import os; import subprocess; from cookiecutter.main import cookiecutter; checkout = subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"]).decode().strip(); project_slug = os.path.basename(os.getcwd()); cookiecutter("https://github.com/zagaran/django-template", checkout=checkout, extra_context={"project_slug": project_slug, "feature_annotations": "on"}, overwrite_if_exists=True, no_input=True, output_dir="..")' | python3
 pip install pip-tools
-pip-compile --upgrade
+pip-compile requirements.in --upgrade
+pip-compile requirements-dev.in --upgrade
 rm package-lock.json
 rm -r node_modules
 npm install
