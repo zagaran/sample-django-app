@@ -8,6 +8,8 @@ See the readme on [django-template](https://github.com/zagaran/django-template) 
 
 # Local Project Setup
 
+Set up a Python virtual environment: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment
+
 ```
 # Create environment config file.
 cp config/.env.example config/.env
