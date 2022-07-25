@@ -53,6 +53,3 @@ libsass
 
 # Convenience
 ipython
-
-# Security
-cryptography==3.3.2  # Lock to 3.3.2 if running into "No module named 'setuptools_rust'" error
