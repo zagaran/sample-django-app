@@ -20,7 +20,7 @@ crispy-bootstrap5
 
 # START_FEATURE django_react
 django-react-components
-django-webpack-loader
+django-webpack-loader==0.7.0
 # END_FEATURE django_react
 
 # START_FEATURE sentry
