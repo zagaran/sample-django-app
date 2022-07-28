@@ -1,0 +1,4 @@
+global:
+  application_name: Sample Django App
+  default_region: us-east-1
+  profile: zagaran-dev

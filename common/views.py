@@ -1,4 +1,5 @@
 from django.contrib.auth import logout
+from django.conf import settings
 from django.shortcuts import redirect, render
 from django.views.generic.base import TemplateView, View
 from django.http.response import HttpResponse
@@ -17,6 +18,17 @@ class LogoutView(View):
     def post(self, request):
         logout(request)
         return redirect("index")
+
+
+class RobotsTxtView(View):
+    def get(self, request):
+        if settings.PRODUCTION:
+            # Allow all (note that a blank Disallow block means "allow all")
+            lines = ["User-agent: *", "Disallow:"]
+        else:
+            # Block all
+            lines = ["User-agent: *", "Disallow: /"]
+        return  HttpResponse("\n".join(lines), content_type="text/plain")
 
 
 # START_FEATURE django_react

@@ -45,6 +45,18 @@
         </div>
       </div>
     </nav>
+    {% if not PRODUCTION and not LOCALHOST %}
+    <div class="container-fluid alert alert-danger">
+      <div class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-10">
+          <h3>Warning</h3>
+          <p>This is a test site.  Do not enter personal or sensitive data on this site.</p>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    
     {# START_FEATURE bootstrap_messages #}
     <div class="container">
       {% for message in messages %}

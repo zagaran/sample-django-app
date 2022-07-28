@@ -6,17 +6,6 @@ psycopg2
 
 ####### OPTIONAL FEATURES #######
 # START_FEATURE elastic_beanstalk
-# The following packages are useful tools for interacting with AWS and Elastic Beanstalk. Please install these
-# as necessary.
-#
-# For interacting with general AWS services (note, this package often has conflicts with its botocore dependency)
-# awscli
-# For interacting with Elastic Beanstalk (note, this package often has conflicts with its botocore dependency)
-# awsebcli
-# For automating the creation of Elastic Beanstalk applications
-# eb-create-environment
-# For Elastic Beanstalk SSH functionality without requiring shared private keys
-# eb-ssm
 ec2_metadata
 # END_FEATURE elastic_beanstalk
 
@@ -31,12 +20,8 @@ crispy-bootstrap5
 
 # START_FEATURE django_react
 django-react-components
-django-webpack-loader
+django-webpack-loader==0.7.0
 # END_FEATURE django_react
-
-# START_FEATURE debug_toolbar
-django-debug-toolbar
-# END_FEATURE debug_toolbar
 
 # START_FEATURE sentry
 sentry-sdk
@@ -58,12 +43,6 @@ sentry-sdk
 django-ses
 # END_FEATURE django_ses
 
-# START_FEATURE pre_commit
-pre-commit
-flake8
-isort
-# END_FEATURE pre_commit
-
 # START_FEATURE sass_bootstrap
 django-compressor
 django-sass-processor
@@ -74,9 +53,3 @@ libsass
 
 # Convenience
 ipython
-werkzeug
-pip-tools
-coverage
-
-# Security
-cryptography==3.3.2  # Lock to 3.3.2 if running into "No module named 'setuptools_rust'" error

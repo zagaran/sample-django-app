@@ -1,0 +1,20 @@
+-r requirements.in
+-c requirements.txt
+
+werkzeug
+pip-tools
+coverage
+
+####### OPTIONAL FEATURES #######
+# START_FEATURE elastic_beanstalk
+# END_FEATURE elastic_beanstalk
+
+# START_FEATURE pre_commit
+pre-commit
+flake8
+isort
+# END_FEATURE pre_commit
+
+# START_FEATURE debug_toolbar
+django-debug-toolbar
+# END_FEATURE debug_toolbar
