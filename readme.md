@@ -18,7 +18,7 @@ cp config/.env.example config/.env
 nano config/.env
 
 # Install pip requirements.
-pip intsall --upgrade pip
+pip install --upgrade pip
 pip install -r requirements-dev.txt
 
 # Apply migrations and sync database schema.
