@@ -38,6 +38,8 @@ look for `{%- if cookiecutter.feature_annotations == "on" -%}` for examples.
    whitespace formatting during the `cookiecutter` project creation process. If you add a new feature, you should emulate
    the style of existing template tags.
 2. Make a branch on the `sample-django-app` repository (this repository) with the same branch name.  Run the above command.
-3. Ensure that the code runs propersly on `sample-django-app` and is styled properly.
-4. Make a PR on the `django-template` repo.
-5. Make a PR on the `sample-django`app` repo (this repo).
+3. Ensure that the code runs propersly on `sample-django-app` and is styled properly.  In particular, check the following URLS:
+    1. http://localhost:8000/
+    2. http://localhost:8000/django-react/
+5. Make a PR on the `django-template` repo.
+6. Make a PR on the `sample-django`app` repo (this repo).
