@@ -314,10 +314,8 @@ else:
 
 
 # START_FEATURE debug_toolbar
-DEBUG_TOOLBAR = DEBUG and env("DEBUG_TOOLBAR")
 INTERNAL_IPS = ["127.0.0.1"]
 if DEBUG_TOOLBAR:
-    INSTALLED_APPS.append("debug_toolbar")
     MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
 # END_FEATURE debug_toolbar
 
