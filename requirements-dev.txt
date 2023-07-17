@@ -142,7 +142,7 @@ idna==3.4
     # via
     #   -c requirements.txt
     #   requests
-ipython==8.14.0
+ipython==8.12.2
     # via
     #   -c requirements.txt
     #   -r requirements.in

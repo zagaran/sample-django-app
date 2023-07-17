@@ -24,7 +24,7 @@ ElasticBeanstalk:
     ServiceRoleForManagedUpdates: "AWSServiceRoleForElasticBeanstalkManagedUpdates"
 RDS:
   AllocatedStorage: 100
-  DBInstanceClass: "db.t3.small"
+  DBInstanceClass: "db.t3.micro"
   MasterUsername: "db_admin"
   BackupRetentionPeriod: 30
   MultiAZ: False
@@ -39,8 +39,8 @@ RDS:
   Postgres:
     DBName: "ebdb"
     Engine: "postgres"
-    EngineVersion: "12.5"
+    EngineVersion: "15.*"
     Port: 5432
-    DBParameterGroupName: "default.postgres12"
+    DBParameterGroupName: "default.postgres15"
     LicenseModel: "postgresql-license"
 # END_FEATURE elastic_beanstalk

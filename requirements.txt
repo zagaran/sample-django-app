@@ -74,7 +74,7 @@ gunicorn==20.1.0
     # via -r requirements.in
 idna==3.4
     # via requests
-ipython==8.14.0
+ipython==8.12.2
     # via -r requirements.in
 jedi==0.18.2
     # via ipython
