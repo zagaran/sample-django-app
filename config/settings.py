@@ -64,6 +64,10 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: do not run with debug turned on in production!
 DEBUG = env("DEBUG")
 
+# START_FEATURE debug_toolbar
+DEBUG_TOOLBAR = DEBUG and env("DEBUG_TOOLBAR")
+# END_FEATURE debug_toolbar
+
 # run with this set to False on server environments
 LOCALHOST = env("LOCALHOST")
 
@@ -110,6 +114,12 @@ THIRD_PARTY_APPS = [
     "sass_processor",
     # END_FEATURE sass_bootstrap
 ]
+
+
+# START_FEATURE debug_toolbar
+if DEBUG_TOOLBAR:
+    THIRD_PARTY_APPS += ["debug_toolbar"]
+# END_FEATURE debug_toolbar
 
 LOCAL_APPS = [
     "common",
