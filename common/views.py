@@ -6,7 +6,7 @@ from django.http.response import HttpResponse
 # START_FEATURE crispy_forms
 from django.views.generic.edit import FormView
 
-from crispy_forms.tests.forms import SampleForm
+from common.forms import SampleForm
 # END_FEATURE crispy_forms
 
 
@@ -28,7 +28,8 @@ class RobotsTxtView(View):
         else:
             # Block all
             lines = ["User-agent: *", "Disallow: /"]
-        return  HttpResponse("\n".join(lines), content_type="text/plain")
+        return HttpResponse("\n".join(lines), content_type="text/plain")
+
 
 
 # START_FEATURE django_react
