@@ -14,7 +14,7 @@ pip install pip-tools
 pip-compile requirements.in --upgrade
 pip-compile requirements-dev.in --upgrade
 rm package-lock.json
-rm -r node_modules
+rm -rI node_modules
 npm install
 ```
 

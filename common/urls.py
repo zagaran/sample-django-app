@@ -16,9 +16,7 @@ urlpatterns = [
 
 # START_FEATURE debug_toolbar
 if settings.DEBUG_TOOLBAR:
-    import debug_toolbar
-
     urlpatterns += [
-        url(r'^__debug__/', include(debug_toolbar.urls)),
+        path("__debug__/", include("debug_toolbar.urls")),
     ]
 # END_FEATURE debug_toolbar

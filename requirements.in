@@ -1,6 +1,6 @@
-Django==3.2.*  # Latest LTS version
+Django==4.2.*  # Latest LTS version
 django-environ
-django-extensions
+django-extensions>=3.2
 requests
 psycopg2
 
