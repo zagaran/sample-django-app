@@ -1,4 +1,6 @@
 #!/bin/bash
+set -e
+
 # START_FEATURE elastic_beanstalk
 source $PYTHONPATH/activate
 
