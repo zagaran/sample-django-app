@@ -137,7 +137,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # START_FEATURE user_action_tracking
-    "common.middleware.UserActionTrackingMiddleware"
+    "common.middleware.UserActionTrackingMiddleware",
     # END_FEATURE user_action_tracking
 ]
 
@@ -303,14 +303,38 @@ MESSAGE_TAGS = {
 
 # START_FEATURE django_storages
 if LOCALHOST is True:
-    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+    STORAGE_BACKEND_DEFAULT = "django.core.files.storage.FileSystemStorage"
     MEDIA_ROOT = ""
 else:
-    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+    STORAGE_BACKEND_DEFAULT = "storages.backends.s3boto3.S3Boto3Storage"
     AWS_DEFAULT_ACL = "private"
     AWS_S3_FILE_OVERWRITE = False
     AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
 # END_FEATURE django_storages
+STORAGES = {
+    "default": {
+        "BACKEND": STORAGE_BACKEND_DEFAULT,
+    },
+    # START_FEATURE sass_bootstrap
+    "sass_processor": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "OPTIONS": {
+            "base_url": STATIC_URL,
+            "location": os.path.join(BASE_DIR, 'static'),
+        },
+        "ROOT": os.path.join(BASE_DIR, 'static'),
+    },
+    # END_FEATURE sass_bootstrap
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+    },
+}
+
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'sass_processor.finders.CssFinder',
+]
 
 
 # START_FEATURE debug_toolbar
@@ -382,6 +406,5 @@ SASS_PROCESSOR_INCLUDE_DIRS = [
     os.path.join(BASE_DIR, 'static/styles'),
     os.path.join(BASE_DIR, 'node_modules'),
 ]
-SASS_PROCESSOR_ROOT = os.path.join(BASE_DIR, 'static')
-COMPRESS_ROOT = SASS_PROCESSOR_ROOT
+COMPRESS_ROOT = STORAGES["sass_processor"]["ROOT"]
 # END_FEATURE sass_bootstrap
