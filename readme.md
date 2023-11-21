@@ -108,6 +108,16 @@ To do create a new Elastic Beanstalk environment, modify the contents of [.elast
 
 See the docs for [eb-create-environment](https://github.com/zagaran/eb-create-environment/) for more details.
 
+Then, add the following environment variables:
+```
+ALLOWED_HOSTS
+SECRET_KEY
+AWS_STORAGE_BUCKET_NAME
+GOOGLE_OAUTH2_KEY
+GOOGLE_OAUTH2_SECRET
+SENTRY_DSN
+```
+
 Following that, deploy your code to the environment (see below).
 
 ## Deploying code
