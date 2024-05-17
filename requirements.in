@@ -35,10 +35,6 @@ django-storages
 gunicorn
 # END_FEATURE docker
 
-# START_FEATURE sentry
-sentry-sdk
-# END_FEATURE sentry
-
 # START_FEATURE django_ses
 django-ses
 # END_FEATURE django_ses

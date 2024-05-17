@@ -47,6 +47,7 @@ def get_s3_path(instance, filename):
         filename,
     )
 
+
 class UploadFile(TimestampedModel):
     user = models.ForeignKey(User, related_name="files", on_delete=models.PROTECT)
     file = models.FileField(
