@@ -5,7 +5,6 @@ from django.views.generic.base import TemplateView, View
 from django.http.response import HttpResponse
 # START_FEATURE crispy_forms
 from django.views.generic.edit import FormView
-
 from common.forms import SampleForm
 # END_FEATURE crispy_forms
 
