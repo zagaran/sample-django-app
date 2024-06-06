@@ -116,6 +116,7 @@ AWS_STORAGE_BUCKET_NAME
 GOOGLE_OAUTH2_KEY
 GOOGLE_OAUTH2_SECRET
 SENTRY_DSN
+DEFAULT_FROM_EMAIL
 ```
 
 Following that, deploy your code to the environment (see below).
