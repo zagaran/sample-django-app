@@ -1,5 +1,5 @@
 # START_FEATURE docker
-FROM python:3.8.8-slim-buster
+FROM python:3.11.4-slim-buster
 
 WORKDIR /app
 
@@ -11,7 +11,7 @@ RUN set -ex \
       libpq-dev \
     " \
     && deps=" \
-      postgresql-client-11 \
+      postgresql-client \
     " \
     && apt-get update && apt-get install -y $buildDeps $deps --no-install-recommends \
     && pip install --no-cache-dir -r /app/requirements.txt \
