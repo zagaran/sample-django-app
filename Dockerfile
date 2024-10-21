@@ -3,21 +3,32 @@ FROM python:3.11.4-slim-buster
 
 WORKDIR /app
 
-ADD requirements.txt /app/requirements.txt
-
 RUN set -ex \
     && buildDeps=" \
       build-essential \
       libpq-dev \
     " \
     && deps=" \
+      curl \
+      vim \
+      nano \
+      procps \
       postgresql-client \
     " \
-    && apt-get update && apt-get install -y $buildDeps $deps --no-install-recommends \
+    && apt update && apt install -y $buildDeps $deps --no-install-recommends \
+
+
+# Install python dependencies
+ADD requirements.txt /app/requirements.txt
+RUN set -ex \
     && pip install --no-cache-dir -r /app/requirements.txt \
-    && apt-get purge -y --auto-remove $buildDeps \
+
+# Cleanup installs
+RUN set -ex \
+    && apt purge -y --auto-remove $buildDeps \
        $(! command -v gpg > /dev/null || echo 'gnupg dirmngr') \
     && rm -rf /var/lib/apt/lists/*
+
 
 ENV VIRTUAL_ENV /env
 ENV PATH /env/bin:$PATH
@@ -30,6 +41,8 @@ RUN npm install
 # END_FEATURE django_react
 
 COPY . /app/
+
+# Add temporary copy of env file to allow running management commands
 COPY ./config/.env.example /app/config/.env
 
 # START_FEATURE django_react
@@ -46,5 +59,5 @@ RUN rm /app/config/.env
 
 EXPOSE 8000
 
-CMD ["gunicorn", "--bind", ":8000", "--workers", "3", "config.wsgi:application"]
+CMD ["gunicorn", "--bind", ":8000", "--workers", "3", "config.wsgi:application", "--access-logfile", "-", "--error-logfile", "-"]
 # END_FEATURE docker
