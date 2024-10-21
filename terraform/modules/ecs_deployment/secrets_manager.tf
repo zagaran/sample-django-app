@@ -7,10 +7,9 @@ resource "aws_secretsmanager_secret_version" "web_infrastructure" {
    secret_string = jsonencode({
     AWS_STORAGE_BUCKET_NAME = aws_s3_bucket.bucket.id
     DATABASE_URL = format(
-      "postgres://dbuser:%s@%s:5432/%s?sslmode=require",
+      "postgres://dbuser:%s@%s:5432/database?sslmode=require",
       random_password.db_password.result,
       aws_db_instance.database.address,
-      "database",
     )
     DEFAULT_FROM_EMAIL = var.ses_from_email
     SECRET_KEY = random_password.app_secret_key.result
