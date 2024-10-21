@@ -15,3 +15,6 @@ rds_backup_retention_period = 30
 rds_deletion_protection = true
 rds_instance_class = "db.m7g.large"
 rds_multi_az = true
+container_web_cpu = 1024
+container_web_memory = 1024
+container_count = 2

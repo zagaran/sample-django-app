@@ -41,3 +41,19 @@ variable "ses_identity" {
 variable "ses_from_email" {
   type string
 }
+
+variable "ecr_image_uri" {
+  type string
+}
+
+variable "container_web_cpu" {
+  type number
+}
+
+variable "container_web_memory" {
+  type number
+}
+
+variable "container_count" {
+  type number
+}

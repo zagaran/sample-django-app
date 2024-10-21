@@ -35,7 +35,9 @@ module "ecs_deployment" {
     rds_multi_az = var.rds_multi_az
     ses_identity = var.ses_identity
     ses_from_email = var.ses_from_email
-}
+    container_web_cpu = var.container_web_cpu
+    container_web_memory = var.container_web_memory
+    container_count = var.container_web_memory
 }
 
 
@@ -102,4 +104,19 @@ variable "rds_instance_class" {
 variable "rds_multi_az" {
   typr bool
   default = false
+}
+
+variable "container_web_cpu" {
+  type number
+  default 256
+}
+
+variable "container_web_memory" {
+  type number
+  default = 1024
+}
+
+variable "container_count" {
+  type number
+  default 1
 }

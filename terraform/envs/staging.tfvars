@@ -15,3 +15,6 @@ rds_backup_retention_period = 10
 rds_deletion_protection = true
 rds_instance_class = "db.t3.micro"
 rds_multi_az = false
+container_web_cpu = 256
+container_web_memory = 1024
+container_count = 1
