@@ -15,13 +15,13 @@ RUN set -ex \
       procps \
       postgresql-client \
     " \
-    && apt update && apt install -y $buildDeps $deps --no-install-recommends \
+    && apt update && apt install -y $buildDeps $deps --no-install-recommends
 
 
 # Install python dependencies
 ADD requirements.txt /app/requirements.txt
 RUN set -ex \
-    && pip install --no-cache-dir -r /app/requirements.txt \
+    && pip install --no-cache-dir -r /app/requirements.txt
 
 # Cleanup installs
 RUN set -ex \
@@ -34,6 +34,13 @@ ENV VIRTUAL_ENV /env
 ENV PATH /env/bin:$PATH
 
 # START_FEATURE django_react
+# LTS Version of Node
+ARG NODE_VERSION=22
+
+# install node
+RUN curl -fsSL https://deb.nodesource.com/setup_{$NODE_VERSION}.x | bash -
+RUN apt-get update && apt install nodejs -y
+
 COPY ./nwb.config.js /app/nwb.config.js
 COPY ./package.json /app/package.json
 COPY ./package-lock.json /app/package-lock.json
