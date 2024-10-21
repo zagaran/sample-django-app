@@ -1,8 +1,18 @@
+# Required Variables
+variable "aws_profile_name" {
+  type = string
+}
+
+variable "aws_region" {
+  type = string
+  default = "us-east-1"
+}
+
 variable "environment_name" {
   type = string
 }
 
-variable "application_name" {
+variable "terraform_backend_bucket" {
   type = string
 }
 
@@ -18,24 +28,8 @@ variable "s3_bucket_prefix" {
   type = string
 }
 
-variable "rds_backup_retention_period" {
-  type = number
-}
-
-variable "rds_deletion_protection" {
-  type = bool
-}
-
 variable "rds_engine_version" {
   type = string
-}
-
-variable "rds_instance_class" {
-  type = string
-}
-
-variable "rds_multi_az" {
-  type = bool
 }
 
 variable "ses_identity" {
@@ -46,26 +40,48 @@ variable "ses_from_email" {
   type = string
 }
 
-variable "ecr_image_uri" {
-  type = string
-}
-
-variable "container_web_cpu" {
-  type = number
-}
-
-variable "container_web_memory" {
-  type = number
-}
-
-variable "container_count" {
-  type = number
-}
-
 variable "certificate_manager_arn" {
   type = string
 }
 
+
+# Optional Variables
+variable "rds_backup_retention_period" {
+  type = number
+  default = 30
+}
+
+variable "rds_deletion_protection" {
+  type = bool
+  default = true
+}
+
+variable "rds_instance_class" {
+  type = string
+  default = "db.t3.micro"
+}
+
+variable "rds_multi_az" {
+  type = bool
+  default = false
+}
+
+variable "container_web_cpu" {
+  type = number
+  default = 256
+}
+
+variable "container_web_memory" {
+  type = number
+  default = 1024
+}
+
+variable "container_count" {
+  type = number
+  default = 1
+}
+
 variable "ssl_policy" {
   type = string
+  default = "ELBSecurityPolicy-TLS13-1-2-Res-FIPS-2023-04"
 }
