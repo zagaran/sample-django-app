@@ -25,8 +25,9 @@ module "ecs_deployment" {
     source = "./modules/ecs_deployment"
     
     environment = var.environment_name
-    var1 = "x"
-    var2 = "y"
+    vpc_id = var.vpc_id
+    web_config_secret_name = var.web_config_secret_name
+    s3_bucket_prefix = var.s3_bucket_prefix
 }
 
 
@@ -43,7 +44,19 @@ variable "environment_name" {
   type = string
 }
 
-
 variable "terraform_backend_bucket" {
   type = string
+}
+
+variable "vpc_id" {
+  type string
+}
+
+variable "web_config_secret_name" {
+  type string
+}
+
+
+variable "s3_bucket_prefix" {
+  type string
 }
