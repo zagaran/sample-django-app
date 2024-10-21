@@ -56,15 +56,15 @@ variable "terraform_backend_bucket" {
 }
 
 variable "vpc_id" {
-  type string
+  type = string
 }
 
 variable "web_config_secret_name" {
-  type string
+  type = string
 }
 
 variable "s3_bucket_prefix" {
-  type string
+  type = string
 }
 
 variable "rds_engine_version" {
