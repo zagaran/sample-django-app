@@ -1,4 +1,4 @@
-resource "aws_securtiy_group" "load_balancer" {
+resource "aws_security_group" "load_balancer" {
   name = format("%s load balancer", var.environment_name)
   
   ingress {
@@ -17,7 +17,7 @@ resource "aws_securtiy_group" "load_balancer" {
   }
 }
 
-resource "aws_securtiy_group" "web" {
+resource "aws_security_group" "web" {
   name = format("%s web", var.environment_name)
 
   ingress {
@@ -28,7 +28,7 @@ resource "aws_securtiy_group" "web" {
   }
 }
 
-resource "aws_securtiy_group" "database" {
+resource "aws_security_group" "database" {
   name = format("%s database", var.environment_name)
 
   ingress {

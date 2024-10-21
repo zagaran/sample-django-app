@@ -50,7 +50,7 @@ data "aws_iam_policy_document" "ecs_execution_role_policy" {
     ]
     resources = [
       "arn:aws:secretsmanager:*:*:secret:${aws_secretsmanager_secret.web_infrastructure.name}-*",
-      "arn:aws:secretsmanager:*:*:secret:${aws_secretsmanager_secret.web_config.name}-*"
+      "arn:aws:secretsmanager:*:*:secret:${data.aws_secretsmanager_secret.web_config.name}-*"
     ]
   }
 

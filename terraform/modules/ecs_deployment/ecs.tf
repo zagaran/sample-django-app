@@ -1,5 +1,5 @@
 resource "aws_ecs_cluster" "cluster" {
-  name = format("%-cluster", var.environment_name)
+  name = format("%s-cluster", var.environment_name)
 
   setting {
     name  = "containerInsights"
@@ -74,7 +74,7 @@ resource "aws_ecs_task_definition" "web" {
 
 resource "aws_ecs_service" "web" {
   name                   = "${var.environment_name}-web"
-  cluster                = aws_ecs_cluster.application.id
+  cluster                = aws_ecs_cluster.cluster.id
   task_definition        = aws_ecs_task_definition.web.arn
   desired_count          = var.container_count
   launch_type            = "FARGATE"
@@ -86,8 +86,8 @@ resource "aws_ecs_service" "web" {
   }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.application.arn
-    container_name   = "${local.app_env_name}-web"
+    target_group_arn = aws_lb_target_group.target_group.arn
+    container_name   = "${var.environment_name}-web"
     container_port   = 8080
   }
 

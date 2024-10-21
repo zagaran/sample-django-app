@@ -1,13 +1,4 @@
 # Required Variables
-variable "aws_profile_name" {
-  type = string
-}
-
-variable "aws_region" {
-  type = string
-  default = "us-east-1"
-}
-
 variable "environment_name" {
   type = string
 }
@@ -41,6 +32,14 @@ variable "ses_from_email" {
 }
 
 variable "certificate_manager_arn" {
+  type = string
+}
+
+variable "ecr_repository_name" {
+  type = string
+}
+
+variable "ecr_image_uri" {
   type = string
 }
 

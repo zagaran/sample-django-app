@@ -8,7 +8,7 @@ terraform {
   
   required_providers {
     aws = {
-      source = "hasicorp/aws"
+      source = "hashicorp/aws"
       version = "~>5.59"
     }
   }
@@ -20,7 +20,7 @@ provider "aws" {
 }
 
 module "ecs_deployment" {
-    source = "./modules/ecs_deployment"
+    source = "../../modules/ecs_deployment"
     
     # Required Variables
     environment_name = "production"
@@ -32,6 +32,8 @@ module "ecs_deployment" {
     ses_identity = ""  # TODO: FILL ME IN
     ses_from_email = ""  # TODO: FILL ME IN
     certificate_manager_arn =  ""  # TODO: FILL ME IN
+    ecr_repository_name =  ""  # TODO: FILL ME IN
+    ecr_image_uri = ""  # TODO: FILL ME IN
 
     # Optional Variables
     rds_backup_retention_period = 30
