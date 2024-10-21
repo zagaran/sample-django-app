@@ -9,17 +9,15 @@ terraform {
   required_providers {
     aws = {
       source = "hasicorp/aws"
-      verison = "~>5.59"
+      version = "~>5.59"
     }
   }
 }
-
 
 provider "aws" {
   region = var.aws_region
   profile = var.aws_profile_name
 }
-
 
 module "ecs_deployment" {
     source = "./modules/ecs_deployment"
@@ -42,9 +40,7 @@ module "ecs_deployment" {
     ssl_policy = var.ssl_policy
 }
 
-
 # Required Variables
-
 variable "aws_profile_name" {
   type = string
 }
@@ -79,20 +75,19 @@ variable "rds_engine_version" {
 }
 
 variable "ses_identity" {
-  type string
+  type = string
 }
 
 variable "ses_from_email" {
-  type string
+  type = string
 }
 
 variable "certificate_manager_arn" {
-  type string
+  type = string
 }
 
 
 # Optional Variables
-
 variable "rds_backup_retention_period" {
   type = number
   default = 30
@@ -104,31 +99,31 @@ variable "rds_deletion_protection" {
 }
 
 variable "rds_instance_class" {
-  type string
+  type = string
   default = "db.t3.micro"
 }
 
 variable "rds_multi_az" {
-  typr bool
+  type = bool
   default = false
 }
 
 variable "container_web_cpu" {
-  type number
-  default 256
+  type = number
+  default = 256
 }
 
 variable "container_web_memory" {
-  type number
+  type = number
   default = 1024
 }
 
 variable "container_count" {
-  type number
-  default 1
+  type = number
+  default = 1
 }
 
 variable "ssl_policy" {
-  type string
+  type = string
   default = "ELBSecurityPolicy-TLS13-1-2-Res-FIPS-2023-04"
 }

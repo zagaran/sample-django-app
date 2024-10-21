@@ -1,17 +1,21 @@
 variable "environment_name" {
-  type string
+  type = string
+}
+
+variable "application_name" {
+  type = string
 }
 
 variable "vpc_id" {
-  type string
+  type = string
 }
 
 variable "web_config_secret_name" {
-  type string
+  type = string
 }
 
 variable "s3_bucket_prefix" {
-  type string
+  type = string
 }
 
 variable "rds_backup_retention_period" {
@@ -27,41 +31,41 @@ variable "rds_engine_version" {
 }
 
 variable "rds_instance_class" {
-  type string
+  type = string
 }
 
 variable "rds_multi_az" {
-  type bool
+  type = bool
 }
 
 variable "ses_identity" {
-  type string
+  type = string
 }
 
 variable "ses_from_email" {
-  type string
+  type = string
 }
 
 variable "ecr_image_uri" {
-  type string
+  type = string
 }
 
 variable "container_web_cpu" {
-  type number
+  type = number
 }
 
 variable "container_web_memory" {
-  type number
+  type = number
 }
 
 variable "container_count" {
-  type number
+  type = number
 }
 
 variable "certificate_manager_arn" {
-  type string
+  type = string
 }
 
 variable "ssl_policy" {
-  type string
+  type = string
 }
