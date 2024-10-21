@@ -3,10 +3,6 @@ variable "environment_name" {
   type = string
 }
 
-variable "terraform_backend_bucket" {
-  type = string
-}
-
 variable "vpc_id" {
   type = string
 }
