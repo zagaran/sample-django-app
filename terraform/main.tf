@@ -9,7 +9,7 @@ terraform {
   required_providers {
     aws = {
       source = "hasicorp/aws"
-      verison = "~>5.59"
+      version = "~>5.59"
     }
   }
 }
@@ -85,6 +85,6 @@ variable "rds_instance_class" {
 }
 
 variable "rds_multi_az" {
-  typr = bool
+  type = bool
   default = false
 }

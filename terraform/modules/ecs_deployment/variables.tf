@@ -2,6 +2,10 @@ variable "environment_name" {
   type = string
 }
 
+variable "application_name" {
+  type = string
+}
+
 variable "vpc_id" {
   type = string
 }

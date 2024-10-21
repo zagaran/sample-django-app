@@ -16,10 +16,6 @@ resource "aws_secretsmanager_secret_version" "web_infrastructure" {
    })
 }
 
-
-web_config_secret_name
-
-
 resource "random_password" "app_secret_key" {
   length  = 32
   special = false
