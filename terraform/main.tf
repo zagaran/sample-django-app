@@ -38,6 +38,8 @@ module "ecs_deployment" {
     container_web_cpu = var.container_web_cpu
     container_web_memory = var.container_web_memory
     container_count = var.container_web_memory
+    certificate_manager_arn = var.certificate_manager_arn
+    ssl_policy = var.ssl_policy
 }
 
 
@@ -84,6 +86,11 @@ variable "ses_from_email" {
   type string
 }
 
+variable "certificate_manager_arn" {
+  type string
+}
+
+
 # Optional Variables
 
 variable "rds_backup_retention_period" {
@@ -119,4 +126,9 @@ variable "container_web_memory" {
 variable "container_count" {
   type number
   default 1
+}
+
+variable "ssl_policy" {
+  type string
+  default = "ELBSecurityPolicy-TLS13-1-2-Res-FIPS-2023-04"
 }

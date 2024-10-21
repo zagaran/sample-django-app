@@ -57,3 +57,11 @@ variable "container_web_memory" {
 variable "container_count" {
   type number
 }
+
+variable "certificate_manager_arn" {
+  type string
+}
+
+variable "ssl_policy" {
+  type string
+}
