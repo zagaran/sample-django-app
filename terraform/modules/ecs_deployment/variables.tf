@@ -1,17 +1,17 @@
 variable "environment_name" {
-  type string
+  type = string
 }
 
 variable "vpc_id" {
-  type string
+  type = string
 }
 
 variable "web_config_secret_name" {
-  type string
+  type = string
 }
 
 variable "s3_bucket_prefix" {
-  type string
+  type = string
 }
 
 variable "rds_backup_retention_period" {
@@ -27,9 +27,9 @@ variable "rds_engine_version" {
 }
 
 variable "rds_instance_class" {
-  type string
+  type = string
 }
 
 variable "rds_multi_az" {
-  typr bool
+  type = bool
 }

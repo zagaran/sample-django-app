@@ -14,12 +14,10 @@ terraform {
   }
 }
 
-
 provider "aws" {
   region = var.aws_region
   profile = var.aws_profile_name
 }
-
 
 module "ecs_deployment" {
     source = "./modules/ecs_deployment"
@@ -35,9 +33,7 @@ module "ecs_deployment" {
     rds_multi_az = var.rds_multi_az
 }
 
-
 # Required Variables
-
 variable "aws_profile_name" {
   type = string
 }
@@ -73,7 +69,6 @@ variable "rds_engine_version" {
 
 
 # Optional Variables
-
 variable "rds_backup_retention_period" {
   type = number
   default = 30
@@ -85,11 +80,11 @@ variable "rds_deletion_protection" {
 }
 
 variable "rds_instance_class" {
-  type string
+  type = string
   default = "db.t3.micro"
 }
 
 variable "rds_multi_az" {
-  typr bool
+  typr = bool
   default = false
 }
