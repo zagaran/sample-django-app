@@ -33,6 +33,9 @@ module "ecs_deployment" {
     rds_deletion_protection = var.rds_deletion_protection
     rds_instance_class = var.rds_instance_class
     rds_multi_az = var.rds_multi_az
+    ses_identity = var.ses_identity
+    ses_from_email = var.ses_from_email
+}
 }
 
 
@@ -71,6 +74,13 @@ variable "rds_engine_version" {
   type = string
 }
 
+variable "ses_identity" {
+  type string
+}
+
+variable "ses_from_email" {
+  type string
+}
 
 # Optional Variables
 

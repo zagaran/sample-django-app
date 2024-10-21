@@ -17,7 +17,9 @@ resource "aws_secretsmanager_secret_version" "web_infrastructure" {
 }
 
 
-web_config_secret_name
+data "aws_secretsmanager_secret" "web_config" {
+  name = var.web_config_secret_name
+}
 
 
 resource "random_password" "app_secret_key" {

@@ -31,5 +31,13 @@ variable "rds_instance_class" {
 }
 
 variable "rds_multi_az" {
-  typr bool
+  type bool
+}
+
+variable "ses_identity" {
+  type string
+}
+
+variable "ses_from_email" {
+  type string
 }

@@ -7,6 +7,8 @@ vpc_id = ""  # TODO: FILL ME IN
 web_config_secret_name = ""  # TODO: FILL ME IN
 s3_bucket_prefix = ""  # TODO: FILL ME IN
 rds_engine_version = ""  # TODO: FILL ME IN
+ses_identity = ""  # TODO: FILL ME IN
+ses_from_email = ""  # TODO: FILL ME IN
 
 # Optional Variables
 rds_backup_retention_period = 10
