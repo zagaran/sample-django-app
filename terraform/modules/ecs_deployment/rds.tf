@@ -6,15 +6,14 @@ resource "random_password" "db_password" {
 
 resource "aws_db_instance" "database" {
   allocated_storage           = 20
-  max_allocated_storage       = 10000
   allow_major_version_upgrade = true
   apply_immediately           = true
   backup_retention_period     = var.rds_backup_retention_period
-  db_name                     = "database"
+  db_name                     = format("%s_db", replace(var.application_name, "-", "_"))
   deletion_protection         = var.rds_deletion_protection
   engine                      = "postgres"
   engine_version              = var.rds_engine_version
-  identifier                  = format("%s-database", var.environment_name)
+  identifier                  = format("%s-%s-db", var.application_name, var.environment_name)
   instance_class              = var.rds_instance_class
   multi_az                    = var.rds_multi_az
   password                    = random_password.db_password.result

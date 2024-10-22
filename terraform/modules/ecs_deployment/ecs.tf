@@ -7,35 +7,11 @@ resource "aws_ecs_cluster" "cluster" {
   }
 }
 
-
 resource "aws_ecs_cluster_capacity_providers" "fargate_provider" {
   cluster_name = aws_ecs_cluster.cluster.name
 
   capacity_providers = ["FARGATE"]
 }
-
-
-locals {
-  ecs_secrets = [
-    {
-      name : "DATABASE_URL",
-      valueFrom : "${aws_secretsmanager_secret.web_infrastructure.arn}:DATABASE_URL::"
-    },
-    {
-      name : "SECRET_KEY",
-      valueFrom : "${aws_secretsmanager_secret.web_infrastructure.arn}:SECRET_KEY::"
-    },
-    {
-      name : "AWS_STORAGE_BUCKET_NAME",
-      valueFrom : "${aws_secretsmanager_secret.web_infrastructure.arn}:AWS_STORAGE_BUCKET_NAME::"
-    },
-    {
-      name : "DEFAULT_FROM_EMAIL",
-      valueFrom : "${aws_secretsmanager_secret.web_infrastructure.arn}:DEFAULT_FROM_EMAIL::"
-    },
-  ]
-}
-
 
 resource "aws_ecs_task_definition" "web" {
   family = "${var.environment_name}-web"
@@ -71,7 +47,6 @@ resource "aws_ecs_task_definition" "web" {
   task_role_arn = aws_iam_role.ecs_task_role.arn
 }
 
-
 resource "aws_ecs_service" "web" {
   name                   = "${var.environment_name}-web"
   cluster                = aws_ecs_cluster.cluster.id
@@ -97,7 +72,6 @@ resource "aws_ecs_service" "web" {
     assign_public_ip = true
   }
 }
-
 
 resource "aws_cloudwatch_log_group" "log_group" {
   name              = var.environment_name

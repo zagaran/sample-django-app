@@ -120,17 +120,21 @@ data "aws_iam_policy_document" "ecs_task_role_policy" {
 resource "aws_iam_role" "ecs_execution_role" {
   name = format("%s-ecs-execution-role", var.environment_name)
   assume_role_policy = data.aws_iam_policy_document.ecs_assume_role_policy.json
-  inline_policy {
-    name = "ecs-execution-role-policy"
-    policy = data.aws_iam_policy_document.ecs_execution_role_policy.json
-  }
+}
+
+resource "aws_iam_role_policy" "ecs_execution_role_policy" {
+  name = "ecs-execution-role-policy"
+  role = aws_iam_role.ecs_execution_role.id
+  policy = data.aws_iam_policy_document.ecs_execution_role_policy.json
 }
 
 resource "aws_iam_role" "ecs_task_role" {
   name = format("%s-ecs-task-role", var.environment_name)
   assume_role_policy = data.aws_iam_policy_document.ecs_assume_role_policy.json
-  inline_policy {
-    name = "ecs-task-role-policy"
-    policy = data.aws_iam_policy_document.ecs_task_role_policy.json
-  }
+}
+
+resource "aws_iam_role_policy" "ecs_task_role_policy" {
+  name = "ecs-task-role-policy"
+  role = aws_iam_role.ecs_task_role.id
+  policy = data.aws_iam_policy_document.ecs_task_role_policy.json
 }

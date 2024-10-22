@@ -1,4 +1,8 @@
 # Required Variables
+variable "application_name" {
+  type = string
+}
+
 variable "environment_name" {
   type = string
 }
@@ -38,7 +42,6 @@ variable "ecr_repository_name" {
 variable "ecr_image_uri" {
   type = string
 }
-
 
 # Optional Variables
 variable "rds_backup_retention_period" {

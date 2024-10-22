@@ -1,5 +1,5 @@
 resource "aws_secretsmanager_secret" "web_infrastructure" {
-  name = format("%s-infrastructure", var.environment_name)
+  name = format("%s-%s-web-infrastructure", var.application_name, var.environment_name)
 }
 
 resource "aws_secretsmanager_secret_version" "web_infrastructure" {
