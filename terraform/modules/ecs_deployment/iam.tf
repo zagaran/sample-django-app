@@ -38,7 +38,7 @@ data "aws_iam_policy_document" "ecs_execution_role_policy" {
       "logs:PutLogEvents"
     ]
     resources = [
-      "arn:aws:logs:*:*:log-group:${var.environment_name}:*",
+      "arn:aws:logs:*:*:log-group:${local.app_env_name}:*",
     ]
   }
 
@@ -49,8 +49,8 @@ data "aws_iam_policy_document" "ecs_execution_role_policy" {
       "secretsmanager:DescribeSecret"
     ]
     resources = [
-      "arn:aws:secretsmanager:*:*:secret:${aws_secretsmanager_secret.web_infrastructure.name}-*",
-      "arn:aws:secretsmanager:*:*:secret:${data.aws_secretsmanager_secret.web_config.name}-*"
+      "arn:aws:secretsmanager:*:*:secret:${aws_secretsmanager_secret.web_infrastructure.name}",
+      "arn:aws:secretsmanager:*:*:secret:${data.aws_secretsmanager_secret.web_config.name}"
     ]
   }
 
