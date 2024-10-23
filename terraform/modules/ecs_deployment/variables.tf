@@ -12,7 +12,7 @@ variable "vpc_id" {
 }
 
 variable "web_config_secret_name" {
-  type = string
+  type = string  # key for secrets_manager secrets that are not terraform managed
 }
 
 variable "s3_bucket_prefix" {
