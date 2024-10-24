@@ -48,6 +48,8 @@ env = environ.Env(
     # Set to True to enable the Django Debug Toolbar
     DEBUG_TOOLBAR=(bool, False),
     # END_FEATURE debug_toolbar
+    
+    EC2_METADATA=(bool, True)
 )
 # If ALLWED_HOSTS has been configured, then we're running on a server and
 # can skip looking for a .env file (this assumes that .env files
@@ -76,10 +78,12 @@ LOCALHOST = env("LOCALHOST")
 # that this is not the production site
 PRODUCTION = env("PRODUCTION")
 
+EC2_METADATA = env("EC2_METADATA")
+
 ALLOWED_HOSTS = env("ALLOWED_HOSTS")
 if LOCALHOST is True:
     ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
-else:
+elif EC2_METADATA:
     # START_FEATURE elastic_beanstalk
     # if using AWS hosting
     from ec2_metadata import ec2_metadata

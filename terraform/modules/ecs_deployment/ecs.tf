@@ -1,5 +1,5 @@
 resource "aws_ecs_cluster" "cluster" {
-  name = format("%s-cluster", var.environment_name)
+  name = "${var.application_name}-${var.environment_name}"
 
   setting {
     name  = "containerInsights"
@@ -14,11 +14,11 @@ resource "aws_ecs_cluster_capacity_providers" "fargate_provider" {
 }
 
 resource "aws_ecs_task_definition" "web" {
-  family = "${var.environment_name}-web"
+  family = "${var.application_name}-${var.environment_name}-web"
   
   container_definitions = jsonencode([
     {
-      name      = "${var.environment_name}-web"
+      name      = "${var.application_name}-${var.environment_name}-web"
       image     = var.ecr_image_uri
       essential = true
       portMappings = [
@@ -30,7 +30,7 @@ resource "aws_ecs_task_definition" "web" {
       logConfiguration = {
         logDriver = "awslogs",
         options = {
-            awslogs-group = aws_cloudwatch_log_group.log_group.name,
+            awslogs-group = aws_cloudwatch_log_group.web_log_group.name,
             awslogs-region = data.aws_region.current.name,
             awslogs-stream-prefix = "ecs"
         }
@@ -48,7 +48,7 @@ resource "aws_ecs_task_definition" "web" {
 }
 
 resource "aws_ecs_service" "web" {
-  name                   = "${var.environment_name}-web"
+  name                   = "${var.application_name}-${var.environment_name}-web"
   cluster                = aws_ecs_cluster.cluster.id
   task_definition        = aws_ecs_task_definition.web.arn
   desired_count          = var.container_count
@@ -62,7 +62,7 @@ resource "aws_ecs_service" "web" {
 
   load_balancer {
     target_group_arn = aws_lb_target_group.target_group.arn
-    container_name   = "${var.environment_name}-web"
+    container_name   = "${var.application_name}-${var.environment_name}-web"
     container_port   = 8080
   }
 
@@ -73,7 +73,7 @@ resource "aws_ecs_service" "web" {
   }
 }
 
-resource "aws_cloudwatch_log_group" "log_group" {
-  name              = var.environment_name
+resource "aws_cloudwatch_log_group" "web_log_group" {
+  name              = "${var.application_name}-${var.environment_name}-web"
   retention_in_days = 90
 }

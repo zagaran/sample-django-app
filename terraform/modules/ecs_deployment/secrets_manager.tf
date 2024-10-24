@@ -13,7 +13,6 @@ resource "aws_secretsmanager_secret_version" "web_infrastructure" {
     )
     DEFAULT_FROM_EMAIL = var.ses_from_email
     SECRET_KEY = random_password.app_secret_key.result
-    ALLOWED_HOSTS = "example.zagaran.com"
    })
 }
 
