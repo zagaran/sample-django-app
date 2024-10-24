@@ -24,6 +24,7 @@ module "ecs_deployment" {
     
     # Required Variables
     environment_name = "production"
+    application_name = ""  # TODO: FILL ME IN
     vpc_id = ""  # TODO: FILL ME IN
     web_config_secret_name = ""  # TODO: FILL ME IN
     s3_bucket_prefix = ""  # TODO: FILL ME IN
