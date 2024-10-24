@@ -129,8 +129,8 @@ Following that, deploy your code to the environment (see below).
 3. Create a bucket for holding terraform config
 4. Create an SES identity and from email (if using SES)
 5. Create an AWS certificate manager certificate for your domain
-6. Create a secrets manager secret containing the config parameters needed by the application (do not include those managed by terraform in terraform/modules/ecs_deployment/secrets_manager.tf)
-7. Ensure these config parameters have been added to the list in terraform/modules/ecs_deployment/ecs.tf
+6. Create a secrets manager secret containing the config parameters needed by the application (you do not need include "DATABASE_URL", "SECRET_KEY", "AWS_STORAGE_BUCKET_NAME", or "DEFAULT_FROM_EMAIL" as those are managed by terraform in terraform/modules/ecs_deployment/secrets_manager.tf)
+7. Ensure your config parameters have been added to the list in terraform/modules/ecs_deployment/locals.tf
 8. Fill in the missing values in terraform/envs/<ENV_NAME>/main.tf
 9. Run terraform to set up that environment
 ```
