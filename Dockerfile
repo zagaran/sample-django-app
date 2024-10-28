@@ -33,24 +33,23 @@ RUN set -ex \
 ENV VIRTUAL_ENV /env
 ENV PATH /env/bin:$PATH
 
-# START_FEATURE django_react
-# LTS Version of Node
+COPY . /app/
+# Add temporary copy of env file to allow running management commands
+COPY ./config/.env.build /app/config/.env
+
+# LTS Version of Node is 22
 ARG NODE_VERSION=22
+
+# START_FEATURE django_react
+# if using nwb, nwb requires Node 16. TODO remove nwb
+ARG NODE_VERSION=16
+# END_FEATURE django_react
 
 # install node
 RUN curl -fsSL https://deb.nodesource.com/setup_{$NODE_VERSION}.x | bash -
 RUN apt-get update && apt install nodejs -y
 
-COPY ./nwb.config.js /app/nwb.config.js
-COPY ./package.json /app/package.json
-COPY ./package-lock.json /app/package-lock.json
 RUN npm install
-# END_FEATURE django_react
-
-COPY . /app/
-
-# Add temporary copy of env file to allow running management commands
-COPY ./config/.env.example /app/config/.env
 
 # START_FEATURE django_react
 RUN ./node_modules/.bin/nwb build --no-vendor
