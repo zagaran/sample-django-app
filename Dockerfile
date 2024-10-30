@@ -63,7 +63,7 @@ RUN python manage.py collectstatic --noinput
 
 RUN rm /app/config/.env
 
-EXPOSE 8000
+EXPOSE 8080
 
-CMD ["gunicorn", "--bind", ":8000", "--workers", "3", "config.wsgi:application", "--access-logfile", "-", "--error-logfile", "-"]
+CMD ["gunicorn", "--bind", ":8080", "--workers", "3", "config.wsgi:application", "--access-logfile", "-", "--error-logfile", "-"]
 # END_FEATURE docker
