@@ -1,6 +1,12 @@
 # START_FEATURE docker
 FROM python:3.11.4-slim-buster
 
+# reduces file creation
+ENV PYTHONDONTWRITEBYTECODE=1
+# disables output buffering so logs are flushed to console
+ENV PYTHONUNBUFFERED=1
+
+# Set container working directory
 WORKDIR /app
 
 RUN set -ex \
@@ -33,6 +39,7 @@ RUN set -ex \
 ENV VIRTUAL_ENV /env
 ENV PATH /env/bin:$PATH
 
+# Copy project files into the container
 COPY . /app/
 # Add temporary copy of env file to allow running management commands
 COPY ./config/.env.build /app/config/.env
