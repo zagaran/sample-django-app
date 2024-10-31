@@ -33,6 +33,7 @@ django-storages
 
 # START_FEATURE docker
 gunicorn
+whitenoise
 # END_FEATURE docker
 
 # START_FEATURE django_ses

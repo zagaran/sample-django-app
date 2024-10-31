@@ -4,7 +4,7 @@ resource "aws_secretsmanager_secret" "web_infrastructure" {
 
 resource "aws_secretsmanager_secret_version" "web_infrastructure" {
   secret_id = aws_secretsmanager_secret.web_infrastructure.id
-   secret_string = jsonencode({
+  secret_string = jsonencode({
     AWS_STORAGE_BUCKET_NAME = aws_s3_bucket.bucket.id
     DATABASE_URL = format(
       "postgres://dbuser:%s@%s:5432/database?sslmode=require",
@@ -13,7 +13,7 @@ resource "aws_secretsmanager_secret_version" "web_infrastructure" {
     )
     DEFAULT_FROM_EMAIL = var.ses_from_email
     SECRET_KEY = random_password.app_secret_key.result
-   })
+  })
 }
 
 

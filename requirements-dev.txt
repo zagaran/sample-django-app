@@ -322,6 +322,10 @@ werkzeug==3.0.1
     # via -r requirements-dev.in
 wheel==0.41.3
     # via pip-tools
+whitenoise==6.8.2
+    # via
+    #   -c requirements.txt
+    #   -r requirements.in
 
 # The following packages are considered to be unsafe in a requirements file:
 # pip

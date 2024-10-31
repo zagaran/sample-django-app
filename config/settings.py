@@ -14,7 +14,6 @@ from django.contrib.messages import constants as messages
 
 import environ
 
-
 env = environ.Env(
     # Sets Django's ALLOWED_HOSTS setting
     ALLOWED_HOSTS=(list, []),
@@ -133,6 +132,9 @@ INSTALLED_APPS = THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    # START_FEATURE docker
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    # END_FEATURE docker
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "common.middleware.MaintenanceModeMiddleware",
@@ -318,6 +320,12 @@ else:
             "default_acl": "private",
         }
     }
+
+STATIC_BACKEND = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
+# START_FEATURE docker
+STATIC_BACKEND = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# END_FEATURE docker
+
 # END_FEATURE django_storages
 STORAGES = {
     "default": DEFAULT_STORAGE,
@@ -332,7 +340,7 @@ STORAGES = {
     },
     # END_FEATURE sass_bootstrap
     "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+        "BACKEND": STATIC_BACKEND,
     },
 }
 
