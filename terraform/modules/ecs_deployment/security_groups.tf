@@ -1,5 +1,5 @@
 resource "aws_security_group" "load_balancer" {
-  name = format("%s %s load balancer", var.application_name, var.environment_name)
+  name = "${local.app_env_name}-lb"
   
   ingress {
     from_port        = 80
@@ -24,7 +24,7 @@ resource "aws_security_group" "load_balancer" {
   }
   
   tags = {
-    Name = "${local.app_env_name}-lb"
+    Name = "${var.application_name} ${var.environment_name} load balancer"
   }
   
   lifecycle {
@@ -33,7 +33,7 @@ resource "aws_security_group" "load_balancer" {
 }
 
 resource "aws_security_group" "web" {
-  name = format("%s %s web", var.application_name, var.environment_name)
+  name = "${local.app_env_name}-web"
 
   ingress {
     from_port       = 8080
@@ -50,7 +50,7 @@ resource "aws_security_group" "web" {
   }
 
   tags = {
-    Name = "${local.app_env_name}-web"
+    Name = "${var.application_name} ${var.environment_name} web"
   }
   
   lifecycle {
@@ -59,7 +59,7 @@ resource "aws_security_group" "web" {
 }
 
 resource "aws_security_group" "database" {
-  name = format("%s %s database", var.application_name, var.environment_name)
+  name = "${local.app_env_name}-db"
 
   ingress {
     from_port       = 5432
@@ -76,7 +76,7 @@ resource "aws_security_group" "database" {
   }
 
   tags = {
-    Name = "${local.app_env_name}-db"
+    Name = "${var.application_name} ${var.environment_name} database"
   }
   
   lifecycle {

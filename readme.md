@@ -125,21 +125,21 @@ Following that, deploy your code to the environment (see below).
 ## Creating a new ECS environment
 
 1. Create an ECR repository
-2. Build and push the docker file to it
+2. Build and push the docker file to it (ECR provides docker commands for this)
 3. Create a bucket for holding terraform config
 4. Create an SES identity and from email (if using SES)
 5. Create an AWS certificate manager certificate for your domain
-6. Create a secrets manager secret containing the config parameters needed by the application (you do not need include "DATABASE_URL", "SECRET_KEY", "AWS_STORAGE_BUCKET_NAME", or "DEFAULT_FROM_EMAIL" as those are managed by terraform in terraform/modules/ecs_deployment/secrets_manager.tf)
-7. Ensure your config parameters have been added to the list in terraform/modules/ecs_deployment/locals.tf
-8. Fill in the missing values in terraform/envs/<ENV_NAME>/main.tf
-9. Run terraform to set up that environment
+6. Create a secrets manager secret containing the config parameters needed by the application (you do not need include "DATABASE_URL", "SECRET_KEY", "AWS_STORAGE_BUCKET_NAME", or "DEFAULT_FROM_EMAIL" as those are managed by terraform in `terraform/modules/ecs_deployment/secrets_manager.tf`)
+7. Fill in the missing values in `terraform/envs/<ENV_NAME>/main.tf`
+8. Run terraform to set up that environment
 ```
 cd terraform/envs/<ENV_NAME>
 terraform init
 terraform plan
 terraform apply
 ```
-10. Add a DNS entry from your domain name to the created load balancer
+
+9. Add a DNS entry from your domain name to the created load balancer
 
 
 
