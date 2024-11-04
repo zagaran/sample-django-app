@@ -112,13 +112,13 @@ data "aws_iam_policy_document" "ecs_task_role_policy" {
       "kms:Decrypt"
     ]
     resources = [
-      format("arn:aws:kms:*:*:aws/secretsmanager")
+      "arn:aws:kms:*:*:aws/secretsmanager"
     ]
   }
 }
 
 resource "aws_iam_role" "ecs_execution_role" {
-  name = format("%s-ecs-execution-role", var.environment_name)
+  name = "${local.app_env_name}-ecs-execution-role"
   assume_role_policy = data.aws_iam_policy_document.ecs_assume_role_policy.json
 }
 
@@ -129,7 +129,7 @@ resource "aws_iam_role_policy" "ecs_execution_role_policy" {
 }
 
 resource "aws_iam_role" "ecs_task_role" {
-  name = format("%s-ecs-task-role", var.environment_name)
+  name = "${local.app_env_name}-ecs-task-role"
   assume_role_policy = data.aws_iam_policy_document.ecs_assume_role_policy.json
 }
 

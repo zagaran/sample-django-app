@@ -13,7 +13,7 @@ resource "aws_db_instance" "database" {
   deletion_protection         = var.rds_deletion_protection
   engine                      = "postgres"
   engine_version              = var.rds_engine_version
-  identifier                  = format("%s-%s-db", var.application_name, var.environment_name)
+  identifier                  = "${local.app_env_name}-db"
   instance_class              = var.rds_instance_class
   multi_az                    = var.rds_multi_az
   password                    = random_password.db_password.result

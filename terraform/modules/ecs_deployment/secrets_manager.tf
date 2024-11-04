@@ -1,5 +1,5 @@
 resource "aws_secretsmanager_secret" "web_infrastructure" {
-  name = format("%s-%s-web-infrastructure", var.application_name, var.environment_name)
+  name = "${local.app_env_name}-web-infrastructure"
 }
 
 resource "aws_secretsmanager_secret_version" "web_infrastructure" {
@@ -19,6 +19,11 @@ resource "aws_secretsmanager_secret_version" "web_infrastructure" {
 
 data "aws_secretsmanager_secret" "web_config" {
   name = var.web_config_secret_name
+}
+
+
+data "aws_secretsmanager_secret_version" "web_config" {
+  secret_id = data.aws_secretsmanager_secret.web_config.id
 }
 
 

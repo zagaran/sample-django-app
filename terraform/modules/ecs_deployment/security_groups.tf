@@ -24,7 +24,7 @@ resource "aws_security_group" "load_balancer" {
   }
   
   tags = {
-    Name = format("%s-%s-lb", var.application_name, var.environment_name)
+    Name = "${local.app_env_name}-lb"
   }
   
   lifecycle {
@@ -50,7 +50,7 @@ resource "aws_security_group" "web" {
   }
 
   tags = {
-    Name = format("%s-%s-web", var.application_name, var.environment_name)
+    Name = "${local.app_env_name}-web"
   }
   
   lifecycle {
@@ -76,7 +76,7 @@ resource "aws_security_group" "database" {
   }
 
   tags = {
-    Name = format("%s-%s-db", var.application_name, var.environment_name)
+    Name = "${local.app_env_name}-db"
   }
   
   lifecycle {
