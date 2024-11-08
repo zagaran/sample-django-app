@@ -19,14 +19,6 @@ class MigrationFailed(Exception):
 class MigrationTimeOut(Exception):
     pass
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--no-input", action="store_true", help="Skips request for confirmation before starting the deploy.")
-parser.add_argument("--skip-build", action="store_true", help="Skips the build step and uses the existing ECR image for the environment.")
-parser.add_argument("--use-latest", action="store_true", help="Skips the build step and uses the ECR image tagged `latest`.")
-parser.add_argument("--use-image-from-env", help="If provided, skips the terraform build and instead uses the existing built image from the specified environment")
-parser.add_argument("--skip-migration", action="store_true", help="Skips the migration step.")
-parser.add_argument("-env", help="Terraform environment to deploy", required=True)
-
 
 def deploy(args):
     if not args.no_input:
@@ -192,10 +184,42 @@ def restart_web_service(env):
         forceNewDeployment=True
     )
 
+def ssh(args):
+    # Runs a bash shell in a running task for the env. Note this may run in a short-lived task (e.g. migration task)
+    cluster_id = get_terraform_output("cluster_id", args.env)
+    service_name = get_terraform_output("web_service_name", args.env)
+    ecs_client = boto3.session.Session(profile_name=AWS_PROFILE_NAME, region_name=AWS_REGION).client("ecs")
+    list_tasks_resp = ecs_client.list_tasks(cluster=cluster_id, serviceName=service_name)
+    task_ids = list_tasks_resp["taskArns"]
+
+    if task_ids:
+        task_id = task_ids[0]
+        bash_command = ["aws", "ecs", "execute-command", "--cluster", cluster_id, "--task", task_id,
+                        "--region", AWS_REGION, "--profile", AWS_PROFILE_NAME, "--interactive",
+                        "--command", "'/bin/bash'"]
+        subprocess.run(bash_command)
+
+
+
+parser = argparse.ArgumentParser(prog="python deploy.py")
+parser.add_argument("--no-input", action="store_true",
+                    help="Skips request for confirmation before starting the deploy.")
+parser.add_argument("--skip-build", action="store_true",
+                    help="Skips the build step and uses the existing ECR image for the environment.")
+parser.add_argument("--use-latest", action="store_true",
+                    help="Skips the build step and uses the ECR image tagged `latest`.")
+parser.add_argument("--use-image-from-env",
+                    help="If provided, skips the terraform build and instead uses the existing built image from the specified environment")
+parser.add_argument("--skip-migration", action="store_true", help="Skips the migration step.")
+parser.add_argument("-env", help="Terraform environment to deploy", required=True)
+parser.set_defaults(func=deploy)
+
+subparsers = parser.add_subparsers(title="Extra utilities", prog="python deploy.py -env <ENV_NAME>")
+ssh_parser = subparsers.add_parser("ssh", help="SSH into running container in env instead of deploying")
+ssh_parser.set_defaults(func=ssh)
+
 
 if __name__ == "__main__":
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO, stream=sys.stdout, format="%(levelname)s - %(message)s")
-    deploy(args)
-
-
+    args.func(args)

@@ -167,3 +167,5 @@ Run `python deploy.py --help` to see available options. You may choose to use an
 ## SSH
 
 To SSH into an Elastic Beanstalk Environment, use [eb-ssm](https://github.com/zagaran/eb-ssm).
+
+To SSH into an ECS environment, use `python deploy.py -env <ENV_NAME> ssh`
