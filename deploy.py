@@ -49,8 +49,12 @@ def deploy(args):
         copy_image_from_env(args.use_image_from_env, args.env)
     elif not args.skip_build:
         build_and_push_image(args.env)
+    else:
+        logging.info("Skipping build step")
 
-    if not args.skip_migration:
+    if args.skip_migration:
+        logging.info("Skipping database migration")
+    else:
         # Run and wait for migrations
         run_migrations(args.env)
 
