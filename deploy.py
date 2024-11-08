@@ -10,6 +10,7 @@ AWS_REGION = "us-east-1"
 AWS_PROFILE_NAME = "FILL ME IN"
 
 MIGRATION_TIMEOUT_SECONDS = 10 * 60  # Ten minutes
+STATUS_CHECK_INTERVAL = 30
 
 
 class MigrationFailed(Exception):
@@ -32,9 +33,11 @@ def deploy(args):
             logging.warning("Deployment canceled.")
             return
 
-    # Refresh terraform state
-    logging.info("Refreshing terraform state...")
-    subprocess.run(["terraform", "refresh"], cwd=f"terraform/envs/{args.env}", check=True, capture_output=True)
+    # Local state setup for relevant envs
+    terraform_envs = [args.env]
+    if args.use_image_from_env:
+        terraform_envs.append(args.use_image_from_env)
+    setup(terraform_envs)
 
     # ECR image setup
     if args.use_image_from_env:
@@ -55,6 +58,13 @@ def deploy(args):
 
     # Redeploy services
     restart_web_service(args.env)
+
+
+def setup(envs):
+    # Refresh terraform state
+    logging.info("Refreshing terraform state...")
+    for env in envs:
+        subprocess.run(["terraform", "refresh"], cwd=f"terraform/envs/{env}", check=True, capture_output=True)
 
 
 def subprocess_output(command_args, **subprocess_kwargs):
@@ -152,7 +162,6 @@ def run_migrations(env):
     migration_task_id = run_task_response["tasks"][0]["taskArn"]
     logging.info(f"Migration task provisioned with ID {migration_task_id}")
     start = time.time()
-    status_check_interval = 30  # Check migration status at interval (in seconds)
 
     while time.time() - start < MIGRATION_TIMEOUT_SECONDS:
         logging.info("Waiting for migrations to finish...")
@@ -160,13 +169,13 @@ def run_migrations(env):
         task = describe_tasks_response["tasks"][0]
         stop_code = task.get("stopCode")
         if not stop_code:
-            time.sleep(status_check_interval)
+            time.sleep(STATUS_CHECK_INTERVAL)
             continue
         if stop_code == "EssentialContainerExited":
             # The migration task has finished successfully
             logging.info("Migration complete")
             return
-        logging.error("Migration task failed.")
+        logging.error(f"Migration task failed with code {stop_code} and reason {task.get('stoppedReason')}.")
         raise MigrationFailed()
     logging.error("Migration timed out. It may still be running.")
     raise MigrationTimeOut()
@@ -184,7 +193,6 @@ def restart_web_service(env):
         forceNewDeployment=True
     )
 
-    status_check_interval = 30
     while True:
         logging.info("Waiting for deployment to finish...")
         services_response = ecs_client.describe_services(cluster=cluster_id, services=[service_name])
@@ -192,20 +200,22 @@ def restart_web_service(env):
         new_deployment = next(deployment for deployment in deployments if deployment["status"] == "PRIMARY")
         deployment_state = new_deployment["rolloutState"]
         if deployment_state == "IN_PROGRESS":
-            time.sleep(status_check_interval)
+            time.sleep(STATUS_CHECK_INTERVAL)
             continue
         if deployment_state == "COMPLETED":
-            logging.info("\nSuccess! Deployment complete.")
+            logging.info("Success! Deployment complete.")
         elif deployment_state == "FAILED":
-            logging.error(f"\nDeployment failed! Reason: {new_deployment['rolloutStateReason']}")
+            logging.error(f"Deployment failed! Reason: {new_deployment['rolloutStateReason']}")
         else:
-            logging.warning(f"\nUnknown deployment state {deployment_state}. Please check the console.")
+            logging.warning(f"Unknown deployment state {deployment_state}. Please check the console.")
         break
 
 
 
 def ssh(args):
     # Runs a bash shell in a running task for the env. Note this may run in a short-lived task (e.g. migration task)
+    # Refresh terraform state
+    setup([args.env])
     cluster_id = get_terraform_output("cluster_id", args.env)
     service_name = get_terraform_output("web_service_name", args.env)
     ecs_client = boto3.session.Session(profile_name=AWS_PROFILE_NAME, region_name=AWS_REGION).client("ecs")
@@ -221,25 +231,28 @@ def ssh(args):
 
 
 
-parser = argparse.ArgumentParser(prog="python deploy.py")
-parser.add_argument("--no-input", action="store_true",
-                    help="Skips request for confirmation before starting the deploy.")
-parser.add_argument("--skip-build", action="store_true",
-                    help="Skips the build step and uses the existing ECR image for the environment.")
-parser.add_argument("--use-latest", action="store_true",
-                    help="Skips the build step and uses the ECR image tagged `latest`.")
-parser.add_argument("--use-image-from-env",
-                    help="If provided, skips the terraform build and instead uses the existing built image from the specified environment")
-parser.add_argument("--skip-migration", action="store_true", help="Skips the migration step.")
-parser.add_argument("-env", help="Terraform environment to deploy", required=True)
-parser.set_defaults(func=deploy)
+def main():
+    parser = argparse.ArgumentParser(prog="python deploy.py")
+    parser.add_argument("--no-input", action="store_true",
+                        help="Skips request for confirmation before starting the deploy.")
+    parser.add_argument("--skip-build", action="store_true",
+                        help="Skips the build step and uses the existing ECR image for the environment.")
+    parser.add_argument("--use-latest", action="store_true",
+                        help="Skips the build step and uses the ECR image tagged `latest`.")
+    parser.add_argument("--use-image-from-env",
+                        help="If provided, skips the terraform build and instead uses the existing built image from the specified environment")
+    parser.add_argument("--skip-migration", action="store_true", help="Skips the migration step.")
+    parser.add_argument("-env", help="Terraform environment to deploy", required=True)
+    parser.set_defaults(func=deploy)
 
-subparsers = parser.add_subparsers(title="Extra utilities", prog="python deploy.py -env <ENV_NAME>")
-ssh_parser = subparsers.add_parser("ssh", help="SSH into running container in env instead of deploying")
-ssh_parser.set_defaults(func=ssh)
+    subparsers = parser.add_subparsers(title="Extra utilities", prog="python deploy.py -env <ENV_NAME>")
+    ssh_parser = subparsers.add_parser("ssh", help="SSH into running container in env instead of deploying")
+    ssh_parser.set_defaults(func=ssh)
 
-
-if __name__ == "__main__":
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO, stream=sys.stdout, format="%(levelname)s - %(message)s")
     args.func(args)
+
+
+if __name__ == "__main__":
+    main()
