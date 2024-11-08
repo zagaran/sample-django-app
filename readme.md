@@ -104,7 +104,7 @@ pip install eb-ssm  # For Elastic Beanstalk SSH functionality without requiring 
 
 ## Creating a new Elastic Beanstalk environment
 
-To do create a new Elastic Beanstalk environment, modify the contents of [.elasticbeanstalk/eb_create_environment.yml]([.elasticbeanstalk/eb_create_environment.yml]) and run `eb-create-environment -c .elasticbeanstalk/eb_create_environment.yml`.
+To create a new Elastic Beanstalk environment, modify the contents of [.elasticbeanstalk/eb_create_environment.yml]([.elasticbeanstalk/eb_create_environment.yml]) and run `eb-create-environment -c .elasticbeanstalk/eb_create_environment.yml`.
 
 See the docs for [eb-create-environment](https://github.com/zagaran/eb-create-environment/) for more details.
 
@@ -125,7 +125,7 @@ Following that, deploy your code to the environment (see below).
 ## Creating a new ECS environment
 
 1. Create an ECR repository
-2. Build and push the docker file to it (ECR provides docker commands for this)
+2. Build and push an initial docker file to it (ECR provides docker commands for this).
 3. Create a bucket for holding terraform config
 4. Create an SES identity and from email (if using SES)
 5. Create an AWS certificate manager certificate for your domain
@@ -139,15 +139,31 @@ terraform plan
 terraform apply
 ```
 
-9. Add a DNS entry from your domain name to the created load balancer
+9. Redeploy your code using the steps described below (with the --use-latest option) to run initial migrations
+10. Add a DNS entry from your domain name to the created load balancer
 
 
 
 ## Deploying code
 
-To deploy new versions of your code to your environment, run `eb deploy <environment_name>` using the EB CLI to deploy your code to that environment.
+### Elastic Beanstalk
+To deploy new versions of your code to an elastic beanstalk environment, run `eb deploy <environment_name>` using the EB CLI to deploy your code to that environment.
 
 See the [eb-cli](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3.html) docs on general command line usage of Elastic Beanstalk.
+
+### ECS
+To deploy new versions of your code to an ECS environment, use the included `deploy.py` script. First fill in the 
+missing constants at the top of that file, and then run the script:
+```
+python deploy.py -env <ENV_NAME>
+```
+This script will do the following:
+1. Build the docker image using your local code version.
+2. Push the docker image to the ECR location for the specified environment
+3. Run database migrations
+4. Deploy to the running web service
+
+Run `python deploy.py --help` to see available options. You may choose to use an existing ECR image or skip migrations.
 
 ## SSH
 

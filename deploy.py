@@ -21,7 +21,8 @@ class MigrationTimeOut(Exception):
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--no-input", action="store_true", help="Skips request for confirmation before starting the deploy.")
-parser.add_argument("--skip-build", action="store_true", help="Skips the build step and uses the existing ECR image.")
+parser.add_argument("--skip-build", action="store_true", help="Skips the build step and uses the existing ECR image for the environment.")
+parser.add_argument("--use-latest", action="store_true", help="Skips the build step and uses the ECR image tagged `latest`.")
 parser.add_argument("--use-image-from-env", help="If provided, skips the terraform build and instead uses the existing built image from the specified environment")
 parser.add_argument("--skip-migration", action="store_true", help="Skips the migration step.")
 parser.add_argument("-env", help="Terraform environment to deploy", required=True)
@@ -47,6 +48,8 @@ def deploy(args):
     if args.use_image_from_env:
         subprocess.run(["terraform", "refresh"], cwd=f"terraform/envs/{args.use_image_from_env}", check=True, capture_output=True)
         copy_image_from_env(args.use_image_from_env, args.env)
+    elif args.use_latest:
+        copy_latest_image(args.env)
     elif not args.skip_build:
         build_and_push_image(args.env)
     else:
@@ -99,24 +102,34 @@ def copy_image_from_env(from_env, to_env):
     # Retags image from from_env into to_env.
     logging.info(f"Copying image from {from_env} to {to_env}")
     from_ecr_repository_name = get_terraform_output("ecr_repository_name", from_env)
+    to_ecr_repository_name = get_terraform_output("ecr_repository_name", to_env)
+    retag_image(from_ecr_repository_name, from_env, to_ecr_repository_name, to_env)
+
+
+def copy_latest_image(env):
+    # Retags latest image in repository for use by env
+    logging.info(f"Copying latest image to {env}")
+    ecr_repository_name = get_terraform_output("ecr_repository_name", env)
+    retag_image(ecr_repository_name, "latest", ecr_repository_name, env)
+
+
+def retag_image(from_repository, from_tag, to_repository, to_tag):
     ecr_client = boto3.session.Session(profile_name=AWS_PROFILE_NAME, region_name=AWS_REGION).client("ecr")
     # Get image manifest
     image_response = ecr_client.batch_get_image(
-        repositoryName=from_ecr_repository_name,
+        repositoryName=from_repository,
         imageIds=[{
-            "imageTag": from_env
+            "imageTag": from_tag
         }],
         acceptedMediaTypes=["string"]
     )
-
     image_manifest = image_response["images"][0]["imageManifest"]
     image_manifest_media_type = image_response["images"][0]["imageManifestMediaType"]
     # Add new tag to manifest
-    to_ecr_repository_name = get_terraform_output("ecr_repository_name", to_env)
     ecr_client.put_image(
-        repositoryName=to_ecr_repository_name,
+        repositoryName=to_repository,
         imageManifest=image_manifest,
-        imageTag=to_env,
+        imageTag=to_tag,
         imageManifestMediaType=image_manifest_media_type,
     )
 
