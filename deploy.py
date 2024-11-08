@@ -56,8 +56,6 @@ def deploy(args):
     # Redeploy services
     restart_web_service(args.env)
 
-    logging.info("Deployment complete.")
-
 
 def subprocess_output(command_args, **subprocess_kwargs):
     output = subprocess.run(command_args, **subprocess_kwargs, capture_output=True, check=True)
@@ -178,11 +176,33 @@ def restart_web_service(env):
     # Restart ECS web service to deploy new code
     ecs_client = boto3.session.Session(profile_name=AWS_PROFILE_NAME, region_name=AWS_REGION).client("ecs")
     logging.info("Redeploying web service...")
+    cluster_id = get_terraform_output("cluster_id", env)
+    service_name = get_terraform_output("web_service_name", env)
     ecs_client.update_service(
-        cluster=get_terraform_output("cluster_id", env),
-        service=get_terraform_output("web_service_name", env),
+        cluster=cluster_id,
+        service=service_name,
         forceNewDeployment=True
     )
+
+    status_check_interval = 30
+    while True:
+        logging.info("Waiting for deployment to finish...")
+        services_response = ecs_client.describe_services(cluster=cluster_id, services=[service_name])
+        deployments = services_response["services"][0]["deployments"]
+        new_deployment = next(deployment for deployment in deployments if deployment["status"] == "PRIMARY")
+        deployment_state = new_deployment["rolloutState"]
+        if deployment_state == "IN_PROGRESS":
+            time.sleep(status_check_interval)
+            continue
+        if deployment_state == "COMPLETED":
+            logging.info("\nSuccess! Deployment complete.")
+        elif deployment_state == "FAILED":
+            logging.error(f"\nDeployment failed! Reason: {new_deployment['rolloutStateReason']}")
+        else:
+            logging.warning(f"\nUnknown deployment state {deployment_state}. Please check the console.")
+        break
+
+
 
 def ssh(args):
     # Runs a bash shell in a running task for the env. Note this may run in a short-lived task (e.g. migration task)
