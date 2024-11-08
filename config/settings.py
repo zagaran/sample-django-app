@@ -321,9 +321,9 @@ else:
         }
     }
 
-STATIC_BACKEND = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
+STATIC_BACKEND = "django.contrib.staticfiles.storage.StaticFilesStorage" if LOCALHOST else "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
 # START_FEATURE docker
-STATIC_BACKEND = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATIC_BACKEND = "django.contrib.staticfiles.storage.StaticFilesStorage" if LOCALHOST else "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # END_FEATURE docker
 
 # END_FEATURE django_storages

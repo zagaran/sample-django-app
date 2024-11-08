@@ -143,7 +143,6 @@ terraform apply
 10. Add a DNS entry from your domain name to the created load balancer
 
 
-
 ## Deploying code
 
 ### Elastic Beanstalk
