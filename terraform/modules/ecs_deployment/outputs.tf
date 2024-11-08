@@ -3,6 +3,11 @@ output "cluster_id" {
   value       = aws_ecs_cluster.cluster.id
 }
 
+output "ecr_image_uri" {
+  description = "The full URI of the ECR image"
+  value = local.ecr_image_uri
+}
+
 output "ecr_repository_name" {
   description = "The name of the ECR repository"
   value = var.ecr_repository_name

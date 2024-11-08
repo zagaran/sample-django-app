@@ -33,8 +33,7 @@ module "ecs_deployment" {
     ses_from_email = ""  # TODO: FILL ME IN
     certificate_manager_arn =  ""  # TODO: FILL ME IN
     ecr_repository_name =  ""  # TODO: FILL ME IN
-    ecr_image_uri = ""  # TODO: FILL ME IN
-    
+
     # Optional Variables
     rds_backup_retention_period = 10
     rds_deletion_protection = true

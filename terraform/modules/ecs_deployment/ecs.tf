@@ -19,7 +19,7 @@ resource "aws_ecs_task_definition" "web" {
   container_definitions = jsonencode([
     {
       name      = "${local.app_env_name}-web"
-      image     = var.ecr_image_uri
+      image     = local.ecr_image_uri
       essential = true
       portMappings = [
         {

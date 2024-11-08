@@ -20,6 +20,7 @@ class MigrationTimeOut(Exception):
     pass
 
 parser = argparse.ArgumentParser()
+parser.add_argument("--no-input", action="store_true", help="Skips request for confirmation before starting the deploy.")
 parser.add_argument("--skip-build", action="store_true", help="Skips the build step and uses the existing ECR image.")
 parser.add_argument("--use-image-from-env", help="If provided, skips the terraform build and instead uses the existing built image from the specified environment")
 parser.add_argument("--skip-migration", action="store_true", help="Skips the migration step.")
@@ -27,15 +28,19 @@ parser.add_argument("-env", help="Terraform environment to deploy", required=Tru
 
 
 def deploy(args):
-    confirmation_message = f"Begin deploying to {args.env}? "
-    if args.use_image_from_env:
-        confirmation_message += f"This will use the current {args.use_image_from_env} deployment"
-    confirmation = input(confirmation_message)
-    if confirmation.lower() not in ["y", "yes"]:
-        logging.warning("Deployment canceled.")
-        return
+    if not args.no_input:
+        # Request user confirmation
+        confirmation_message = f"\nBegin deploying to {args.env}? "
+        if args.use_image_from_env:
+            confirmation_message += f"This will use the current {args.use_image_from_env} deployment. "
+        confirmation_message += "(y/n): "
+        confirmation = input(confirmation_message)
+        if confirmation.lower() not in ["y", "yes"]:
+            logging.warning("Deployment canceled.")
+            return
 
     # Refresh terraform state
+    logging.info("Refreshing terraform state...")
     subprocess.run(["terraform", "refresh"], cwd=f"terraform/envs/{args.env}", check=True, capture_output=True)
 
     # ECR image setup
@@ -88,26 +93,26 @@ def build_and_push_image(env):
 
 def copy_image_from_env(from_env, to_env):
     # Retags image from from_env into to_env.
-    from_ecr_image_uri = get_terraform_output("ecr_image_uri", from_env)
-    from_ecr_repository_name, from_ecr_image_tag = from_ecr_image_uri.split("/")
+    logging.info(f"Copying image from {from_env} to {to_env}")
+    from_ecr_repository_name = get_terraform_output("ecr_repository_name", from_env)
     ecr_client = boto3.session.Session(profile_name=AWS_PROFILE_NAME, region_name=AWS_REGION).client("ecr")
     # Get image manifest
     image_response = ecr_client.batch_get_image(
         repositoryName=from_ecr_repository_name,
         imageIds=[{
-            "imageTag": from_ecr_image_tag
+            "imageTag": from_env
         }],
         acceptedMediaTypes=["string"]
     )
+
     image_manifest = image_response["images"][0]["imageManifest"]
     image_manifest_media_type = image_response["images"][0]["imageManifestMediaType"]
     # Add new tag to manifest
-    to_ecr_image_uri = get_terraform_output("ecr_image_uri", to_env)
-    to_ecr_repository_name, to_ecr_image_tag = to_ecr_image_uri.split("/")
+    to_ecr_repository_name = get_terraform_output("ecr_repository_name", to_env)
     ecr_client.put_image(
         repositoryName=to_ecr_repository_name,
         imageManifest=image_manifest,
-        imageTag=to_ecr_image_tag,
+        imageTag=to_env,
         imageManifestMediaType=image_manifest_media_type,
     )
 
@@ -138,8 +143,9 @@ def run_migrations(env):
 
     # Wait for task to complete. Times out after MIGRATION_TIMEOUT_SECONDS
     migration_task_id = run_task_response["tasks"][0]["taskArn"]
+    logging.info(f"Migration task provisioned with ID {migration_task_id}")
     start = time.time()
-    status_check_interval = 10  # Check migration status every 10 seconds
+    status_check_interval = 30  # Check migration status at interval (in seconds)
 
     while time.time() - start < MIGRATION_TIMEOUT_SECONDS:
         logging.info("Waiting for migrations to finish...")
