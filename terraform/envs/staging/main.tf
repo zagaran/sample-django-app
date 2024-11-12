@@ -50,6 +50,11 @@ output "cluster_id" {
   value = module.ecs_deployment.cluster_id
 }
 
+output "cloudwatch_log_group_name" {
+  description = "The name of the cloudwatch log group for the web service task"
+  value = module.ecs_deployment.cloudwatch_log_group_name
+}
+
 output "ecr_repository_name" {
   description = "The name of the ECR repository"
   value = module.ecs_deployment.ecr_repository_name

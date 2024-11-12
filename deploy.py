@@ -175,9 +175,14 @@ def run_migrations(env):
             # The migration task has finished successfully
             logging.info("Migration complete")
             return
-        logging.error(f"Migration task failed with code {stop_code} and reason {task.get('stoppedReason')}.")
+        logging.error(
+            f"Migration task failed with code {stop_code} and reason {task.get('stoppedReason')}."
+            f"Check log stream for more info: {cloudwatch_log_url(env)}"
+        )
         raise MigrationFailed()
-    logging.error("Migration timed out. It may still be running.")
+    logging.error(
+        f"Migration timed out. It may still be running. Check log stream for more info: {cloudwatch_log_url(env)}"
+    )
     raise MigrationTimeOut()
 
 
@@ -205,11 +210,18 @@ def restart_web_service(env):
         if deployment_state == "COMPLETED":
             logging.info("Success! Deployment complete.")
         elif deployment_state == "FAILED":
-            logging.error(f"Deployment failed! Reason: {new_deployment['rolloutStateReason']}")
+            logging.error(
+                f"Deployment failed! Reason: {new_deployment['rolloutStateReason']}. "
+                f"Check log stream for more info: {cloudwatch_log_url(env)}"
+            )
         else:
-            logging.warning(f"Unknown deployment state {deployment_state}. Please check the console.")
+            logging.warning(f"Unknown deployment state {deployment_state}. Please check the ECS console.")
         break
 
+
+def cloudwatch_log_url(env):
+    cloudwatch_log_group_name = get_terraform_output("cloudwatch_log_group_name", env)
+    return f"https://{AWS_REGION}.console.aws.amazon.com/cloudwatch/home?region={AWS_REGION}#logsV2:log-groups/log-group/{cloudwatch_log_group_name}"
 
 
 def ssh(args):

@@ -3,6 +3,11 @@ output "cluster_id" {
   value       = aws_ecs_cluster.cluster.id
 }
 
+output "cloudwatch_log_group_name" {
+  description = "The name of the cloudwatch log group for the web service task"
+  value = aws_cloudwatch_log_group.web_log_group.name
+}
+
 output "ecr_image_uri" {
   description = "The full URI of the ECR image"
   value = local.ecr_image_uri
