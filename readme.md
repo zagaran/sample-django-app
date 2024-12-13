@@ -131,7 +131,7 @@ with a Redis instance to act as a task broker.
 3. Create a bucket for holding terraform config
 4. Create an SES identity and from email (if using SES)
 5. Create an AWS certificate manager certificate for your domain
-6. Create a secrets manager secret containing the config parameters needed by the application (you do not need include "DATABASE_URL", "SECRET_KEY", "AWS_STORAGE_BUCKET_NAME", or "DEFAULT_FROM_EMAIL" as those are managed by terraform in `terraform/modules/ecs_deployment/secrets_manager.tf`)
+6. Create a secrets manager secret containing the config parameters needed by the application (you do not need include "DATABASE_URL", "SECRET_KEY", "AWS_STORAGE_BUCKET_NAME", "DEFAULT_FROM_EMAIL", or "CELERY_BROKER_URL" as those are managed by terraform in `terraform/modules/ecs_deployment/secrets_manager.tf`)
 7. Fill in the missing values in `terraform/envs/<ENV_NAME>/main.tf`
 8. Run terraform to set up that environment
 ```

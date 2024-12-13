@@ -422,3 +422,10 @@ SASS_PROCESSOR_INCLUDE_DIRS = [
 ]
 COMPRESS_ROOT = STORAGES["sass_processor"]["ROOT"]
 # END_FEATURE sass_bootstrap
+
+
+# Celery configuration
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_BROKER_URL = env("CELERY_BROKER_URL", default="")
+# If no broker URL configured, run tasks in the web process
+CELERY_TASK_ALWAYS_EAGER = not CELERY_BROKER_URL
