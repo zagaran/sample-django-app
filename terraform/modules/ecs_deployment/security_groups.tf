@@ -58,6 +58,25 @@ resource "aws_security_group" "web" {
   }
 }
 
+resource "aws_security_group" "worker" {
+  name = "${local.app_env_name}-worker"
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "${var.application_name} ${var.environment_name} worker"
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
 resource "aws_security_group" "database" {
   name = "${local.app_env_name}-db"
 
@@ -65,7 +84,7 @@ resource "aws_security_group" "database" {
     from_port       = 5432
     to_port         = 5432
     protocol        = "tcp"
-    security_groups = [aws_security_group.web.id]
+    security_groups =  [aws_security_group.web.id, aws_security_group.worker.id]
   }
 
   egress {
@@ -79,6 +98,32 @@ resource "aws_security_group" "database" {
     Name = "${var.application_name} ${var.environment_name} database"
   }
   
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_security_group" "redis" {
+  name = "${local.app_env_name}-redis"
+
+  ingress {
+    from_port = 6379
+    to_port = 6379
+    protocol = "tcp"
+    security_groups = [aws_security_group.web.id, aws_security_group.worker.id]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "${var.application_name} ${var.environment_name} redis"
+  }
+
   lifecycle {
     create_before_destroy = true
   }

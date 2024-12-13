@@ -70,7 +70,22 @@ variable "container_web_memory" {
   default = 1024
 }
 
-variable "container_count" {
+variable "container_web_count" {
+  type = number
+  default = 1
+}
+
+variable "container_worker_cpu" {
+  type = number
+  default = 256
+}
+
+variable "container_worker_memory" {
+  type = number
+  default = 1024
+}
+
+variable "container_worker_count" {
   type = number
   default = 1
 }
@@ -78,4 +93,9 @@ variable "container_count" {
 variable "ssl_policy" {
   type = string
   default = "ELBSecurityPolicy-TLS13-1-2-Res-FIPS-2023-04"
+}
+
+variable "redis_instance_type" {
+  type = string
+  default = "cache.t3.micro"
 }
