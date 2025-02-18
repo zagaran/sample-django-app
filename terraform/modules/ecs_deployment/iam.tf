@@ -81,12 +81,18 @@ data "aws_iam_policy_document" "ecs_task_role_policy" {
   statement {
     effect = "Allow"
     actions = [
-      "ses:SendEmail",
-      "ses:SendRawEmail",
       "ses:GetSendQuota"
     ]
-    resources = [
-      format("arn:aws:ses:*:*:identity/%s", var.ses_identity)
+    resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "ses:SendBulkTemplatedEmail",
+      "ses:SendEmail",
+      "ses:SendRawEmail",
+      "ses:SendTemplatedEmail"
     ]
     condition {
       test     = "StringLike"

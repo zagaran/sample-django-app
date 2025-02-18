@@ -23,10 +23,6 @@ variable "rds_engine_version" {
   type = string
 }
 
-variable "ses_identity" {
-  type = string
-}
-
 variable "ses_from_email" {
   type = string
 }
