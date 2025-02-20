@@ -3,11 +3,6 @@ output "cluster_id" {
   value       = aws_ecs_cluster.cluster.id
 }
 
-output "cloudwatch_log_group_name" {
-  description = "The name of the cloudwatch log group for the web service task"
-  value = aws_cloudwatch_log_group.web_log_group.name
-}
-
 output "ecr_image_uri" {
   description = "The full URI of the ECR image"
   value = local.ecr_image_uri
@@ -34,11 +29,31 @@ output "web_network_configuration_security_groups" {
 }
 
 output "web_network_configuration_subnets" {
-  description = "The ID of the subnets used by the web task"
+  description = "The ID of one of the subnets used by the web task"
   value = aws_ecs_service.web.network_configuration[0].subnets
 }
 
 output "web_task_definition_arn" {
   description = "The ARN of the ECS web service task definition"
   value = aws_ecs_task_definition.web.arn
+}
+
+output "web_log_group_name" {
+  description = "The name of the cloudwatch log group for the web service task"
+  value = aws_cloudwatch_log_group.web_log_group.name
+}
+
+output "worker_service_name" {
+  description = "The name of the ECS worker service. This is also the container name."
+  value = aws_ecs_service.worker.name
+}
+
+output "worker_task_desired_count" {
+  description = "The intended number of worker tasks"
+  value = aws_ecs_service.worker.desired_count
+}
+
+output "worker_log_group_name" {
+  description = "The name of the cloudwatch log group for the worker service task"
+  value = aws_cloudwatch_log_group.worker_log_group.name
 }

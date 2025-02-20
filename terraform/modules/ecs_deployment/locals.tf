@@ -21,5 +21,8 @@ locals {
     }
   ]
 
+  # If different web and worker config is needed, split this into web- and worker-
   ecs_secrets = concat(local.ecs_infrastructure_secrets, local.ecs_config_secrets)
+
+  ecs_worker_command = split(" ", "celery -A config worker --beat --scheduler redbeat.RedBeatScheduler --loglevel=INFO")
 }

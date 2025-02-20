@@ -53,11 +53,13 @@ def deploy(args):
     if args.skip_migration:
         logging.info("Skipping database migration")
     else:
+        # Stop worker before running migrations
+        stop_worker_service(env)
         # Run and wait for migrations
         run_migrations(args.env)
 
     # Redeploy services
-    restart_web_service(args.env)
+    restart_services(args.env)
 
 
 def setup(envs):
@@ -185,42 +187,91 @@ def run_migrations(env):
     )
     raise MigrationTimeOut()
 
-
-def restart_web_service(env):
-    # Restart ECS web service to deploy new code
-    ecs_client = boto3.session.Session(profile_name=AWS_PROFILE_NAME, region_name=AWS_REGION).client("ecs")
-    logging.info("Redeploying web service...")
+def stop_worker_service(env):
+    logging.info("Stopping worker service")
     cluster_id = get_terraform_output("cluster_id", env)
-    service_name = get_terraform_output("web_service_name", env)
+    service_name = get_terraform_output("worker_service_name", env)
+    ecs_client = boto3.session.Session(profile_name=AWS_PROFILE_NAME, region_name=AWS_REGION).client("ecs")
     ecs_client.update_service(
         cluster=cluster_id,
         service=service_name,
-        forceNewDeployment=True
+        desiredCount=0
     )
+    # Desired status may not have updated immediately -- try both RUNNING and STOPPED
+    task_arns = ecs_client.list_tasks(cluster=cluster_id, serviceName=service_name)["taskArns"]
+    if not task_arns:
+        task_arns = ecs_client.list_tasks(
+            cluster=cluster_id, serviceName=service_name, desiredStatus="STOPPED"
+        )["taskArns"]
+    if not task_arns:
+        logging.info("No worker tasks to stop")
+        return
+    while True:
+        tasks = ecs_client.describe_tasks(cluster=cluster_id, tasks=task_arns)["tasks"]
+        if all(task.get("stoppedAt") for task in tasks):
+            break
+        logging.info("Waiting for worker service to stop...")
+        time.sleep(STATUS_CHECK_INTERVAL)
+    logging.info("Worker service stopped")
 
+def restart_services(env):
+    # Restarts both web and worker in parallel (order doesn't matter since communication is handled via redis)
+    # Restart ECS web service to deploy new code
+    logging.info("Redeploying web service...")
+    web_service_name = get_terraform_output("web_service_name", env)
+    cluster_id = get_terraform_output("cluster_id", env)
+    ecs_client = boto3.session.Session(profile_name=AWS_PROFILE_NAME, region_name=AWS_REGION).client("ecs")
+    ecs_client.update_service(
+        cluster=cluster_id,
+        service=web_service_name,
+        forceNewDeployment=True,
+    )
+    # Restart worker service to deploy new code and set the desired task count back to expected state
+    logging.info("Redeploying worker service...")
+    worker_service_name = get_terraform_output("worker_service_name", env)
+    desired_task_count = get_terraform_output("worker_task_desired_count", env)
+    ecs_client.update_service(
+        cluster=cluster_id,
+        service=worker_service_name,
+        forceNewDeployment=True,
+        desiredCount=int(desired_task_count)
+    )
     while True:
         logging.info("Waiting for deployment to finish...")
-        services_response = ecs_client.describe_services(cluster=cluster_id, services=[service_name])
-        deployments = services_response["services"][0]["deployments"]
-        new_deployment = next(deployment for deployment in deployments if deployment["status"] == "PRIMARY")
-        deployment_state = new_deployment["rolloutState"]
-        if deployment_state == "IN_PROGRESS":
+        services_response = ecs_client.describe_services(
+            cluster=cluster_id, services=[web_service_name, worker_service_name]
+        )
+        in_progress = False
+        failure = False
+        for service in services_response["services"]:
+            new_deployment = next(
+                deployment for deployment in service["deployments"] if deployment["status"] == "PRIMARY"
+            )
+            deployment_state = new_deployment["rolloutState"]
+            service_name = service['serviceName']
+            if deployment_state == "IN_PROGRESS":
+                in_progress = True
+            if deployment_state == "COMPLETED":
+                logging.info(f"Success! Deployment complete for service {service_name}.")
+            elif deployment_state == "FAILED":
+                is_worker = service_name == worker_service_name
+                logging.error(
+                    f"Deployment failed for {service_name}! Reason: {new_deployment['rolloutStateReason']}. "
+                    f"Check log stream for more info: {cloudwatch_log_url(env, worker=is_worker)}"
+                )
+                failure = True
+            else:
+                logging.warning(f"Unknown deployment state {deployment_state}. Please check the ECS console.")
+                failure = True
+        if in_progress and not failure:
             time.sleep(STATUS_CHECK_INTERVAL)
             continue
-        if deployment_state == "COMPLETED":
-            logging.info("Success! Deployment complete.")
-        elif deployment_state == "FAILED":
-            logging.error(
-                f"Deployment failed! Reason: {new_deployment['rolloutStateReason']}. "
-                f"Check log stream for more info: {cloudwatch_log_url(env)}"
-            )
-        else:
-            logging.warning(f"Unknown deployment state {deployment_state}. Please check the ECS console.")
         break
 
 
-def cloudwatch_log_url(env):
-    cloudwatch_log_group_name = get_terraform_output("cloudwatch_log_group_name", env)
+def cloudwatch_log_url(env, worker=False):
+    log_name_key = "worker_log_group_name" if worker else "web_log_group_name"
+    cloudwatch_log_group_name = get_terraform_output(log_name_key, env)
     return f"https://{AWS_REGION}.console.aws.amazon.com/cloudwatch/home?region={AWS_REGION}#logsV2:log-groups/log-group/{cloudwatch_log_group_name}"
 
 

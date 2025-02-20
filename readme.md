@@ -123,13 +123,15 @@ Following that, deploy your code to the environment (see below).
 
 
 ## Creating a new ECS environment
+The terraform configuration for ECS deployments will create both a web and worker environment, 
+with a Redis instance to act as a task broker.
 
 1. Create an ECR repository
 2. Build and push an initial docker file to it (ECR provides docker commands for this).
 3. Create a bucket for holding terraform config
 4. Create an SES identity and from email (if using SES)
 5. Create an AWS certificate manager certificate for your domain
-6. Create a secrets manager secret containing the config parameters needed by the application (you do not need include "DATABASE_URL", "SECRET_KEY", "AWS_STORAGE_BUCKET_NAME", or "DEFAULT_FROM_EMAIL" as those are managed by terraform in `terraform/modules/ecs_deployment/secrets_manager.tf`)
+6. Create a secrets manager secret containing the config parameters needed by the application (you do not need include "DATABASE_URL", "SECRET_KEY", "AWS_STORAGE_BUCKET_NAME", "DEFAULT_FROM_EMAIL", or "CELERY_BROKER_URL" as those are managed by terraform in `terraform/modules/ecs_deployment/secrets_manager.tf`)
 7. Fill in the missing values in `terraform/envs/<ENV_NAME>/main.tf`
 8. Run terraform to set up that environment
 ```
@@ -138,7 +140,6 @@ terraform init
 terraform plan
 terraform apply
 ```
-
 9. Redeploy your code using the steps described below (with the --use-latest option) to run initial migrations
 10. Add a DNS entry from your domain name to the created load balancer
 
@@ -159,8 +160,9 @@ python deploy.py -env <ENV_NAME>
 This script will do the following:
 1. Build the docker image using your local code version.
 2. Push the docker image to the ECR location for the specified environment
-3. Run database migrations
-4. Deploy to the running web service
+3. Stop the running worker service
+4. Run database migrations
+5. Deploy to the running web service and restart the worker service
 
 Run `python deploy.py --help` to see available options. You may choose to use an existing ECR image or skip migrations.
 
