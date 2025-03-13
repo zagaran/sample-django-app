@@ -254,7 +254,7 @@ def main():
     parser.add_argument("--use-image-from-env",
                         help="If provided, skips the terraform build and instead uses the existing built image from the specified environment")
     parser.add_argument("--skip-migration", action="store_true", help="Skips the migration step.")
-    parser.add_argument("-env", help="Terraform environment to deploy", required=True)
+    parser.add_argument("env", help="Terraform environment to deploy")
     parser.set_defaults(func=deploy)
 
     subparsers = parser.add_subparsers(title="Extra utilities", prog="python deploy.py -env <ENV_NAME>")

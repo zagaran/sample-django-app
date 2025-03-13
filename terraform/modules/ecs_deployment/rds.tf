@@ -21,4 +21,11 @@ resource "aws_db_instance" "database" {
   storage_type                = "gp2"
   username                    = "dbuser"
   vpc_security_group_ids      = [aws_security_group.database.id]
+  db_subnet_group_name = aws_db_subnet_group.database.name
+}
+
+
+resource "aws_db_subnet_group" "database" {
+  name = "${local.app_env_name}-database-subnets"
+  subnet_ids = data.aws_subnets.subnets.ids
 }
