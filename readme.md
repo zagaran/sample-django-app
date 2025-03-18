@@ -102,9 +102,9 @@ pip install eb-create-environment  # For automating the creation of Elastic Bean
 pip install eb-ssm  # For Elastic Beanstalk SSH functionality without requiring shared private keys
 ```
 
-## Creating a new environment
+## Creating a new Elastic Beanstalk environment
 
-To do create a new Elastic Beanstalk environment, modify the contents of [.elasticbeanstalk/eb_create_environment.yml]([.elasticbeanstalk/eb_create_environment.yml]) and run `eb-create-environment -c .elasticbeanstalk/eb_create_environment.yml`.
+To create a new Elastic Beanstalk environment, modify the contents of [.elasticbeanstalk/eb_create_environment.yml]([.elasticbeanstalk/eb_create_environment.yml]) and run `eb-create-environment -c .elasticbeanstalk/eb_create_environment.yml`.
 
 See the docs for [eb-create-environment](https://github.com/zagaran/eb-create-environment/) for more details.
 
@@ -121,12 +121,57 @@ DEFAULT_FROM_EMAIL
 
 Following that, deploy your code to the environment (see below).
 
+
+## Creating a new ECS environment
+
+In the following steps, config variables go in `terraform/envs/<ENV_NAME>/main.tf`; most of them go in the definition of the `ecs_deployment` module.
+
+1. Create a VPC and subnets (or use the default VPC).  This is config var `ecs_deployment.vpc_id`.
+1. Create an ECR repository.  This is config var `ecs_deployment.ecr_repository_name`.
+2. Build and push an initial docker file to it (ECR provides docker commands for this) and tag it with a tag called `<ENV_NAME>`.
+3. Create a bucket for holding terraform config.  This is config var `terraform.backend.bucket`.
+4. Create an SES identity and from email (if using SES).  The from email is config var `ecs_deployment.ses_from_email`.
+5. Create an AWS certificate manager certificate for your domain.  This is config var `ecs_deployment.certificate_manager_arn`.
+6. Create a secrets manager secret containing the config parameters needed by the application (you do not need include "DATABASE_URL", "SECRET_KEY", "AWS_STORAGE_BUCKET_NAME", or "DEFAULT_FROM_EMAIL" as those are managed by terraform in `terraform/modules/ecs_deployment/secrets_manager.tf`).  This is config var `ecs_deployment.web_config_secret_name`.
+7. Fill in the remaining config vars:
+    * `ecs_deployment.application_name` with a name for your application.
+    * `ecs_deployment.rds_engine_version` with the version of Postgres you want to use.
+    * `ecs_deployment.s3_bucket_prefix` with a prefix for your s3 bucket so that it will have a globally unique name (the bucket will be named `<s3_bucket_prefix>_<environment_name>`).
+8. Run terraform to set up that environment:
+```
+cd terraform/envs/<ENV_NAME>
+terraform init
+terraform plan
+terraform apply
+```
+
+9. Redeploy your code using the steps described below (with the --use-latest option) to run initial migrations
+10. Add a DNS entry from your domain name to the created load balancer
+
+
 ## Deploying code
 
-To deploy new versions of your code to your environment, run `eb deploy <environment_name>` using the EB CLI to deploy your code to that environment.
+### Elastic Beanstalk
+To deploy new versions of your code to an elastic beanstalk environment, run `eb deploy <environment_name>` using the EB CLI to deploy your code to that environment.
 
 See the [eb-cli](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3.html) docs on general command line usage of Elastic Beanstalk.
+
+### ECS
+To deploy new versions of your code to an ECS environment, use the included `deploy.py` script. First fill in the 
+missing constants at the top of that file, and then run the script:
+```
+python deploy.py <ENV_NAME>
+```
+This script will do the following:
+1. Build the docker image using your local code version.
+2. Push the docker image to the ECR location for the specified environment
+3. Run database migrations
+4. Deploy to the running web service
+
+Run `python deploy.py --help` to see available options. You may choose to use an existing ECR image or skip migrations.
 
 ## SSH
 
 To SSH into an Elastic Beanstalk Environment, use [eb-ssm](https://github.com/zagaran/eb-ssm).
+
+To SSH into an ECS environment, use `python deploy.py -env <ENV_NAME> ssh`

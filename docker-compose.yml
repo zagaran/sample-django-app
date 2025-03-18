@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    command: >
+      /bin/bash -c "
+      python manage.py collectstatic --noinput &&
+      sleep 2 &&
+      python manage.py migrate --noinput &&
+      python manage.py runserver 0.0.0.0:8001
+      "
+    volumes:
+      - .:/app
+    ports:
+      - "8001:8001"
+    environment:
+      DEBUG: True
+      LOCALHOST: True
+      DATABASE_URL: postgres://dbuser:dbpassword@db:5432/dbname
+      SECRET_KEY: 'supersecret'
+      AWS_STORAGE_BUCKET_NAME: ""
+      DEFAULT_FROM_EMAIL: "example@example.com"
+      ALLOWED_HOSTS: 'localhost,127.0.0.1'
+      GOOGLE_OAUTH2_KEY: ""
+      GOOGLE_OAUTH2_SECRET: ""
+      EC2_METADATA: False
+      SENTRY_DSN: ""
+    depends_on:
+      - db
+
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: dbname
+      POSTGRES_USER: dbuser
+      POSTGRES_PASSWORD: dbpassword
+    ports:
+    - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

@@ -14,7 +14,6 @@ from django.contrib.messages import constants as messages
 
 import environ
 
-
 env = environ.Env(
     # Sets Django's ALLOWED_HOSTS setting
     ALLOWED_HOSTS=(list, []),
@@ -48,6 +47,8 @@ env = environ.Env(
     # Set to True to enable the Django Debug Toolbar
     DEBUG_TOOLBAR=(bool, False),
     # END_FEATURE debug_toolbar
+    
+    EC2_METADATA=(bool, True)
 )
 # If ALLWED_HOSTS has been configured, then we're running on a server and
 # can skip looking for a .env file (this assumes that .env files
@@ -76,10 +77,12 @@ LOCALHOST = env("LOCALHOST")
 # that this is not the production site
 PRODUCTION = env("PRODUCTION")
 
+EC2_METADATA = env("EC2_METADATA")
+
 ALLOWED_HOSTS = env("ALLOWED_HOSTS")
 if LOCALHOST is True:
     ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
-else:
+elif EC2_METADATA:
     # START_FEATURE elastic_beanstalk
     # if using AWS hosting
     from ec2_metadata import ec2_metadata
@@ -129,6 +132,9 @@ INSTALLED_APPS = THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    # START_FEATURE docker
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    # END_FEATURE docker
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "common.middleware.MaintenanceModeMiddleware",
@@ -314,6 +320,12 @@ else:
             "default_acl": "private",
         }
     }
+
+STATIC_BACKEND = "django.contrib.staticfiles.storage.StaticFilesStorage" if LOCALHOST else "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
+# START_FEATURE docker
+STATIC_BACKEND = "django.contrib.staticfiles.storage.StaticFilesStorage" if LOCALHOST else "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# END_FEATURE docker
+
 # END_FEATURE django_storages
 STORAGES = {
     "default": DEFAULT_STORAGE,
@@ -328,7 +340,7 @@ STORAGES = {
     },
     # END_FEATURE sass_bootstrap
     "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+        "BACKEND": STATIC_BACKEND,
     },
 }
 
