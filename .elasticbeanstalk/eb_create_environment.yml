@@ -4,7 +4,7 @@ ElasticBeanstalk:
   # aws elasticbeanstalk list-available-solution-stacks --region us-east-1
   SolutionStackName: "64bit Amazon Linux 2023 * Python 3.11"
   NumProcesses: "1"
-  InstanceTypes: "t3.micro"
+  InstanceTypes: "t3.small"
   IamInstanceProfile: "aws-elasticbeanstalk-ec2-role"
   AssociatePublicIpAddress: True
   ProxyServer: "apache"  # apache, nginx

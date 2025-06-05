@@ -18,11 +18,14 @@ from django.contrib import admin
 from django.http import HttpResponse
 from django.urls import path
 
+from config.constants import HEALTH_CHECK_URL_NAME
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("oauth/", include("social_django.urls", namespace="social")),
     path('', include("common.urls")),
-    path("health-check/", lambda request: HttpResponse("ok")),
+    # Health check is actually handled by the HealthCheckMiddleware
+    path("health-check/", lambda request: HttpResponse("ok"), name=HEALTH_CHECK_URL_NAME),
 ]
 
 handler404 = "common.views.error_404"
