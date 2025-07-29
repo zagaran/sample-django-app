@@ -27,28 +27,17 @@ env = environ.Env(
     # site have a "deny all" robots.txt and a non-production warning on all pages
     PRODUCTION=(bool, True),
 
-    # START_FEATURE django_react
-    # Set to True to use JavaScript assets served on localhost:3000 via `nwb serve`
-    WEBPACK_LOADER_HOTLOAD=(bool, False),
-    # END_FEATURE django_react
-
-    # START_FEATURE django_ses
     # Set to configure AWS SES to run in a region other than us-east-1
     AWS_SES_REGION_NAME=(str, "us-east-1"),
     AWS_SES_REGION_ENDPOINT=(str, "email.us-east-1.amazonaws.com"),
-    # END_FEATURE django_ses
 
-    # START_FEATURE sentry
     # Set to the DSN from sentry.io to send errors to Sentry
     SENTRY_DSN=(str, None),
-    # END_FEATURE sentry
 
-    # START_FEATURE debug_toolbar
     # Set to True to enable the Django Debug Toolbar
     DEBUG_TOOLBAR=(bool, False),
-    # END_FEATURE debug_toolbar
 )
-# If ALLWED_HOSTS has been configured, then we're running on a server and
+# If ALLOWED_HOSTS has been configured, then we're running on a server and
 # can skip looking for a .env file (this assumes that .env files
 # file is only used for local development and servers use environment variables)
 if not env("ALLOWED_HOSTS"):
