@@ -414,7 +414,7 @@ wheels = [
 [[package]]
 name = "deploy"
 version = "0.1.0"
-source = { git = "ssh://git@github.com/msc5/deploy#ec13050f5e5fdd23a4c31813572383122ec093a0" }
+source = { editable = "../../Code/deploy" }
 dependencies = [
     { name = "boto3" },
     { name = "django" },
@@ -425,6 +425,27 @@ dependencies = [
     { name = "pytz" },
     { name = "rich" },
     { name = "typer" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "boto3", specifier = ">=1.40.54" },
+    { name = "django", specifier = ">=5.2.7" },
+    { name = "gitpython", specifier = ">=3.1.45" },
+    { name = "ipython", specifier = ">=8.37.0" },
+    { name = "jinja2", specifier = ">=3.1.6" },
+    { name = "python-dotenv", specifier = ">=1.1.1" },
+    { name = "pytz", specifier = ">=2025.2" },
+    { name = "rich", specifier = ">=14.2.0" },
+    { name = "typer", specifier = ">=0.19.2" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "autopep8", specifier = ">=2.3.2" },
+    { name = "basedpyright", specifier = ">=1.31.7" },
+    { name = "ipdb", specifier = ">=0.13.13" },
+    { name = "setuptools", specifier = ">=80.9.0" },
 ]
 
 [[package]]
@@ -1517,7 +1538,7 @@ requires-dist = [
 dev = [
     { name = "basedpyright", specifier = ">=1.31.0" },
     { name = "coverage", specifier = ">=7.6.1" },
-    { name = "deploy", git = "ssh://git@github.com/msc5/deploy" },
+    { name = "deploy", editable = "../../Code/deploy" },
     { name = "django-debug-toolbar", specifier = ">=4.4.6" },
     { name = "flake8", specifier = ">=5.0.4" },
     { name = "ipdb", specifier = ">=0.13.13" },

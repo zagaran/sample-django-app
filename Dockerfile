@@ -26,15 +26,14 @@ RUN set -ex \
     && apt-get install -y $buildDeps $deps --no-install-recommends
 
 # Install web app dependencies
-RUN uv sync --no-dev
+RUN uv sync --no-dev --no-sources
+RUN uv cache clean
 
 # Remove build dependencies
 RUN set -ex \
     && apt-get purge -y --auto-remove $buildDeps \
        $(! command -v gpg > /dev/null || echo 'gnupg dirmngr') \
     && rm -rf /var/lib/apt/lists/*
-    
-RUN uv cache clean
 
 ENV PATH="/app/.venv/bin:$PATH"
 
