@@ -1499,7 +1499,6 @@ dependencies = [
 dev = [
     { name = "basedpyright" },
     { name = "coverage" },
-    { name = "deploy" },
     { name = "django-debug-toolbar" },
     { name = "flake8" },
     { name = "ipdb" },
@@ -1509,6 +1508,9 @@ dev = [
     { name = "pre-commit" },
     { name = "rich" },
     { name = "werkzeug" },
+]
+local-dev = [
+    { name = "deploy" },
 ]
 
 [package.metadata]
@@ -1538,7 +1540,6 @@ requires-dist = [
 dev = [
     { name = "basedpyright", specifier = ">=1.31.0" },
     { name = "coverage", specifier = ">=7.6.1" },
-    { name = "deploy", editable = "../../Code/deploy" },
     { name = "django-debug-toolbar", specifier = ">=4.4.6" },
     { name = "flake8", specifier = ">=5.0.4" },
     { name = "ipdb", specifier = ">=0.13.13" },
@@ -1549,6 +1550,7 @@ dev = [
     { name = "rich", specifier = ">=14.1.0" },
     { name = "werkzeug", specifier = ">=3.0.6" },
 ]
+local-dev = [{ name = "deploy", editable = "../../Code/deploy" }]
 
 [[package]]
 name = "sentry-sdk"
