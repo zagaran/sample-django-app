@@ -3,16 +3,26 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/plugin-transform-react-jsx": "~7.16.7",
     "bootstrap": "^5.1.1",
     "django-react-loader": "^0.1.7",
     "nwb": "^0.24.7",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "webpack-bundle-tracker": "^0.4.3",
-    "@babel/plugin-transform-react-jsx": "~7.16.7"
+    "rollup-plugin-external-globals": "^0.13.0",
+    "vue": "^3.5.22",
+    "webpack-bundle-tracker": "^0.4.3"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.3",
+    "eslint": "^9.28.0",
+    "vite": "^6.3.5",
+    "vite-plugin-vue-devtools": "^7.7.2"
   },
   "scripts": {
-    "build": "react-scripts build"
+    "dev": "vite build --watch --mode development",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "eslintConfig": {
     "extends": [
