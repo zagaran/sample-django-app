@@ -12,14 +12,15 @@
     "@babel/plugin-transform-react-jsx": "~7.16.7"
   },
   "scripts": {
-    "build": "react-scripts build",
+    "build": "react-scripts build"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
     ]
-  },"browserslist": {
+  },
+  "browserslist": {
     "production": [
       ">0.2%",
       "not dead",

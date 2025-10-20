@@ -43,8 +43,8 @@ COPY ./config/.env.build /app/config/.env
 COPY .bashrc /root/
 
 # Compile static assets
-RUN uv run manage.py compilescss
-RUN uv run manage.py collectstatic --noinput
+RUN uv run --no-dev --no-sources manage.py compilescss
+RUN uv run --no-dev --no-sources manage.py collectstatic --noinput
 RUN rm /app/config/.env
 
 EXPOSE 8080
