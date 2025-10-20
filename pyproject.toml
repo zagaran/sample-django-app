@@ -45,4 +45,4 @@ local-dev = [
 ]
 
 [tool.uv.sources]
-deploy = { path = "../../Code/deploy", editable = true }
+deploy = { path = "../deploy", editable = true }

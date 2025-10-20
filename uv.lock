@@ -414,7 +414,7 @@ wheels = [
 [[package]]
 name = "deploy"
 version = "0.1.0"
-source = { editable = "../../Code/deploy" }
+source = { editable = "../deploy" }
 dependencies = [
     { name = "boto3" },
     { name = "django" },
@@ -1550,7 +1550,7 @@ dev = [
     { name = "rich", specifier = ">=14.1.0" },
     { name = "werkzeug", specifier = ">=3.0.6" },
 ]
-local-dev = [{ name = "deploy", editable = "../../Code/deploy" }]
+local-dev = [{ name = "deploy", editable = "../deploy" }]
 
 [[package]]
 name = "sentry-sdk"

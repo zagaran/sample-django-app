@@ -49,7 +49,6 @@ RUN set -ex \
 
 # Install web app dependencies
 RUN uv sync --no-group local-dev --no-sources
-RUN uv cache clean
 
 # Remove build dependencies
 RUN set -ex \
@@ -73,6 +72,9 @@ COPY .bashrc /root/
 RUN uv run --no-group local-dev --no-sources manage.py compilescss
 RUN uv run --no-group local-dev --no-sources manage.py collectstatic --noinput
 RUN rm /app/config/.env
+
+# Clean UV cache
+RUN uv cache clean
 
 EXPOSE 8080
 CMD ["uv", "run", "gunicorn", "--bind", ":8080", "--workers", "15", "config.wsgi:application"]
