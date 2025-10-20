@@ -3,9 +3,10 @@ name = "sample-django-app"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.12"
 dependencies = [
     "crispy-bootstrap5>=2025.6",
+    "deploy",
     "django>=4.2.23",
     "django-compressor>=4.5.1",
     "django-crispy-forms>=2.4",
@@ -40,3 +41,6 @@ dev = [
     "rich>=14.1.0",
     "werkzeug>=3.0.6",
 ]
+
+[tool.uv.sources]
+deploy = { path = "../deploy" }
