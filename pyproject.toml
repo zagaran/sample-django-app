@@ -43,4 +43,4 @@ dev = [
 ]
 
 [tool.uv.sources]
-deploy = { git = "https://github.com/msc5/deploy.git" }
+deploy = { git = "ssh://git@github.com/msc5/deploy" }

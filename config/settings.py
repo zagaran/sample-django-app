@@ -98,11 +98,6 @@ THIRD_PARTY_APPS = [
     "crispy_bootstrap5",
     # END_FEATURE crispy_forms
 
-    # START_FEATURE django_react
-    "django_react_components",
-    "webpack_loader",
-    # END_FEATURE django_react
-
     # START_FEATURE sass_bootstrap
     "sass_processor",
     # END_FEATURE sass_bootstrap

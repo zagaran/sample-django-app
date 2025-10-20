@@ -414,7 +414,7 @@ wheels = [
 [[package]]
 name = "deploy"
 version = "0.1.0"
-source = { git = "https://github.com/msc5/deploy.git#ec13050f5e5fdd23a4c31813572383122ec093a0" }
+source = { git = "ssh://git@github.com/msc5/deploy#ec13050f5e5fdd23a4c31813572383122ec093a0" }
 dependencies = [
     { name = "boto3" },
     { name = "django" },
@@ -1517,7 +1517,7 @@ requires-dist = [
 dev = [
     { name = "basedpyright", specifier = ">=1.31.0" },
     { name = "coverage", specifier = ">=7.6.1" },
-    { name = "deploy", git = "https://github.com/msc5/deploy.git" },
+    { name = "deploy", git = "ssh://git@github.com/msc5/deploy" },
     { name = "django-debug-toolbar", specifier = ">=4.4.6" },
     { name = "flake8", specifier = ">=5.0.4" },
     { name = "ipdb", specifier = ">=0.13.13" },
