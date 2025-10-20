@@ -1,3 +1,25 @@
+# ----------------------------------- NPM ------------------------------------ #
+
+FROM node:24-slim AS node-deps
+
+WORKDIR /app
+
+# Install required system dependencies
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends bzip2
+
+# Add only files needed for dependency installation
+COPY package.json ./
+
+# Install Node dependencies with caching
+RUN npm install && npm cache clean --force
+
+# Build vue dist
+COPY . /app/
+RUN npm run build
+
+# ---------------------------------- Python ---------------------------------- #
+
 FROM python:3.11.4-slim-bookworm
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
@@ -36,6 +58,11 @@ RUN set -ex \
     && rm -rf /var/lib/apt/lists/*
 
 ENV PATH="/app/.venv/bin:$PATH"
+
+# Copy Node dependencies from node-deps stage
+COPY --from=node-deps /app/node_modules /app/node_modules
+COPY --from=node-deps /app/package*.json /app/
+COPY --from=node-deps /app/static/js/dist/ /app/static/js/dist/
 
 # Copy application files and .env.build
 COPY . /app/
