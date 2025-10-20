@@ -48,7 +48,7 @@ RUN set -ex \
     && apt-get install -y $buildDeps $deps --no-install-recommends
 
 # Install web app dependencies
-RUN uv sync --no-dev --locked
+RUN uv sync --no-dev
 
 # Remove build dependencies
 RUN set -ex \

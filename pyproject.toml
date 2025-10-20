@@ -43,4 +43,4 @@ dev = [
 ]
 
 [tool.uv.sources]
-deploy = { path = "../deploy", editable = true }
+deploy = { git = "https://github.com/msc5/deploy.git" }
