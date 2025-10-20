@@ -6,7 +6,6 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "crispy-bootstrap5>=2025.6",
-    "deploy",
     "django>=4.2.23",
     "django-compressor>=4.5.1",
     "django-crispy-forms>=2.4",
@@ -31,6 +30,7 @@ dependencies = [
 dev = [
     "basedpyright>=1.31.0",
     "coverage>=7.6.1",
+    "deploy",
     "django-debug-toolbar>=4.4.6",
     "flake8>=5.0.4",
     "ipdb>=0.13.13",

@@ -1303,7 +1303,6 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "crispy-bootstrap5" },
-    { name = "deploy" },
     { name = "django" },
     { name = "django-compressor" },
     { name = "django-crispy-forms" },
@@ -1328,6 +1327,7 @@ dependencies = [
 dev = [
     { name = "basedpyright" },
     { name = "coverage" },
+    { name = "deploy" },
     { name = "django-debug-toolbar" },
     { name = "flake8" },
     { name = "ipdb" },
@@ -1342,7 +1342,6 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "crispy-bootstrap5", specifier = ">=2025.6" },
-    { name = "deploy", editable = "../deploy" },
     { name = "django", specifier = ">=4.2.23" },
     { name = "django-compressor", specifier = ">=4.5.1" },
     { name = "django-crispy-forms", specifier = ">=2.4" },
@@ -1367,6 +1366,7 @@ requires-dist = [
 dev = [
     { name = "basedpyright", specifier = ">=1.31.0" },
     { name = "coverage", specifier = ">=7.6.1" },
+    { name = "deploy", editable = "../deploy" },
     { name = "django-debug-toolbar", specifier = ">=4.4.6" },
     { name = "flake8", specifier = ">=5.0.4" },
     { name = "ipdb", specifier = ">=0.13.13" },
