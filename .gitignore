@@ -66,3 +66,4 @@ webpack-stats.json
 # END_FEATURE django_react
 
 .terraform/
+.git-copy/

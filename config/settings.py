@@ -36,6 +36,9 @@ env = environ.Env(
 
     # Set to True to enable the Django Debug Toolbar
     DEBUG_TOOLBAR=(bool, False),
+
+    # Set a git repo remote name
+    REMOTE_REPO_NAME=(str, "zagaran/sample-django-app")
 )
 # If ALLOWED_HOSTS has been configured, then we're running on a server and
 # can skip looking for a .env file (this assumes that .env files
@@ -69,6 +72,12 @@ if LOCALHOST is True:
     ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 else:
     ALLOWED_HOSTS.append("localhost")
+
+
+# This specifies the git repo name and URL
+REMOTE_REPO_NAME = env("REMOTE_REPO_NAME")
+REMOTE_REPO_URL = f"git@github.com:{REMOTE_REPO_NAME}.git"
+
 
 # Application definition
 THIRD_PARTY_APPS = [

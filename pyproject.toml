@@ -43,4 +43,4 @@ dev = [
 ]
 
 [tool.uv.sources]
-deploy = { path = "../deploy" }
+deploy = { path = "../deploy", editable = true }
