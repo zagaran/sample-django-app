@@ -67,3 +67,5 @@ webpack-stats.json
 
 .terraform/
 .git-copy/
+
+static/js/dist/
