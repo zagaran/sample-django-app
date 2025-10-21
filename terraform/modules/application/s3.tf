@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "bucket" {
-  bucket = local.app_env_name
+  bucket = "${local.app_env_name}-${var.application_url}"
 
   tags = {
     Environment = var.environment
@@ -31,6 +31,7 @@ resource "aws_s3_bucket_cors_configuration" "bucket" {
 
 resource "aws_s3_bucket_versioning" "bucket" {
   bucket = aws_s3_bucket.bucket.id
+
   versioning_configuration {
     status = "Enabled"
   }
