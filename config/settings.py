@@ -101,6 +101,8 @@ THIRD_PARTY_APPS = [
     # START_FEATURE sass_bootstrap
     "sass_processor",
     # END_FEATURE sass_bootstrap
+
+    "deploy",
 ]
 
 
