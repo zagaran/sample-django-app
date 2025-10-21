@@ -69,3 +69,4 @@ webpack-stats.json
 .git-copy/
 
 static/js/dist/
+.deploy/
