@@ -48,7 +48,7 @@ RUN set -ex \
     && apt-get install -y $buildDeps $deps --no-install-recommends
 
 # Install web app dependencies
-RUN uv sync --no-group local-dev --no-sources
+RUN uv sync --no-sources
 
 # Remove build dependencies
 RUN set -ex \
@@ -69,8 +69,8 @@ COPY ./config/.env.build /app/config/.env
 COPY .bashrc /root/
 
 # Compile static assets
-RUN uv run --no-group local-dev --no-sources manage.py compilescss
-RUN uv run --no-group local-dev --no-sources manage.py collectstatic --noinput
+RUN uv run --no-sources manage.py compilescss
+RUN uv run --no-sources manage.py collectstatic --noinput
 RUN rm /app/config/.env
 
 # Clean UV cache
