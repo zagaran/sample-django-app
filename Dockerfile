@@ -77,4 +77,4 @@ RUN rm /app/config/.env
 RUN uv cache clean
 
 EXPOSE 8080
-CMD ["uv", "run", "gunicorn", "--bind", ":8080", "--workers", "15", "config.wsgi:application"]
+CMD ["uv", "run", "--frozen", "gunicorn", "--bind", ":8080", "--workers", "15", "config.wsgi:application"]
