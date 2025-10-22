@@ -5,6 +5,8 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "celery>=5.5.3",
+    "celery-redbeat>=2.3.3",
     "crispy-bootstrap5>=2025.6",
     "django>=4.2.23",
     "django-compressor>=4.5.1",
