@@ -53,26 +53,6 @@ variable "rds_engine_version" {
   default = "17"
 }
 
-variable "container_web_cpu" {
-  type    = number
-  default = 256
-}
-
-variable "container_web_count" {
-  type    = number
-  default = 1
-}
-
-variable "container_worker_cpu" {
-  type    = number
-  default = 256
-}
-
-variable "container_worker_count" {
-  type    = number
-  default = 1
-}
-
 variable "redis_instance_type" {
   type    = string
   default = "cache.t3.micro"

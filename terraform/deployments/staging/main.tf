@@ -41,6 +41,7 @@ module "staging" {
 
   rds_deletion_protection           = false
   load_balancer_deletion_protection = false
+  worker_desired_count              = 0
 
 }
 
