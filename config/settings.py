@@ -101,10 +101,10 @@ THIRD_PARTY_APPS = [
     # START_FEATURE sass_bootstrap
     "sass_processor",
     # END_FEATURE sass_bootstrap
-
-    "deploy",
 ]
 
+if DEBUG:
+    THIRD_PARTY_APPS += ['deploy']
 
 # START_FEATURE debug_toolbar
 if DEBUG_TOOLBAR:
