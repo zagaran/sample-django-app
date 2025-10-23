@@ -118,6 +118,7 @@ LOCAL_APPS = [
 INSTALLED_APPS = THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "common.middleware.HealthCheckMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -319,7 +320,11 @@ STORAGES = {
     },
     # END_FEATURE sass_bootstrap
     "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+        "BACKEND": (
+            "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
+            if DEBUG else
+            "whitenoise.storage.CompressedManifestStaticFilesStorage"
+        ),
     },
 }
 
