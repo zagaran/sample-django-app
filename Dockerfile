@@ -73,8 +73,5 @@ RUN uv run --no-sources manage.py compilescss
 RUN uv run --no-sources manage.py collectstatic --noinput
 RUN rm /app/config/.env
 
-# Clean UV cache
-RUN uv cache clean
-
 EXPOSE 8080
 CMD ["uv", "run", "--frozen", "gunicorn", "--bind", ":8080", "--workers", "15", "config.wsgi:application"]
