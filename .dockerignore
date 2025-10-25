@@ -1,18 +1,78 @@
-# Ignore pyc files
-**/*.pyc
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
 
-# Ignore local databases
-**/*.sqlite3
+# C extensions
+*.so
 
-# Local environment files
-*/.env
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+*.sqlite3
+*.sqlite3-journal
 
 # Environments
+.env
 .venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
 
 # Editors
-.idea/
-.vscode/
+.idea
+.vscode
 
-# Operating system metafiles
+# Operating systems
 .DS_Store
+
+# Installed packages
+node_modules/
+
+# Compiled Files
+staticfiles/
+staticfiles/*
+# START_FEATURE sass_bootstrap
+/static/styles/**/*.css
+/static/styles/**/*.map
+# END_FEATURE sass_bootstrap
+# START_FEATURE django_react
+static/webpack_bundles/
+webpack-stats.json
+# END_FEATURE django_react
+
+.terraform/
+.git-copy/
+
+static/js/dist/
+.deploy/
+
+
+# ---------------------------------- Docker ---------------------------------- #
+
+
+.git
