@@ -48,7 +48,8 @@ RUN set -ex \
     && apt-get install -y $buildDeps $deps --no-install-recommends
 
 # Install web app dependencies
-ENV UV_SOURCE_DEPLOY="git+https://github.com/msc5/deploy.git@main"
+# (Use git version of deploy script)
+RUN uv add git+ssh://git@github.com/msc5/deploy
 RUN uv sync
 
 # Remove build dependencies
