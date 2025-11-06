@@ -43,6 +43,7 @@ dev = [
     "rich>=14.1.0",
     "werkzeug>=3.0.6",
     "deploy",
+    "ruff>=0.14.3",
 ]
 
 [tool.uv.sources]
