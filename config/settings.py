@@ -26,19 +26,15 @@ env = environ.Env(
     # Set to True on the production server environment; setting to False makes the
     # site have a "deny all" robots.txt and a non-production warning on all pages
     PRODUCTION=(bool, True),
-
     # Set to configure AWS SES to run in a region other than us-east-1
     AWS_SES_REGION_NAME=(str, "us-east-1"),
     AWS_SES_REGION_ENDPOINT=(str, "email.us-east-1.amazonaws.com"),
-
     # Set to the DSN from sentry.io to send errors to Sentry
     SENTRY_DSN=(str, None),
-
     # Set to True to enable the Django Debug Toolbar
     DEBUG_TOOLBAR=(bool, False),
-
     # Set a git repo remote name
-    REMOTE_REPO_NAME=(str, "zagaran/sample-django-app")
+    REMOTE_REPO_NAME=(str, "zagaran/sample-django-app"),
 )
 # If ALLOWED_HOSTS has been configured, then we're running on a server and
 # can skip looking for a .env file (this assumes that .env files
@@ -88,23 +84,20 @@ THIRD_PARTY_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
-
     # START_FEATURE django_social
     "social_django",
     # END_FEATURE django_social
-
     # START_FEATURE crispy_forms
     "crispy_forms",
     "crispy_bootstrap5",
     # END_FEATURE crispy_forms
-
     # START_FEATURE sass_bootstrap
     "sass_processor",
     # END_FEATURE sass_bootstrap
 ]
 
 if DEBUG:
-    THIRD_PARTY_APPS += ['deploy']
+    THIRD_PARTY_APPS += ["deploy"]
 
 # START_FEATURE debug_toolbar
 if DEBUG_TOOLBAR:
@@ -210,9 +203,7 @@ LOGGING = {
         "verbose": {
             "format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s"
         },
-        "simple": {
-            "format": "%(levelname)s %(message)s"
-        },
+        "simple": {"format": "%(levelname)s %(message)s"},
     },
     "handlers": {
         "console": {
@@ -225,9 +216,7 @@ LOGGING = {
         },
     },
     "loggers": {
-        "django.request": {
-            "handlers": ["console"]
-        },
+        "django.request": {"handlers": ["console"]},
         "django.security.DisallowedHost": {
             "handlers": ["null"],
             "propagate": False,
@@ -304,7 +293,7 @@ else:
             "bucket_name": env("AWS_STORAGE_BUCKET_NAME"),
             "file_overwrite": False,
             "default_acl": "private",
-        }
+        },
     }
 # END_FEATURE django_storages
 STORAGES = {
@@ -314,24 +303,24 @@ STORAGES = {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
         "OPTIONS": {
             "base_url": STATIC_URL,
-            "location": os.path.join(BASE_DIR, 'static'),
+            "location": os.path.join(BASE_DIR, "static"),
         },
-        "ROOT": os.path.join(BASE_DIR, 'static'),
+        "ROOT": os.path.join(BASE_DIR, "static"),
     },
     # END_FEATURE sass_bootstrap
     "staticfiles": {
         "BACKEND": (
             "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
-            if DEBUG else
-            "whitenoise.storage.CompressedManifestStaticFilesStorage"
+            if DEBUG
+            else "whitenoise.storage.CompressedManifestStaticFilesStorage"
         ),
     },
 }
 
 STATICFILES_FINDERS = [
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'sass_processor.finders.CssFinder',
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    "sass_processor.finders.CssFinder",
 ]
 
 
@@ -347,9 +336,7 @@ if DEBUG:
     WEBPACK_LOADER_HOTLOAD = env("WEBPACK_LOADER_HOTLOAD")
     if WEBPACK_LOADER_HOTLOAD:
         WEBPACK_LOADER = {
-            "DEFAULT": {
-                "LOADER_CLASS": "config.webpack_loader.DynamicWebpackLoader"
-            }
+            "DEFAULT": {"LOADER_CLASS": "config.webpack_loader.DynamicWebpackLoader"}
         }
 # END_FEATURE django_react
 
@@ -360,6 +347,7 @@ if LOCALHOST is False and SENTRY_DSN:
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
     from sentry_sdk.integrations.logging import ignore_logger
+
     sentry_sdk.init(
         dsn=env("SENTRY_DSN"),
         integrations=[DjangoIntegration()],
@@ -391,18 +379,22 @@ if LOCALHOST is False:
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_AGE = 60 * 60 * 3  # 3 hours
     CSRF_COOKIE_SECURE = True
-    CSRF_COOKIE_HTTPONLY = True  # Only do this if you are not accessing the CSRF cookie with JS
+    CSRF_COOKIE_HTTPONLY = (
+        True  # Only do this if you are not accessing the CSRF cookie with JS
+    )
 # END_FEATURE security_settings
 
 
 # START_FEATURE sass_bootstrap
-SASS_PRECISION = 8  # Bootstrap's sass requires a precision of at least 8 to prevent layout errors
+SASS_PRECISION = (
+    8  # Bootstrap's sass requires a precision of at least 8 to prevent layout errors
+)
 SASS_PROCESSOR_CUSTOM_FUNCTIONS = {
-    'django-static': 'django.templatetags.static.static',
+    "django-static": "django.templatetags.static.static",
 }
 SASS_PROCESSOR_INCLUDE_DIRS = [
-    os.path.join(BASE_DIR, 'static/styles'),
-    os.path.join(BASE_DIR, 'node_modules'),
+    os.path.join(BASE_DIR, "static/styles"),
+    os.path.join(BASE_DIR, "node_modules"),
 ]
 COMPRESS_ROOT = STORAGES["sass_processor"]["ROOT"]
 # END_FEATURE sass_bootstrap

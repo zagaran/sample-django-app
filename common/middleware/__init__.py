@@ -1,5 +1,6 @@
 from common.middleware.maintenance_mode_middleware import MaintenanceModeMiddleware
 from common.middleware.health_check_middleware import HealthCheckMiddleware
+
 # START_FEATURE user_action_tracking
 from common.middleware.user_action_tracking import UserActionTrackingMiddleware
 # END_FEATURE user_action_tracking

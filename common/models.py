@@ -13,7 +13,7 @@ class TimestampedModel(models.Model):
     updated_on = models.DateTimeField(auto_now=True)
 
     def update(self, update_dict=None, **kwargs):
-        """ Helper method to update objects """
+        """Helper method to update objects"""
         if not update_dict:
             update_dict = kwargs
         update_fields = {"updated_on"}
@@ -50,22 +50,25 @@ def get_s3_path(instance, filename):
 
 class UploadFile(TimestampedModel):
     user = models.ForeignKey(User, related_name="files", on_delete=models.PROTECT)
-    file = models.FileField(
-        max_length=1024,
-        upload_to=get_s3_path
-    )
+    file = models.FileField(max_length=1024, upload_to=get_s3_path)
 
     class Meta:
         abstract = True
+
+
 # END_FEATURE django_storages
 
 
 # START_FEATURE user_action_tracking
 class UserAction(TimestampedModel):
-    user = models.ForeignKey(User, related_name="user_actions", on_delete=models.PROTECT)
+    user = models.ForeignKey(
+        User, related_name="user_actions", on_delete=models.PROTECT
+    )
     url = models.URLField(max_length=2083)
     method = models.CharField(max_length=64)
     url_name = models.CharField(max_length=256, null=True)
     status_code = models.IntegerField()
     user_agent = models.TextField(null=True)
+
+
 # END_FEATURE user_action_tracking

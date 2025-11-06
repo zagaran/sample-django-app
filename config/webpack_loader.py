@@ -16,4 +16,5 @@ class DynamicWebpackLoader(WebpackLoader):
             path = f"http://localhost:3000{path}"
         return path
 
+
 # END_FEATURE django_react

@@ -31,8 +31,7 @@ client = OpenAI(api_key=api_key)
 # Try to find existing vector store
 existing_vector_stores = client.vector_stores.list().data
 vector_store = next(
-    (vs for vs in existing_vector_stores if vs.name == VECTOR_STORE_NAME),
-    None
+    (vs for vs in existing_vector_stores if vs.name == VECTOR_STORE_NAME), None
 )
 
 if vector_store:
@@ -60,17 +59,13 @@ for root, _, files in os.walk("."):
 
         _, ext = os.path.splitext(fname)
         if (
-            ext in INCLUDE_EXTENSIONS
-            or fname in INCLUDE_FILENAMES
+            ext in INCLUDE_EXTENSIONS or fname in INCLUDE_FILENAMES
         ) and rel_fpath in git_files:
-
             try:
                 print(f"Uploading {rel_fpath}...")
                 with open(fpath, "rb") as f:
                     client.vector_stores.files.upload_and_poll(
-                        vector_store_id=vector_store.id,
-                        file=f
+                        vector_store_id=vector_store.id, file=f
                     )
             except Exception as e:
                 print(e)
-

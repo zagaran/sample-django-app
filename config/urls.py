@@ -13,6 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.conf.urls import include
 from django.contrib import admin
 from django.http import HttpResponse
@@ -21,11 +22,13 @@ from django.urls import path
 from config.constants import HEALTH_CHECK_URL_NAME
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path("admin/", admin.site.urls),
     path("oauth/", include("social_django.urls", namespace="social")),
-    path('', include("common.urls")),
+    path("", include("common.urls")),
     # Health check is actually handled by the HealthCheckMiddleware
-    path("health-check/", lambda request: HttpResponse("ok"), name=HEALTH_CHECK_URL_NAME),
+    path(
+        "health-check/", lambda request: HttpResponse("ok"), name=HEALTH_CHECK_URL_NAME
+    ),
 ]
 
 handler404 = "common.views.error_404"
