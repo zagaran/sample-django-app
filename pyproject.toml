@@ -39,7 +39,6 @@ dev = [
     "ipython>=8.12.3",
     "isort>=5.13.2",
     "pip-tools>=7.4.1",
-    "pre-commit>=3.5.0",
     "rich>=14.1.0",
     "werkzeug>=3.0.6",
     "deploy",
