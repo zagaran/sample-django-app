@@ -1,13 +1,10 @@
-Django==4.2.*  # Latest LTS version
+Django==5.2.*  # Latest LTS version
 django-environ
 django-extensions>=3.2
 requests
 psycopg2
 
 ####### OPTIONAL FEATURES #######
-# START_FEATURE elastic_beanstalk
-ec2_metadata
-# END_FEATURE elastic_beanstalk
 
 # START_FEATURE django_social
 social-auth-app-django

@@ -8,11 +8,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
+import environ
 import os
 
 from django.contrib.messages import constants as messages
 
-import environ
 
 env = environ.Env(
     # Sets Django's ALLOWED_HOSTS setting
@@ -131,6 +131,7 @@ LOCAL_APPS = [
 INSTALLED_APPS = THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
+    "common.middleware.HealthCheckMiddleware",
     "django.middleware.security.SecurityMiddleware",
     # START_FEATURE docker
     "whitenoise.middleware.WhiteNoiseMiddleware",
