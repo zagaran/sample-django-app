@@ -6,15 +6,15 @@
 #
 amqp==5.3.1
     # via kombu
-asgiref==3.8.1
+asgiref==3.11.0
     # via django
-asttokens==3.0.0
+asttokens==3.0.1
     # via stack-data
 billiard==4.2.4
     # via celery
-boto3==1.38.30
+boto3==1.42.9
     # via django-ses
-botocore==1.38.30
+botocore==1.42.9
     # via
     #   boto3
     #   s3transfer
@@ -24,13 +24,13 @@ celery[redis]==5.6.0
     #   celery-redbeat
 celery-redbeat==2.3.3
     # via -r requirements.in
-certifi==2025.4.26
+certifi==2025.11.12
     # via
     #   requests
     #   sentry-sdk
-cffi==1.17.1
+cffi==2.0.0
     # via cryptography
-charset-normalizer==3.4.2
+charset-normalizer==3.4.4
     # via requests
 click==8.3.1
     # via
@@ -44,17 +44,17 @@ click-plugins==1.1.1.2
     # via celery
 click-repl==0.3.0
     # via celery
-crispy-bootstrap5==2025.4
+crispy-bootstrap5==2025.6
     # via -r requirements.in
-cryptography==45.0.3
-    # via social-auth-core
+cryptography==46.0.3
+    # via pyjwt
 decorator==5.2.1
     # via ipython
 defusedxml==0.7.1
     # via
     #   python3-openid
     #   social-auth-core
-django==5.2.2
+django==5.2.9
     # via
     #   -r requirements.in
     #   crispy-bootstrap5
@@ -65,11 +65,11 @@ django==5.2.2
     #   django-ses
     #   django-storages
     #   social-auth-app-django
-django-appconf==1.1.0
+django-appconf==1.2.0
     # via django-compressor
-django-compressor==4.5.1
+django-compressor==4.6.0
     # via -r requirements.in
-django-crispy-forms==2.4
+django-crispy-forms==2.5
     # via
     #   -r requirements.in
     #   crispy-bootstrap5
@@ -77,9 +77,9 @@ django-environ==0.12.0
     # via -r requirements.in
 django-extensions==4.1
     # via -r requirements.in
-django-react-components==0.1.8a0
+django-react-components==1.0.0
     # via -r requirements.in
-django-sass-processor==1.4.1
+django-sass-processor==1.4.2
     # via -r requirements.in
 django-ses==4.4.0
     # via -r requirements.in
@@ -87,16 +87,18 @@ django-storages==1.14.6
     # via -r requirements.in
 django-webpack-loader==0.7.0
     # via -r requirements.in
-exceptiongroup==1.3.0
+exceptiongroup==1.3.1
     # via celery
-executing==2.2.0
+executing==2.2.1
     # via stack-data
 gunicorn==23.0.0
     # via -r requirements.in
-idna==3.10
+idna==3.11
     # via requests
-ipython==8.37.0
+ipython==9.8.0
     # via -r requirements.in
+ipython-pygments-lexers==1.1.1
+    # via ipython
 jedi==0.19.2
     # via ipython
 jmespath==1.0.1
@@ -107,9 +109,9 @@ kombu[redis]==5.6.1
     # via celery
 libsass==0.23.0
     # via -r requirements.in
-matplotlib-inline==0.1.7
+matplotlib-inline==0.2.1
     # via ipython
-oauthlib==3.2.2
+oauthlib==3.3.1
     # via
     #   requests-oauthlib
     #   social-auth-core
@@ -117,26 +119,30 @@ packaging==25.0
     # via
     #   gunicorn
     #   kombu
-parso==0.8.4
+parso==0.8.5
     # via jedi
 pexpect==4.9.0
     # via ipython
-prompt-toolkit==3.0.51
+prompt-toolkit==3.0.52
     # via
     #   click-repl
     #   ipython
-psycopg2==2.9.10
+psycopg2==2.9.11
     # via -r requirements.in
 ptyprocess==0.7.0
     # via pexpect
 pure-eval==0.2.3
     # via stack-data
-pycparser==2.22
+pycparser==2.23
     # via cffi
-pygments==2.19.1
-    # via ipython
-pyjwt==2.10.1
-    # via social-auth-core
+pygments==2.19.2
+    # via
+    #   ipython
+    #   ipython-pygments-lexers
+pyjwt[crypto]==2.10.1
+    # via
+    #   pyjwt
+    #   social-auth-core
 python-dateutil==2.9.0.post0
     # via
     #   botocore
@@ -144,32 +150,32 @@ python-dateutil==2.9.0.post0
     #   celery-redbeat
 python3-openid==3.2.0
     # via social-auth-core
-rcssmin==1.1.2
+rcssmin==1.2.2
     # via django-compressor
 redis==6.4.0
     # via
     #   celery-redbeat
     #   kombu
-requests==2.32.3
+requests==2.32.5
     # via
     #   -r requirements.in
     #   requests-oauthlib
     #   social-auth-core
 requests-oauthlib==2.0.0
     # via social-auth-core
-rjsmin==1.2.2
+rjsmin==1.2.5
     # via django-compressor
-s3transfer==0.13.0
+s3transfer==0.16.0
     # via boto3
-sentry-sdk==2.29.1
+sentry-sdk==2.47.0
     # via -r requirements.in
 six==1.17.0
     # via python-dateutil
-social-auth-app-django==5.4.3
+social-auth-app-django==5.6.0
     # via -r requirements.in
-social-auth-core==4.6.1
+social-auth-core==4.8.1
     # via social-auth-app-django
-sqlparse==0.5.3
+sqlparse==0.5.4
     # via django
 stack-data==0.6.3
     # via ipython
@@ -183,7 +189,7 @@ tzdata==2025.3
     # via kombu
 tzlocal==5.3.1
     # via celery
-urllib3==2.4.0
+urllib3==2.6.2
     # via
     #   botocore
     #   requests
@@ -193,7 +199,7 @@ vine==5.1.0
     #   amqp
     #   celery
     #   kombu
-wcwidth==0.2.13
+wcwidth==0.2.14
     # via prompt-toolkit
-whitenoise==6.8.2
+whitenoise==6.11.0
     # via -r requirements.in
