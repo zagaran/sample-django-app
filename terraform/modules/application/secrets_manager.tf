@@ -2,8 +2,16 @@ resource "aws_secretsmanager_secret" "web_config" {
   name = "${local.app_env_name}-web-config"
 }
 
-data "aws_secretsmanager_secret_version" "web_config" {
-  secret_id = aws_secretsmanager_secret.web_config.id
+resource "aws_secretsmanager_secret_version" "web_config" {
+  secret_id     = aws_secretsmanager_secret.web_config.id
+  secret_string = jsonencode({})
+
+  # Allow users to manually own `web_config` and modify it manually in AWS console or elsewhere
+  lifecycle {
+    ignore_changes = [
+      secret_string,
+    ]
+  }
 }
 
 resource "aws_secretsmanager_secret" "web_infrastructure" {
