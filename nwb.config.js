@@ -15,8 +15,8 @@ const BundleTracker = require('webpack-bundle-tracker')
 
 const ENTRIES = {
   // TODO delete me; this is just a reference example
-  Home: './src/Pages/Home.js',
-  Hello: './src/Components/Hello.js'
+  Home: './src/Pages/Home.jsx',
+  Hello: './src/Components/Hello.jsx'
 }
 
 const SHARED_ENTRIES = [

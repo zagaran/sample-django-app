@@ -28,6 +28,10 @@ sentry-sdk
 django-storages
 # END_FEATURE django_storages
 
+# START_FEATURE direct_upload
+boto3
+# END_FEATURE
+
 # START_FEATURE docker
 gunicorn
 # END_FEATURE docker

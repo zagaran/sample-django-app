@@ -1,9 +1,18 @@
+import os
 import uuid
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.http import FileResponse, Http404, HttpResponse, HttpResponseRedirect
+from django.conf import settings
+import boto3
 
+from common.helpers import get_attachment_extension, remove_attachment_extension
 from common.managers import UserManager
+
+# START_FEATURE sentry
+from sentry_sdk import capture_message
+# END_FEATURE sentry
 
 
 class TimestampedModel(models.Model):
@@ -40,7 +49,7 @@ class User(AbstractUser, TimestampedModel):
 
 # START_FEATURE django_storages
 # TODO: delete me; this is just a reference example
-def get_s3_path(instance, filename):
+def get_upload_prefix(instance, filename):
     return "%s/%s/%s" % (
         "uploads",
         instance.user_id,
@@ -49,14 +58,46 @@ def get_s3_path(instance, filename):
 
 
 class UploadFile(TimestampedModel):
-    user = models.ForeignKey(User, related_name="files", on_delete=models.PROTECT)
-    file = models.FileField(
-        max_length=1024,
-        upload_to=get_s3_path
-    )
 
     class Meta:
         abstract = True
+
+    user = models.ForeignKey(User, related_name="files", on_delete=models.PROTECT)
+    name = models.CharField(max_length=512)
+    file = models.FileField(max_length=1024, upload_to=get_upload_prefix)
+
+    # START_FEATURE direct_upload
+    upload_completed_on = models.DateTimeField(null=True)
+
+    def download_file(self) -> FileResponse | HttpResponse:
+        extension = get_attachment_extension(self.file.name)
+        filename = f"{remove_attachment_extension(self.name)}.{extension}".replace('"', '')
+        s3_filename = self.file.name
+
+        try:
+
+            # Download file directly from S3
+            if not settings.LOCALHOST:
+                s3 = boto3.client('s3')
+                url = s3.generate_presigned_url(
+                    'get_object',
+                    Params={
+                        "Bucket": str(os.environ.get('AWS_STORAGE_BUCKET_NAME')),
+                        "Key": s3_filename,
+                        "ResponseContentDisposition": f'attachment; filename="{filename}"',
+                    },
+                    ExpiresIn=900
+                )
+                return HttpResponseRedirect(url)
+            else:
+                return FileResponse(self.file.open(), as_attachment=True, filename=filename)
+
+        # START_FEATURE sentry
+        except Exception:
+            capture_message(f"Failed to download file ({self.id}) from S3 with path ({s3_filename})")
+            raise Http404()
+        # END_FEATURE sentry
+    # END_FEATURE direct_upload
 # END_FEATURE django_storages
 
 

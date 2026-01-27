@@ -53,7 +53,12 @@ venv.bak/
 # Installed packages
 node_modules/
 
+# ECS deploy script
+.deploy/
+.git-copy/
+
 # Compiled Files
+static/js/dist*
 staticfiles/
 staticfiles/*
 # START_FEATURE sass_bootstrap
