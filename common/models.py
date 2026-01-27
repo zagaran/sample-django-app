@@ -97,6 +97,11 @@ class UploadFile(TimestampedModel):
             capture_message(f"Failed to download file ({self.id}) from S3 with path ({s3_filename})")
             raise Http404()
         # END_FEATURE sentry
+
+
+class Attachment(UploadFile):
+    pass
+
     # END_FEATURE direct_upload
 # END_FEATURE django_storages
 

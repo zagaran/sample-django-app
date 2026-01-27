@@ -26,7 +26,11 @@
     {# START_FEATURE direct_upload #}
     <div class="my-4">
       <h5>Upload a file!</h5>
-      <uppy-component></uppy-component>
+      <file-upload-direct
+        field-id="field-id"
+        field-name="field-name"
+        upload-start-url="{% url 'attachment_upload_start' %}"
+      ></file-upload-direct>
     </div>
     {# END_FEATURE direct_upload #}
   </div>
