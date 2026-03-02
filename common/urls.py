@@ -27,6 +27,16 @@ urlpatterns = [
         views.FileUploadCompleteView.as_view(),
         name='attachment_upload_complete'
     ),
+    path(
+        f"attachments/<uuid:{ATTACHMENT_PK_URL_KWARG}>/download/",
+        views.FileDownloadView.as_view(),
+        name='attachment_download'
+    ),
+    path(
+        f"attachments/<uuid:{ATTACHMENT_PK_URL_KWARG}>/open/",
+        views.FileOpenView.as_view(),
+        name='attachment_open'
+    ),
     # END_FEATURE direct_upload
 
     path("logout", views.LogoutView.as_view(), name="logout"),

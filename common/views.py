@@ -2,7 +2,7 @@ from django.contrib.auth import logout
 from django.conf import settings
 from django.db import transaction
 from django.http import JsonResponse
-from django.shortcuts import redirect, render, reverse
+from django.shortcuts import get_object_or_404, redirect, render, reverse
 from django.views.generic.base import TemplateView, View
 from django.http.response import HttpResponse
 
@@ -129,6 +129,23 @@ class FileUploadCompleteView(FileUploadStreamView):
         instance = self.get_object()
         instance.update(upload_completed_on=timezone.now())
         return HttpResponse(status=200)
+
+
+class FileDownloadView(SingleObjectMixin, View):
+
+    model = Attachment
+    pk_url_kwarg = ATTACHMENT_PK_URL_KWARG
+
+    def get(self, request, *args, **kwargs):
+        instance = self.get_object()
+        return instance.download_file()
+
+
+class FileOpenView(FileDownloadView):
+
+    def get(self, request, *args, **kwargs):
+        instance = self.get_object()
+        return instance.view_file()
 # END_FEATURE direct_upload
 
 

@@ -98,11 +98,23 @@ class UploadFile(TimestampedModel):
             raise Http404()
         # END_FEATURE sentry
 
+    def view_file(self) -> FileResponse | HttpResponse:
+        extension = get_attachment_extension(self.file.name)
+        filename = f"{remove_attachment_extension(self.name)}.{extension}"
 
+        # Get file directly from S3
+        if not settings.LOCALHOST:
+            return HttpResponseRedirect(self.file.url)
+        else:
+            return FileResponse(self.file.open(), as_attachment=False, filename=filename)
+    # END_FEATURE direct_upload
+
+
+# START_FEATURE direct_upload
 class Attachment(UploadFile):
     pass
 
-    # END_FEATURE direct_upload
+# END_FEATURE direct_upload
 # END_FEATURE django_storages
 
 

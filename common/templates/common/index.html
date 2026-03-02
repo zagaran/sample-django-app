@@ -38,19 +38,26 @@
       <table class="table my-3">
         <thead>
           <th>Filename</th>
-          <th>Path</th>
           <th>Uploaded By</th>
           <th>Uploaded On</th>
           <th>File Size</th>
+          <th>Actions</th>
         </thead>  
         <tbody>
           {% for attachment in attachments %}
           <tr>
             <td>{{ attachment.name }}</td>
-            <td>{{ attachment.file.name }}</td>
             <td>{{ attachment.user }}</td>
             <td>{{ attachment.upload_completed_on }}</td>
             <td>{{ attachment.file.size|filesizeformat }}</td>
+            <td>
+              <a target="_blank" href={% url 'attachment_open' attachment.id %}>
+                <button class="btn btn-sm btn-secondary">View</button>
+              </a>
+              <a href={% url 'attachment_download' attachment.id %}>
+                <button class="btn btn-sm btn-secondary">Download</button>
+              </a>
+            </td>
           </tr>
           {% endfor %}
         </tbody>
