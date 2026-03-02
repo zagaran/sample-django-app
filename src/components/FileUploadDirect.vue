@@ -51,6 +51,8 @@ const props = defineProps({
 
 let uppy = null
 
+const attachments = defineModel("attachments", { default: [] })
+
 const files = defineModel()
 const fileIds = computed(() => {
   return files.value ? files.value.map(f => f.id) : []
@@ -58,7 +60,7 @@ const fileIds = computed(() => {
 
 watch(files, (newFiles, oldFiles) => {
   const newUppyFiles = newFiles.map(f => f?.uppyId, 0).filter(id => id != null)
-  const oldUppyFiles = oldFiles.map(f => f?.uppyId, 0).filter(id => id != null)
+  const oldUppyFiles = oldFiles?.map(f => f?.uppyId, 0).filter(id => id != null) || []
 
   // Determine which uppy files were removed
   const removedIds = oldUppyFiles.filter(id => !newUppyFiles.includes(id))
@@ -68,7 +70,6 @@ watch(files, (newFiles, oldFiles) => {
 })
 
 onMounted(() => {
-  console.log(props)
   let restrictions = {}
   restrictions["maxNumberOfFiles"] = props.multiple ? props?.maxFiles : 1
   if (props.minFiles) {
@@ -146,11 +147,11 @@ onMounted(() => {
 
   // When files are finished uploading and they are successful, add them to the `files` state
   uppy.on("upload-success", async (file, response) => {
+    attachments.value = [response.body.context_data, ...attachments.value]
     const newEntry = {
       ...response.body,
       uppyId: file.id,
       size: file.size,
-      fileSource: fileSources.uppy,
     }
     if (props.multiple) {
       files.value = [newEntry, ...files.value]

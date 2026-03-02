@@ -25,48 +25,17 @@
 
     {# START_FEATURE direct_upload #}
     {% if user.is_authenticated %}
-    <div class="my-4">
-      <h3>Attachments</h3>
-      <div class="my-3">
-        <h5>Upload a file!</h5>
-        <file-upload-direct
+      <div id="app">
+        <file-upload-dashboard
           field-id="field-id"
           field-name="field-name"
           upload-start-url="{% url 'attachment_upload_start' %}"
-        ></file-upload-direct>
+        ></file-upload-dashboard>
       </div>
-      <table class="table my-3">
-        <thead>
-          <th>Filename</th>
-          <th>Uploaded By</th>
-          <th>Uploaded On</th>
-          <th>File Size</th>
-          <th>Actions</th>
-        </thead>  
-        <tbody>
-          {% for attachment in attachments %}
-          <tr>
-            <td>{{ attachment.name }}</td>
-            <td>{{ attachment.user }}</td>
-            <td>{{ attachment.upload_completed_on }}</td>
-            <td>{{ attachment.file.size|filesizeformat }}</td>
-            <td>
-              <a target="_blank" href={% url 'attachment_open' attachment.id %}>
-                <button class="btn btn-sm btn-secondary">View</button>
-              </a>
-              <a href={% url 'attachment_download' attachment.id %}>
-                <button class="btn btn-sm btn-secondary">Download</button>
-              </a>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-    <script>
-      window.csrfmiddlewaretoken = '{{ csrf_token }}'
-    </script>
+      {{ attachments|json_script:"attachments" }}
+      <script type="text/javascript">
+        window.attachments = JSON.parse(document.getElementById("attachments").innerText)
+      </script>
     {% endif %}
     {# END_FEATURE direct_upload #}
-  </div>
 {% endblock %}

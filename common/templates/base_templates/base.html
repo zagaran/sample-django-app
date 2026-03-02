@@ -80,12 +80,18 @@
           {{ message }}
         </div>
       {% endfor %}
-      <div id="app">
+      <div>
         {% block body %}
         {% endblock %}
       </div>
     </div>
     {# END_FEATURE bootstrap_messages #}
+
+    {# START_FEATURE direct_upload #}
+    <script>
+      window.csrfmiddlewaretoken = '{{ csrf_token }}'
+    </script>
+    {# END_FEATURE direct_upload #}
 
     {% block bottom_javascript %}
       <script type="module" src="{% static "js/dist/pages/default.js" %}"></script>

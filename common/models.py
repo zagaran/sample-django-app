@@ -7,6 +7,12 @@ from django.http import FileResponse, Http404, HttpResponse, HttpResponseRedirec
 from django.conf import settings
 import boto3
 
+# START_FEATURE direct_upload
+from django.shortcuts import reverse
+from common.constants import ATTACHMENT_PK_URL_KWARG
+from django.template.defaultfilters import filesizeformat
+# END_FEATURE direct_upload
+
 from common.helpers import get_attachment_extension, remove_attachment_extension
 from common.managers import UserManager
 
@@ -107,6 +113,24 @@ class UploadFile(TimestampedModel):
             return HttpResponseRedirect(self.file.url)
         else:
             return FileResponse(self.file.open(), as_attachment=False, filename=filename)
+
+    # TODO: Should replace this with a DRF serializer
+    def get_context_data(self):
+        context = {
+            "user": self.user.email,
+            "name": self.name,
+            "upload_completed_on": self.upload_completed_on,
+            "view_url": reverse('attachment_open', kwargs={
+                ATTACHMENT_PK_URL_KWARG: self.id,
+            }),
+            "download_url": reverse('attachment_download', kwargs={
+                ATTACHMENT_PK_URL_KWARG: self.id,
+            })
+        }
+        if self.file.storage.exists(self.file.name):
+            context["size"] = filesizeformat(self.file.size)
+            context["path"] = self.file.name
+        return context
     # END_FEATURE direct_upload
 
 

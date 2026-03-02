@@ -8,7 +8,6 @@ from django.http.response import HttpResponse
 
 # START_FEATURE crispy_forms
 from django.views.generic.edit import FormView
-from common.constants import ATTACHMENT_PK_URL_KWARG
 from common.forms import SampleForm
 from common.models import Attachment
 # END_FEATURE crispy_forms
@@ -19,6 +18,7 @@ from django.core.files.storage import default_storage
 from django.core.files.storage.filesystem import FileSystemStorage
 from django.views.generic.detail import SingleObjectMixin
 from common.s3 import create_presigned_upload_url
+from common.constants import ATTACHMENT_PK_URL_KWARG
 # END_FEATURE direct_upload
 
 
@@ -28,7 +28,10 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
-            context['attachments'] = Attachment.objects.all()
+            context['attachments'] = [
+                attachment.get_context_data()
+                for attachment in Attachment.objects.all()
+            ]
         return context
 
 
@@ -47,7 +50,6 @@ class RobotsTxtView(View):
             # Block all
             lines = ["User-agent: *", "Disallow: /"]
         return HttpResponse("\n".join(lines), content_type="text/plain")
-
 
 
 # START_FEATURE django_react
@@ -120,6 +122,7 @@ class FileUploadStreamView(SingleObjectMixin, View):
             "id": instance.id,
             "name": instance.name,
             "url": instance.file.url,
+            "context_data": instance.get_context_data()
         })
 
 
@@ -151,6 +154,7 @@ class FileOpenView(FileDownloadView):
 
 def error_404(request, exception):
     return render(request, "errors/404.html", status=404)
+
 
 def error_500(request):
     return render(request, "errors/500.html", status=500)
