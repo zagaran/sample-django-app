@@ -84,14 +84,14 @@ class FileUploadStartView(View):
         attachment.save()
 
         # Set the presigned upload and completion URLs on response paylod
-        url_kwargs = {"attachment_pk": str(attachment.id)}
+        url_kwargs = {"attachment_id": str(attachment.id)}
         serialized_data = dict(request.POST)
         if isinstance(default_storage, FileSystemStorage):
-            serialized_data['upload_presigned_url'] = reverse("file_upload_stream", kwargs=url_kwargs)
-            serialized_data['upload_complete_url'] = reverse("file_upload_complete", kwargs=url_kwargs)
+            serialized_data['upload_presigned_url'] = reverse("attachment_upload_stream", kwargs=url_kwargs)
+            serialized_data['upload_complete_url'] = reverse("attachment_upload_complete", kwargs=url_kwargs)
         else:
             serialized_data['upload_presigned_url'] = create_presigned_upload_url(object_name=storage_path)
-            serialized_data['upload_complete_url'] = reverse("file_upload_complete", kwargs=url_kwargs)
+            serialized_data['upload_complete_url'] = reverse("attachment_upload_complete", kwargs=url_kwargs)
 
         return JsonResponse(serialized_data)
 

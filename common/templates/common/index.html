@@ -31,6 +31,9 @@
         field-name="field-name"
         upload-start-url="{% url 'attachment_upload_start' %}"
       ></file-upload-direct>
+      <script>
+        window.csrfmiddlewaretoken = '{{ csrf_token }}'
+      </script>
     </div>
     {# END_FEATURE direct_upload #}
   </div>
