@@ -25,6 +25,12 @@ from common.s3 import create_presigned_upload_url
 class IndexView(TemplateView):
     template_name = "common/index.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            context['attachments'] = Attachment.objects.all()
+        return context
+
 
 class LogoutView(View):
     def post(self, request):
