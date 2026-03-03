@@ -122,7 +122,6 @@ class FileUploadStreamView(SingleObjectMixin, View):
             "id": instance.id,
             "name": instance.name,
             "url": instance.file.url,
-            "context_data": instance.get_context_data()
         })
 
 
@@ -131,7 +130,7 @@ class FileUploadCompleteView(FileUploadStreamView):
     def post(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.update(upload_completed_on=timezone.now())
-        return HttpResponse(status=200)
+        return JsonResponse(instance.get_context_data())
 
 
 class FileDownloadView(SingleObjectMixin, View):

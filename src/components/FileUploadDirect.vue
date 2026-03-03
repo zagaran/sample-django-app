@@ -39,6 +39,10 @@ const props = defineProps({
   minFiles: Number,
   maxFiles: Number,
   allowedFileTypes: Array, // Allow all file types if unspecified
+  autoProceed: {
+    type: Boolean,
+    default: false,
+  },
   multiple: {
     type: Boolean,
     default: false,
@@ -80,7 +84,7 @@ onMounted(() => {
   }
 
   uppy = new Uppy({
-    autoProceed: true,
+    autoProceed: props.autoProceed,
     restrictions: restrictions,
   })
 
@@ -141,20 +145,20 @@ onMounted(() => {
   uppy.addPostProcessor(async fileIds => {
     for (const fileId of fileIds) {
       const file = uppy.getFile(fileId)
-      await post(file.attachmentData.upload_complete_url)
+      const response = await post(file.attachmentData.upload_complete_url)
+      attachments.value = [await response.json(), ...attachments.value]
     }
   })
 
   // When files are finished uploading and they are successful, add them to the `files` state
   uppy.on("upload-success", async (file, response) => {
-    attachments.value = [response.body.context_data, ...attachments.value]
     const newEntry = {
       ...response.body,
       uppyId: file.id,
       size: file.size,
     }
     if (props.multiple) {
-      files.value = [newEntry, ...files.value]
+      files.value = [newEntry, ...(files.value || [])]
     } else {
       files.value = [newEntry]
     }
