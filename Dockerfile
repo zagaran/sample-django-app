@@ -27,7 +27,6 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 WORKDIR /app
 
 ADD pyproject.toml /app/pyproject.toml
-ADD uv.lock /app/uv.lock
 
 # Install system and python dependencies
 RUN set -ex \
