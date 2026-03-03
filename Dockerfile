@@ -27,6 +27,7 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 WORKDIR /app
 
 ADD pyproject.toml /app/pyproject.toml
+ADD uv.lock /app/uv.lock
 
 # Install system and python dependencies
 RUN set -ex \
@@ -47,7 +48,7 @@ RUN set -ex \
     && apt-get install -y $buildDeps $deps --no-install-recommends
 
 # Install web app dependencies
-RUN uv sync --no-dev
+RUN uv sync --frozen --no-dev --no-install-project
 
 # Remove build dependencies
 RUN set -ex \
