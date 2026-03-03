@@ -63,9 +63,9 @@ COPY --from=node-deps /app/node_modules /app/node_modules
 COPY --from=node-deps /app/package*.json /app/
 COPY --from=node-deps /app/static/js/dist/ /app/static/js/dist/
 
-# Copy application files and .env.build
+# Copy application files and .env.example
 COPY . /app/
-COPY ./config/.env.build /app/config/.env
+COPY ./config/.env.example /app/config/.env
 COPY .bashrc /root/
 
 # Compile static assets
