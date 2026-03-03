@@ -16,7 +16,7 @@ RUN npm install && npm cache clean --force
 
 # Build vue dist
 COPY . /app/
-RUN npm run build
+RUN npm run vue-build
 
 # ---------------------------------- Python ---------------------------------- #
 
