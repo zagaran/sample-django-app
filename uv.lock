@@ -1465,11 +1465,13 @@ dependencies = [
 ]
 
 [package.dev-dependencies]
+deploy = [
+    { name = "deploy" },
+]
 dev = [
     { name = "boto3" },
     { name = "coverage" },
     { name = "crispy-bootstrap5" },
-    { name = "deploy" },
     { name = "django" },
     { name = "django-compressor" },
     { name = "django-crispy-forms" },
@@ -1521,11 +1523,11 @@ requires-dist = [
 ]
 
 [package.metadata.requires-dev]
+deploy = [{ name = "deploy", editable = "../deploy" }]
 dev = [
     { name = "boto3", specifier = ">=1.38.30" },
     { name = "coverage", specifier = ">=7.13.4" },
     { name = "crispy-bootstrap5", specifier = ">=2025.4" },
-    { name = "deploy", editable = "../deploy" },
     { name = "django", specifier = "==5.2.*" },
     { name = "django-compressor", specifier = ">=4.5.1" },
     { name = "django-crispy-forms", specifier = ">=2.4" },
