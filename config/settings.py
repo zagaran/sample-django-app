@@ -47,6 +47,10 @@ env = environ.Env(
     # Set to True to enable the Django Debug Toolbar
     DEBUG_TOOLBAR=(bool, False),
     # END_FEATURE debug_toolbar
+
+    # START_FEATURE direct_upload
+    AWS_STORAGE_BUCKET_NAME=(str, ""),
+    # END_FEATURE direct_upload
 )
 # If ALLWED_HOSTS has been configured, then we're running on a server and
 # can skip looking for a .env file (this assumes that .env files
