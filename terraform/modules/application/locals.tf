@@ -40,7 +40,7 @@ locals {
     ))) :
     {
       name : setting
-      valueFrom : format("%s:%s::", aws_secretsmanager_secret_version.web_config.arn, setting)
+      valueFrom : format("%s:%s::", aws_secretsmanager_secret.web_config.arn, setting)
     }
   ]
 
