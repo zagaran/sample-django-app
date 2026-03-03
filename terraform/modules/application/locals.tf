@@ -36,11 +36,11 @@ locals {
 
   ecs_config_secrets = [
     for setting in keys(jsondecode(nonsensitive(
-      aws_secretsmanager_secret_version.web_config.secret_string,
+      data.aws_secretsmanager_secret_version.web_config.secret_string,
     ))) :
     {
       name : setting
-      valueFrom : format("%s:%s::", aws_secretsmanager_secret.web_config.arn, setting)
+      valueFrom : format("%s:%s::", data.aws_secretsmanager_secret.web_config.arn, setting)
     }
   ]
 
