@@ -70,5 +70,7 @@ static/webpack_bundles/
 webpack-stats.json
 # END_FEATURE django_react
 
+.terraform
+
 # Locally uploaded files
 uploads/
