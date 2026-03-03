@@ -48,9 +48,7 @@ RUN set -ex \
     && apt-get install -y $buildDeps $deps --no-install-recommends
 
 # Install web app dependencies
-# (Use git version of deploy script)
-RUN uv add git+ssh://git@github.com/msc5/deploy
-RUN uv sync
+RUN uv sync --frozen --no-install-project
 
 # Remove build dependencies
 RUN set -ex \
@@ -71,8 +69,8 @@ COPY ./config/.env.build /app/config/.env
 COPY .bashrc /root/
 
 # Compile static assets
-RUN uv run manage.py compilescss
-RUN uv run manage.py collectstatic --noinput
+RUN uv run --no-sync manage.py compilescss
+RUN uv run --no-sync manage.py collectstatic --noinput
 RUN rm /app/config/.env
 
 EXPOSE 8080

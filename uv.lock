@@ -1,5 +1,5 @@
 version = 1
-revision = 2
+revision = 3
 requires-python = ">=3.12"
 resolution-markers = [
     "python_full_version >= '3.14' and platform_python_implementation != 'PyPy'",
@@ -1588,6 +1588,9 @@ dependencies = [
 ]
 
 [package.dev-dependencies]
+deploy = [
+    { name = "deploy" },
+]
 dev = [
     { name = "basedpyright" },
     { name = "coverage" },
@@ -1630,6 +1633,7 @@ requires-dist = [
 ]
 
 [package.metadata.requires-dev]
+deploy = [{ name = "deploy", editable = "../deploy" }]
 dev = [
     { name = "basedpyright", specifier = ">=1.31.0" },
     { name = "coverage", specifier = ">=7.6.1" },

@@ -30,6 +30,9 @@ dependencies = [
 ]
 
 [dependency-groups]
+deploy = [
+    "deploy",
+]
 dev = [
     "basedpyright>=1.31.0",
     "coverage>=7.6.1",
