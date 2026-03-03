@@ -26,10 +26,12 @@
     {# START_FEATURE direct_upload #}
     {% if user.is_authenticated %}
       <div id="app">
+        {{ storage_backend }}
         <file-upload-dashboard
           field-id="field-id"
           field-name="field-name"
           :multiple="true"
+          storage-backend="{{ storage_backend }}"
           upload-start-url="{% url 'attachment_upload_start' %}"
         ></file-upload-dashboard>
       </div>

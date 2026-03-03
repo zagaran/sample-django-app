@@ -145,8 +145,10 @@ onMounted(() => {
   uppy.addPostProcessor(async fileIds => {
     for (const fileId of fileIds) {
       const file = uppy.getFile(fileId)
-      const response = await post(file.attachmentData.upload_complete_url)
-      attachments.value = [await response.json(), ...attachments.value]
+      if (!file["error"]) {
+        const response = await post(file.attachmentData.upload_complete_url)
+        attachments.value = [await response.json(), ...attachments.value]
+      }
     }
   })
 

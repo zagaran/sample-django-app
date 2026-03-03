@@ -304,10 +304,7 @@ MESSAGE_TAGS = {
 
 # START_FEATURE django_storages
 AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
-if LOCALHOST is True:
-    DEFAULT_STORAGE = {"BACKEND": "django.core.files.storage.FileSystemStorage"}
-    MEDIA_ROOT = ""
-else:
+if AWS_STORAGE_BUCKET_NAME:
     DEFAULT_STORAGE = {
         "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
         "OPTIONS": {
@@ -316,6 +313,9 @@ else:
             "default_acl": "private",
         }
     }
+else:
+    DEFAULT_STORAGE = {"BACKEND": "django.core.files.storage.FileSystemStorage"}
+    MEDIA_ROOT = ""
 # END_FEATURE django_storages
 STORAGES = {
     "default": DEFAULT_STORAGE,

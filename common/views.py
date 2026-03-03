@@ -28,6 +28,7 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
+            context['storage_backend'] = "s3" if settings.AWS_STORAGE_BUCKET_NAME else "local"
             context['attachments'] = [
                 attachment.get_context_data()
                 for attachment in Attachment.objects.all()
