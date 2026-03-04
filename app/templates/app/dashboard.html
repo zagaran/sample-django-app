@@ -1,0 +1,84 @@
+{% extends "base_templates/base.html" %}
+
+
+{# START_FEATURE sass_bootstrap #}
+{% load sass_tags %}
+{# END_FEATURE sass_bootstrap #}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block head %}
+
+{# START_FEATURE sass_bootstrap #}
+  <link href="{% sass_src 'styles/pages/index.scss' %}" rel="stylesheet">
+{# END_FEATURE sass_bootstrap #}
+{% endblock %}
+
+{% block body %}
+  <div id="app">
+    <h2>Dashboard</h2>
+    <p>Welcome to the [PROJECT] application, {{ user.email }}</p>
+
+    <div class="my-4 card">
+      <div class="card-body">
+      <div class="d-flex justify-content-between">
+        <h3 class="card-title">Sample Objects</h3>
+        <a href="{% url 'sample-object-create' %}">
+          <button class="btn btn-sm btn-success">
+            <i class="bi bi-plus-circle"></i>
+          </button>
+        </a>
+      </div>
+      <table class="table">
+        <thead>
+          <th>Name</th>
+          <th>Created By</th>
+          <th>Created On</th>
+          <th>Actions</th>
+        </thead>
+        <tbody>
+          {% for sample_object in sample_objects %}
+          <tr>
+            <td>{{ sample_object.name }}</td>
+            <td>{{ sample_object.created_by }}</td>
+            <td>{{ sample_object.created_on }}</td>
+            <td>
+              <div class="d-flex gap-2">
+                <a href="{% url 'sample-object' sample_object.id %}">
+                  <button class="btn btn-sm btn-secondary">View</button>
+                </a>
+                <a href="{% url 'sample-object-edit' sample_object.id %}">
+                  <button class="btn btn-sm btn-secondary">Edit</button>
+                </a>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    {# START_FEATURE direct_upload #}
+    <div class="my-4 card">
+      <div class="card-body">
+        <h3 class="card-title">Attachments</h3>
+        <file-upload-dashboard
+          field-id="field-id"
+          field-name="field-name"
+          :multiple="true"
+          storage-backend="{{ storage_backend }}"
+          upload-start-url="{% url 'attachment_upload_start' %}"
+        ></file-upload-dashboard>
+      </div>
+    </div>
+    {# END_FEATURE direct_upload #}
+  </div>
+
+  {# START_FEATURE direct_upload #}
+  {{ attachments|json_script:"attachments" }}
+  <script type="text/javascript">
+    window.attachments = JSON.parse(document.getElementById("attachments").innerText)
+  </script>
+  {# END_FEATURE direct_upload #}
+{% endblock %}

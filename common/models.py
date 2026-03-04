@@ -133,12 +133,6 @@ class UploadFile(TimestampedModel):
         return context
     # END_FEATURE direct_upload
 
-
-# START_FEATURE direct_upload
-class Attachment(UploadFile):
-    pass
-
-# END_FEATURE direct_upload
 # END_FEATURE django_storages
 
 

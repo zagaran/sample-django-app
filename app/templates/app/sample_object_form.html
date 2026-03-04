@@ -1,0 +1,14 @@
+{% extends "base_templates/base.html" %}
+
+{# START_FEATURE crispy_forms #}
+{% load crispy_forms_tags %}
+{# END_FEATURE crispy_forms #}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+  <div id="app">
+    <h2>Sample Object Form</h2>
+    {% crispy form %}
+  </div>
+{% endblock %}

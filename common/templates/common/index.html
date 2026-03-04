@@ -15,29 +15,10 @@
 {% endblock %}
 
 {% block body %}
-  <div class="container">
-    <p>Welcome to [PROJECT]. Please log in to continue.</p>
-    
-    {# START_FEATURE sass_bootstrap #}
-    {# TODO: delete me; this is just a reference example #}
-    <button class="btn btn-primary does-nothing-button">This button does nothing</button>
-    {# END_FEATURE sass_bootstrap #}
-
-    {# START_FEATURE direct_upload #}
-    {% if user.is_authenticated %}
-      <div id="app">
-        <file-upload-dashboard
-          field-id="field-id"
-          field-name="field-name"
-          :multiple="true"
-          storage-backend="{{ storage_backend }}"
-          upload-start-url="{% url 'attachment_upload_start' %}"
-        ></file-upload-dashboard>
-      </div>
-      {{ attachments|json_script:"attachments" }}
-      <script type="text/javascript">
-        window.attachments = JSON.parse(document.getElementById("attachments").innerText)
-      </script>
-    {% endif %}
-    {# END_FEATURE direct_upload #}
+  <p>Welcome to [PROJECT]. Please log in to continue.</p>
+  
+  {# START_FEATURE sass_bootstrap #}
+  {# TODO: delete me; this is just a reference example #}
+  <button class="btn btn-primary does-nothing-button">This button does nothing</button>
+  {# END_FEATURE sass_bootstrap #}
 {% endblock %}

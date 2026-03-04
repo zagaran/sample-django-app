@@ -3,9 +3,12 @@ from django.core.files.storage import default_storage
 from django.core.files.storage.filesystem import FileSystemStorage
 from django.shortcuts import reverse
 
-from common.models import Attachment, User
+from app.models import Attachment
+from common.models import User
 
 # START_FEATURE direct_upload
+
+
 class DirectUploadFileInput(forms.Widget):
     template_name = "widgets/multi_source_file_input.html"
 

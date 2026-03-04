@@ -122,6 +122,7 @@ if DEBUG_TOOLBAR:
 
 LOCAL_APPS = [
     "common",
+    "app",
 ]
 
 INSTALLED_APPS = THIRD_PARTY_APPS + LOCAL_APPS
