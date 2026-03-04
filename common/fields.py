@@ -10,14 +10,10 @@ from common.models import User
 
 
 class DirectUploadFileInput(forms.Widget):
-    template_name = "widgets/multi_source_file_input.html"
+    template_name = "widgets/direct_upload_file_input.html"
 
     def get_context(self, name, value, attrs):
         context: dict = super().get_context(name, value, attrs)
-        # context['max_file_size'] = FILE_UPLOAD_LIMIT
-        context['min_files'] = self.attrs['min_files']
-        context['max_files'] = self.attrs['max_files']
-        context['allowed_file_types'] = self.attrs['allowed_file_types']
         context['upload_start_url'] = reverse("attachment_upload_start")
         context["storage_backend"] = ("filesystem" if isinstance(default_storage, FileSystemStorage) else "s3")
         return context
@@ -39,15 +35,12 @@ class DirectUploadFileField(forms.Field):
     def __init__(
         self,
         *,
-        user: User,
-        entra_enabled: bool = False,
         allowed_file_types: list[str] = [],
         multiple: bool = False,
         min_files: int | None = None,
         max_files: int | None = None,
         **kwargs,
     ):
-        self.entra_enabled = entra_enabled
         self.allowed_file_types = [ft if ft.startswith(".") else "." + ft for ft in allowed_file_types]
         self.multiple = multiple
         self.min_files = min_files

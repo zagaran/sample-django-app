@@ -11,5 +11,5 @@ class SampleObject(TimestampedModel):
 
 # START_FEATURE direct_upload
 class Attachment(UploadFile):
-    sample_object = models.ForeignKey("SampleObject", null=True, related_name="attachment", on_delete=models.PROTECT)
+    sample_object = models.ManyToManyField("SampleObject", related_name="attachments")
 # END_FEATURE direct_upload

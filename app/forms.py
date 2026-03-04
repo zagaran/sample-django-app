@@ -1,6 +1,7 @@
 from django import forms
 from django.http import HttpRequest
 from app.models import SampleObject
+from common.fields import DirectUploadFileField
 from common.forms import CrispyFormMixin
 
 
@@ -17,6 +18,7 @@ class SampleObjectBaseForm(CrispyFormMixin, forms.ModelForm):
 
 
 class SampleObjectCreateForm(SampleObjectBaseForm):
+    attachments = DirectUploadFileField()
 
     def save(self, commit=True):
         self.instance.created_by = self.request.user
