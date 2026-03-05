@@ -57,10 +57,7 @@ let uppy = null
 
 // `attachments` represents all attachments relevant to this dashboard, which
 // can include other attachments/files from previous uploads.
-const attachments = defineModel("attachments", { default: [] })
-
-// `files` represents the current files held in uppy.
-const files = defineModel()
+const files = defineModel("files", { default: [] })
 const fileIds = computed(() => {
   return files.value ? files.value.map(f => f.id) : []
 })
@@ -169,10 +166,10 @@ onMounted(() => {
     }
   })
 
-  // When files are removed from the frontend UI, remove them from the `files` state
-  uppy.on("file-removed", async file => {
-    files.value = files.value.filter(f => f.uppyId !== file.id)
-  })
+  // // When files are removed from the frontend UI, remove them from the `files` state
+  // uppy.on("file-removed", async file => {
+  //   files.value = files.value.filter(f => f.uppyId !== file.id)
+  // })
 
   return uppy
 })

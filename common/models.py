@@ -8,7 +8,7 @@ from django.conf import settings
 import boto3
 
 # START_FEATURE direct_upload
-from django.shortcuts import reverse
+from django.urls import reverse
 from common.constants import ATTACHMENT_PK_URL_KWARG
 from django.template.defaultfilters import filesizeformat
 # END_FEATURE direct_upload
@@ -129,6 +129,7 @@ class UploadFile(TimestampedModel):
     # TODO: Should replace this with a DRF serializer
     def get_context_data(self):
         context = {
+            "id": self.id,
             "user": self.user.email,
             "name": self.name,
             "upload_completed_on": self.upload_completed_on,

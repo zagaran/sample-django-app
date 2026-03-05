@@ -1,13 +1,9 @@
+# START_FEATURE direct_upload
 from django import forms
 from django.core.files.storage import default_storage
 from django.core.files.storage.filesystem import FileSystemStorage
 from django.db.models import QuerySet
-from django.shortcuts import reverse
-
-from app.models import Attachment
-from common.models import User
-
-# START_FEATURE direct_upload
+from django.urls import reverse
 
 
 class DirectUploadFileInput(forms.SelectMultiple):
@@ -16,9 +12,10 @@ class DirectUploadFileInput(forms.SelectMultiple):
 
     def get_context(self, name, value, attrs):
         context: dict = super().get_context(name, value, attrs)
-        context['upload_start_url'] = reverse("attachment_upload_start")
+        context["upload_start_url"] = reverse("attachment_upload_start")
         context["storage_backend"] = ("filesystem" if isinstance(default_storage, FileSystemStorage) else "s3")
-        context['value_json'] = [f.get_context_data() for f in self.queryset.filter(id__in=value)]
+        context["value_json"] = [f.get_context_data() for f in self.queryset.filter(id__in=(value or []))]
+        # context["widget"]["field_id"] = [f.get_context_data() for f in self.queryset.filter(id__in=(value or []))]
         return context
 
 

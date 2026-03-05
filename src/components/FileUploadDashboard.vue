@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex flex-column gap-4">
-    <file-upload-direct v-bind="$attrs" v-model:attachments="attachments"></file-upload-direct>
+    <file-upload-direct v-bind="$attrs" v-model:files="files"></file-upload-direct>
     <table class="table">
       <thead>
         <th>Filename</th>
@@ -10,17 +10,17 @@
         <th>Actions</th>
       </thead>
       <tbody>
-        <tr v-for="attachment in attachments">
-          <td>{{ attachment.name }}</td>
-          <td>{{ attachment.user }}</td>
-          <td>{{ attachment.upload_completed_on }}</td>
-          <td>{{ attachment.size }}</td>
+        <tr v-for="file in files">
+          <td>{{ file.name }}</td>
+          <td>{{ file.user }}</td>
+          <td>{{ file.upload_completed_on }}</td>
+          <td>{{ file.size }}</td>
           <td>
             <div class="d-flex gap-2">
-              <a target="_blank" :href="attachment.view_url">
+              <a target="_blank" :href="file.view_url">
                 <button class="btn btn-sm btn-outline-secondary">View</button>
               </a>
-              <a :href="attachment.download_url">
+              <a :href="file.download_url">
                 <button class="btn btn-sm btn-secondary">Download</button>
               </a>
             </div>
@@ -32,9 +32,18 @@
 </template>
 
 <script setup>
+import { onMounted } from "vue"
+
 defineOptions({ inheritAttrs: false })
 
-const attachments = defineModel("attachments", {
-  default: JSON.parse(document.getElementById("attachments").innerText),
+const props = defineProps({
+  initial: String,
+})
+
+const files = defineModel("attachments", { default: [] })
+
+onMounted(() => {
+  const jsonData = document.getElementById(props.fieldId)
+  if (jsonData) files.value = JSON.parse(jsonData.innerText)
 })
 </script>

@@ -1,10 +1,12 @@
-<file-upload-dashboard
-  field-id="{{ widget.field_id }}"
-  field-name="{{ widget.name }}"
-  upload-start-url="{{ upload_start_url }}"
-  storage-backend="{{ storage_backend }}"
-  :allowed-file-types="{{ widget.attrs.allowed_file_types }}"
-  :min-files="{{ widget.attrs.min_files }}"
-  :max-files="{{ widget.attrs.max_files }}"
-></file-upload-dashboard>
-{{ value_json|json_script:"attachments" }}
+<div>
+  <file-upload-dashboard
+    v-init:files="{{ widget.value }}"
+    field-id="{{ widget.field_id }}"
+    field-name="{{ widget.name }}"
+    upload-start-url="{{ upload_start_url }}"
+    storage-backend="{{ storage_backend }}"
+    :allowed-file-types="{{ widget.attrs.allowed_file_types }}"
+    :min-files="{{ widget.attrs.min_files }}"
+    :max-files="{{ widget.attrs.max_files }}"
+  ></file-upload-dashboard>
+</div>
