@@ -1,10 +1,12 @@
 from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView, FormMixin, UpdateView
+from django.views.generic.edit import CreateView, UpdateView
 from app.constants import SAMPLE_OBJECT_PK_URL_KWARG
 from app.forms import SampleObjectCreateForm, SampleObjectEditForm
 from app.models import Attachment, SampleObject
 from django.conf import settings
 from common.constants import ATTACHMENT_PK_URL_KWARG
+from common.mixins import PermissionRequiredMixin, RequestFormMixin
+from common.permissions import PermissionType
 from common.s3 import create_presigned_upload_url
 from django.core.files.storage import default_storage
 from django.core.files.storage.filesystem import FileSystemStorage
@@ -17,7 +19,8 @@ from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import DetailView, SingleObjectMixin
 
 
-class DashboardView(TemplateView):
+class DashboardView(PermissionRequiredMixin, TemplateView):
+    permission_required = PermissionType.dashboard
     template_name = "app/dashboard.html"
 
     def get_context_data(self, **kwargs):
@@ -31,29 +34,24 @@ class DashboardView(TemplateView):
         return context
 
 
-class RequestFormMixin(FormMixin):
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['request'] = self.request
-        return kwargs
-
-
-class SampleObjectCreateView(RequestFormMixin, CreateView):
+class SampleObjectCreateView(PermissionRequiredMixin, RequestFormMixin, CreateView):
+    permission_required = PermissionType.dashboard
     template_name = "app/sample_object_form.html"
     form_class = SampleObjectCreateForm
     model = SampleObject
     success_url = reverse_lazy('dashboard')
 
 
-class SampleObjectDetailView(DetailView):
+class SampleObjectDetailView(PermissionRequiredMixin, DetailView):
+    permission_required = PermissionType.dashboard
     template_name = "app/sample_object_detail.html"
     model = SampleObject
     pk_url_kwarg = SAMPLE_OBJECT_PK_URL_KWARG
     context_object_name = "sample_object"
 
 
-class SampleObjectEditView(RequestFormMixin, UpdateView):
+class SampleObjectEditView(PermissionRequiredMixin, RequestFormMixin, UpdateView):
+    permission_required = PermissionType.dashboard
     template_name = "app/sample_object_form.html"
     form_class = SampleObjectEditForm
     model = SampleObject
@@ -68,7 +66,8 @@ class SampleObjectEditView(RequestFormMixin, UpdateView):
 
 # START_FEATURE direct_upload
 # TODO: These views should have some permission structure
-class FileUploadStartView(View):
+class FileUploadStartView(PermissionRequiredMixin, View):
+    permission_required = PermissionType.dashboard
 
     @transaction.atomic
     def post(self, request, *args, **kwargs):
@@ -98,7 +97,8 @@ class FileUploadStartView(View):
         return JsonResponse(serialized_data)
 
 
-class FileUploadStreamView(SingleObjectMixin, View):
+class FileUploadStreamView(PermissionRequiredMixin, SingleObjectMixin, View):
+    permission_required = PermissionType.dashboard
 
     model = Attachment
     pk_url_kwarg = ATTACHMENT_PK_URL_KWARG
@@ -120,6 +120,7 @@ class FileUploadStreamView(SingleObjectMixin, View):
 
 
 class FileUploadCompleteView(FileUploadStreamView):
+    permission_required = PermissionType.dashboard
 
     def post(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -127,7 +128,8 @@ class FileUploadCompleteView(FileUploadStreamView):
         return JsonResponse(instance.get_context_data())
 
 
-class FileDownloadView(SingleObjectMixin, View):
+class FileDownloadView(PermissionRequiredMixin, SingleObjectMixin, View):
+    permission_required = PermissionType.dashboard
 
     model = Attachment
     pk_url_kwarg = ATTACHMENT_PK_URL_KWARG
@@ -138,6 +140,7 @@ class FileDownloadView(SingleObjectMixin, View):
 
 
 class FileOpenView(FileDownloadView):
+    permission_required = PermissionType.dashboard
 
     def get(self, request, *args, **kwargs):
         instance = self.get_object()

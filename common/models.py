@@ -18,6 +18,8 @@ from common.managers import UserManager
 
 # START_FEATURE sentry
 from sentry_sdk import capture_message
+
+from common.permissions import ROLE_PERMISSIONS, UserRole
 # END_FEATURE sentry
 
 
@@ -44,6 +46,7 @@ class TimestampedModel(models.Model):
 # Create your models here.
 class User(AbstractUser, TimestampedModel):
     email = models.EmailField(unique=True)
+
     # START_FEATURE django_social
     username = None  # disable the AbstractUser.username field
     USERNAME_FIELD = "email"
@@ -51,6 +54,15 @@ class User(AbstractUser, TimestampedModel):
 
     objects = UserManager()
     # END_FEATURE django_social
+
+    role = models.CharField(max_length=128, default=UserRole.standard, choices=UserRole.choices)
+
+    @property
+    def permissions(self):
+        return ROLE_PERMISSIONS[self.role]
+
+    def has_permission(self, permission):
+        return permission in self.permissions
 
 
 # START_FEATURE django_storages

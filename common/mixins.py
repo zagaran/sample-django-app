@@ -1,5 +1,6 @@
 from django.conf import ImproperlyConfigured
 from django.contrib.auth.mixins import AccessMixin
+from django.views.generic.edit import FormMixin
 
 from common.permissions import PermissionType
 
@@ -21,3 +22,11 @@ class PermissionRequiredMixin(AccessMixin):
             return self.handle_no_permission()
 
         return super().dispatch(request, *args, **kwargs)
+
+
+class RequestFormMixin(FormMixin):
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs

@@ -8,8 +8,7 @@ from common.mixins import PermissionRequiredMixin
 from common.permissions import PermissionType
 
 
-class IndexView(PermissionRequiredMixin, TemplateView):
-    permission_required = PermissionType.none
+class IndexView(TemplateView):
     template_name = "common/index.html"
 
     def get(self, request, *args, **kwargs):
@@ -18,7 +17,7 @@ class IndexView(PermissionRequiredMixin, TemplateView):
         return super().get(request, *args, **kwargs)
 
 
-class LogoutView(PermissionRequiredMixin, View):
+class LogoutView(View):
 
     def post(self, request):
         logout(request)
