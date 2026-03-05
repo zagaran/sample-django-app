@@ -1,4 +1,3 @@
-# START_FEATURE direct_upload
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, FormMixin, UpdateView
 from app.constants import SAMPLE_OBJECT_PK_URL_KWARG
@@ -16,7 +15,6 @@ from django.shortcuts import reverse
 from django.utils import timezone
 from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import DetailView, SingleObjectMixin
-# END_FEATURE direct_upload
 
 
 class DashboardView(TemplateView):
