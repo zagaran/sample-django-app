@@ -7,3 +7,4 @@
   :min-files="{{ widget.attrs.min_files }}"
   :max-files="{{ widget.attrs.max_files }}"
 ></file-upload-dashboard>
+{{ value_json|json_script:"attachments" }}

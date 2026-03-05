@@ -34,6 +34,7 @@
           <th>Name</th>
           <th>Created By</th>
           <th>Created On</th>
+          <th>Attachments</th>
           <th>Actions</th>
         </thead>
         <tbody>
@@ -42,6 +43,11 @@
             <td>{{ sample_object.name }}</td>
             <td>{{ sample_object.created_by }}</td>
             <td>{{ sample_object.created_on }}</td>
+            <td>
+              {% for attachment in sample_object.attachments.all %}
+              <span class="badge bg-info">{{ attachment.name }}</span>
+              {% endfor %}
+            </td>
             <td>
               <div class="d-flex gap-2">
                 <a href="{% url 'sample-object' sample_object.id %}">
@@ -77,8 +83,5 @@
 
   {# START_FEATURE direct_upload #}
   {{ attachments|json_script:"attachments" }}
-  <script type="text/javascript">
-    window.attachments = JSON.parse(document.getElementById("attachments").innerText)
-  </script>
   {# END_FEATURE direct_upload #}
 {% endblock %}

@@ -45,6 +45,7 @@ dev = [
     "django-sass-processor>=1.4.1",
     "django-ses>=4.4.0",
     "django-storages>=1.14.6",
+    "django-stubs>=5.2.9",
     "django-webpack-loader==0.7.0",
     "flake8>=7.3.0",
     "gunicorn>=23.0.0",

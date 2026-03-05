@@ -34,5 +34,7 @@
 <script setup>
 defineOptions({ inheritAttrs: false })
 
-const attachments = defineModel("attachments", { default: window.attachments })
+const attachments = defineModel("attachments", {
+  default: JSON.parse(document.getElementById("attachments").innerText),
+})
 </script>

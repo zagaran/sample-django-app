@@ -1,6 +1,7 @@
 from django import forms
 from django.core.files.storage import default_storage
 from django.core.files.storage.filesystem import FileSystemStorage
+from django.db.models import QuerySet
 from django.shortcuts import reverse
 
 from app.models import Attachment
@@ -9,32 +10,24 @@ from common.models import User
 # START_FEATURE direct_upload
 
 
-class DirectUploadFileInput(forms.Widget):
+class DirectUploadFileInput(forms.SelectMultiple):
+    queryset: QuerySet
     template_name = "widgets/direct_upload_file_input.html"
 
     def get_context(self, name, value, attrs):
         context: dict = super().get_context(name, value, attrs)
         context['upload_start_url'] = reverse("attachment_upload_start")
         context["storage_backend"] = ("filesystem" if isinstance(default_storage, FileSystemStorage) else "s3")
+        context['value_json'] = [f.get_context_data() for f in self.queryset.filter(id__in=value)]
         return context
 
-    def value_from_datadict(self, data, files, name):
 
-        # `data` will always be a list of `InProgressFileUpload` uuids
-        ids = data.getlist(name)
-
-        # Attempt to get `Attachment` instances
-        attachments = Attachment.objects.filter(id__in=ids)
-
-        return attachments
-
-
-class DirectUploadFileField(forms.Field):
+class DirectUploadFileField(forms.ModelMultipleChoiceField):
     widget = DirectUploadFileInput
 
     def __init__(
         self,
-        *,
+        queryset: QuerySet,
         allowed_file_types: list[str] = [],
         multiple: bool = False,
         min_files: int | None = None,
@@ -45,7 +38,8 @@ class DirectUploadFileField(forms.Field):
         self.multiple = multiple
         self.min_files = min_files
         self.max_files = max_files
-        super().__init__(**kwargs)
+        super().__init__(queryset=queryset, **kwargs)
+        self.widget.queryset = self.queryset
 
         if allowed_file_types:
             self.help_text = "Only the following file types are allowed: " + ", ".join(self.allowed_file_types)

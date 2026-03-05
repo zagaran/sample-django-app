@@ -55,8 +55,11 @@ const props = defineProps({
 
 let uppy = null
 
+// `attachments` represents all attachments relevant to this dashboard, which
+// can include other attachments/files from previous uploads.
 const attachments = defineModel("attachments", { default: [] })
 
+// `files` represents the current files held in uppy.
 const files = defineModel()
 const fileIds = computed(() => {
   return files.value ? files.value.map(f => f.id) : []
@@ -79,7 +82,7 @@ onMounted(() => {
   if (props.minFiles) {
     restrictions["minNumberOfFiles"] = props.minFiles
   }
-  if (props.allowedFileTypes) {
+  if (props.allowedFileTypes && props.allowedFileTypes?.length) {
     restrictions["allowedFileTypes"] = props.allowedFileTypes
   }
 
@@ -89,7 +92,7 @@ onMounted(() => {
   })
 
   uppy.use(Dashboard, {
-    height: 400,
+    height: 300,
     inline: true,
     proudlyDisplayPoweredByUppy: false,
     singleFileFullScreen: true,
