@@ -4,18 +4,29 @@ from django.shortcuts import redirect, render
 from django.views.generic.base import TemplateView, View
 from django.http.response import HttpResponse
 
+from common.mixins import PermissionRequiredMixin
+from common.permissions import PermissionType
 
-class IndexView(TemplateView):
+
+class IndexView(PermissionRequiredMixin, TemplateView):
+    permission_required = PermissionType.none
     template_name = "common/index.html"
 
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect("dashboard")
+        return super().get(request, *args, **kwargs)
 
-class LogoutView(View):
+
+class LogoutView(PermissionRequiredMixin, View):
+
     def post(self, request):
         logout(request)
         return redirect("index")
 
 
 class RobotsTxtView(View):
+
     def get(self, request):
         if settings.PRODUCTION:
             # Allow all (note that a blank Disallow block means "allow all")
@@ -27,8 +38,9 @@ class RobotsTxtView(View):
 
 
 # START_FEATURE django_react
-class DjangoReactView(TemplateView):
+class DjangoReactView(PermissionRequiredMixin, TemplateView):
     # TODO: delete me; this is just a reference example
+    permission_required = PermissionType.dashboard
     template_name = 'common/sample_django_react.html'
 
     def get_context_data(self, **kwargs):
