@@ -37,15 +37,14 @@ import { onMounted } from "vue"
 defineOptions({ inheritAttrs: false })
 
 const props = defineProps({
+  fieldId: String,
   value: String,
 })
 
-const files = defineModel("attachments", { default: [] })
+const files = defineModel("files", { type: Array, default: [] })
 
 onMounted(() => {
-  const jsonData = document.getElementById(props.fieldId)
-  if (jsonData) files.value = JSON.parse(jsonData.innerText)
   console.log(props.value)
-  console.log(JSON.parse(props.value))
+  if (props.value) files.value = JSON.parse(props.value)
 })
 </script>

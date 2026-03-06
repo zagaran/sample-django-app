@@ -1,12 +1,15 @@
 <div>
-  <file-upload-dashboard
-    value="{{ value_json|escape }}"
-    field-id="{{ widget.field_id }}"
-    field-name="{{ widget.name }}"
-    upload-start-url="{{ upload_start_url }}"
-    storage-backend="{{ storage_backend }}"
-    :allowed-file-types="{{ widget.attrs.allowed_file_types }}"
-    :min-files="{{ widget.attrs.min_files }}"
-    :max-files="{{ widget.attrs.max_files }}"
-  ></file-upload-dashboard>
+  <div id="app-{{ widget.id }}">
+    <file-upload-dashboard
+      field-id="{{ widget.id }}"
+      field-name="{{ widget.name }}"
+      value="{{ value_json|escape }}"
+      upload-start-url="{{ upload_start_url }}"
+      storage-backend="{{ storage_backend }}"
+      :allowed-file-types="{{ widget.attrs.allowed_file_types }}"
+      :multiple="{{ widget.attrs.multiple }}"
+      :required="{{ widget.attrs.required }}"
+      :max-number-of-files="{{ widget.attrs.max_number_of_files }}"
+    ></file-upload-dashboard>
+  </div>
 </div>

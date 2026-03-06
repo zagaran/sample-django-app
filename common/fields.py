@@ -16,10 +16,13 @@ class DirectUploadFileInput(forms.SelectMultiple):
 
     def get_context(self, name, value, attrs):
         context: dict = super().get_context(name, value, attrs)
+        context["widget"]["id"] = uuid4()
         context["upload_start_url"] = reverse("attachment_upload_start")
         context["storage_backend"] = ("filesystem" if isinstance(default_storage, FileSystemStorage) else "s3")
-        context["value_json"] = [AttachmentSerializer(f).validated_data for f in self.queryset.filter(id__in=(value or []))]
-        context["widget"]["field_id"] = uuid4()
+        context["value_json"] = json.dumps([
+            AttachmentSerializer(f).data
+            for f in self.queryset.filter(id__in=(value or []))
+        ])
         from rich import print
         print(context)
         return context
@@ -32,15 +35,13 @@ class DirectUploadFileField(forms.ModelMultipleChoiceField):
         self,
         queryset: QuerySet,
         allowed_file_types: list[str] = [],
-        multiple: bool = False,
-        min_files: int | None = None,
-        max_files: int | None = None,
+        multiple: bool = True,
+        max_number_of_files: int | None = None,
         **kwargs,
     ):
         self.allowed_file_types = [ft if ft.startswith(".") else "." + ft for ft in allowed_file_types]
         self.multiple = multiple
-        self.min_files = min_files
-        self.max_files = max_files
+        self.max_number_of_files = max_number_of_files
         super().__init__(queryset=queryset, **kwargs)
         self.widget.queryset = self.queryset
 
@@ -49,8 +50,9 @@ class DirectUploadFileField(forms.ModelMultipleChoiceField):
 
     def widget_attrs(self, widget):
         attrs = super().widget_attrs(widget)
-        attrs['min_files'] = self.min_files
-        attrs['max_files'] = self.max_files
+        attrs['multiple'] = self.multiple
+        attrs['required'] = self.required
+        attrs['max_number_of_files'] = self.max_number_of_files
         attrs['allowed_file_types'] = self.allowed_file_types
         return attrs
 # END_FEATURE direct_upload

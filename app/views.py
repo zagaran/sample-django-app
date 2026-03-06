@@ -1,9 +1,11 @@
+import json
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, UpdateView
 from app.constants import SAMPLE_OBJECT_PK_URL_KWARG
 from app.forms import SampleObjectCreateForm, SampleObjectEditForm
 from app.models import Attachment, SampleObject
 from django.conf import settings
+from app.serializers import AttachmentSerializer
 from common.constants import ATTACHMENT_PK_URL_KWARG
 from common.mixins import PermissionRequiredMixin, RequestFormMixin
 from common.permissions import PermissionType
@@ -26,10 +28,10 @@ class DashboardView(PermissionRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['storage_backend'] = "s3" if settings.AWS_STORAGE_BUCKET_NAME else "local"
-        context['attachments'] = [
-            attachment.get_context_data()
+        context['attachments'] = json.dumps([
+            AttachmentSerializer(attachment).data
             for attachment in self.request.user.files.all()
-        ]
+        ])
         context['sample_objects'] = SampleObject.objects.all()
         return context
 
@@ -40,6 +42,11 @@ class SampleObjectCreateView(PermissionRequiredMixin, RequestFormMixin, CreateVi
     form_class = SampleObjectCreateForm
     model = SampleObject
     success_url = reverse_lazy('dashboard')
+
+    def post(self, request, *args, **kwargs) -> HttpResponse:
+        form = self.get_form()
+        print(form.data)
+        return super().post(request, *args, **kwargs)
 
 
 class SampleObjectDetailView(PermissionRequiredMixin, DetailView):

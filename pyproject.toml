@@ -33,6 +33,7 @@ deploy = [
     "deploy",
 ]
 dev = [
+    "autopep8>=2.3.2",
     "boto3>=1.38.30",
     "coverage>=7.13.4",
     "crispy-bootstrap5>=2025.4",

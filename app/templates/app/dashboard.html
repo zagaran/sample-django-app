@@ -70,8 +70,9 @@
       <div class="card-body">
         <h3 class="card-title">Attachments</h3>
         <file-upload-dashboard
-          field-id="field-id"
+          field-id="attachments"
           field-name="field-name"
+          value="{{ attachments|escape }}"
           :multiple="true"
           storage-backend="{{ storage_backend }}"
           upload-start-url="{% url 'attachment_upload_start' %}"
@@ -80,8 +81,4 @@
     </div>
     {# END_FEATURE direct_upload #}
   </div>
-
-  {# START_FEATURE direct_upload #}
-  {{ attachments|json_script:"field-id" }}
-  {# END_FEATURE direct_upload #}
 {% endblock %}
