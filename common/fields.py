@@ -1,9 +1,13 @@
 # START_FEATURE direct_upload
+import json
+from uuid import uuid4
 from django import forms
 from django.core.files.storage import default_storage
 from django.core.files.storage.filesystem import FileSystemStorage
 from django.db.models import QuerySet
 from django.urls import reverse
+
+from app.serializers import AttachmentSerializer
 
 
 class DirectUploadFileInput(forms.SelectMultiple):
@@ -14,8 +18,10 @@ class DirectUploadFileInput(forms.SelectMultiple):
         context: dict = super().get_context(name, value, attrs)
         context["upload_start_url"] = reverse("attachment_upload_start")
         context["storage_backend"] = ("filesystem" if isinstance(default_storage, FileSystemStorage) else "s3")
-        context["value_json"] = [f.get_context_data() for f in self.queryset.filter(id__in=(value or []))]
-        # context["widget"]["field_id"] = [f.get_context_data() for f in self.queryset.filter(id__in=(value or []))]
+        context["value_json"] = [AttachmentSerializer(f).validated_data for f in self.queryset.filter(id__in=(value or []))]
+        context["widget"]["field_id"] = uuid4()
+        from rich import print
+        print(context)
         return context
 
 

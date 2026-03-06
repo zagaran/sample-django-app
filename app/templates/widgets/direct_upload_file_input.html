@@ -1,6 +1,6 @@
 <div>
   <file-upload-dashboard
-    v-init:files="{{ widget.value }}"
+    value="{{ value_json|escape }}"
     field-id="{{ widget.field_id }}"
     field-name="{{ widget.name }}"
     upload-start-url="{{ upload_start_url }}"
