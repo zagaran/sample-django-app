@@ -70,35 +70,35 @@ const effectiveMaxFiles = computed(() => {
 
 async function handleUpload({ files: uploadFiles }) {
   for (const file of uploadFiles) {
-    // Step 1: Get upload parameters from the server
-    const formData = new FormData()
-    formData.set("name", file.name)
-    const response = await post(props.uploadStartUrl, { body: formData })
-    const attachmentData = await response.json()
+    // Get upload parameters from the server
+    const uploadStartFormData = new FormData()
+    uploadStartFormData.set("name", file.name)
+    const response = await post(props.uploadStartUrl, { body: uploadStartFormData })
+    const uploadStartData = await response.json()
 
-    // Step 2: Upload the file to the presigned URL
+    // Upload the file to the presigned URL
+    const uploadFormData = new FormData()
+    uploadFormData.append("file", file)
     if (props.storageBackend === "s3") {
-      const s3FormData = new FormData()
-      for (const [key, value] of Object.entries(attachmentData.upload_presigned_url.fields)) {
-        s3FormData.append(key, value)
+      // Post to S3 bucket
+      for (const [key, value] of Object.entries(uploadStartData.upload_presigned_url.fields)) {
+        uploadFormData.append(key, value)
       }
-      s3FormData.append("file", file)
-      await fetch(attachmentData.upload_presigned_url.url, {
+      await fetch(uploadStartData.upload_presigned_url.url, {
         method: "POST",
-        body: s3FormData,
+        body: uploadFormData,
       })
     } else {
-      const uploadFormData = new FormData()
-      uploadFormData.append("file", file)
-      await fetch(attachmentData.upload_presigned_url, {
+      // Post directly to database
+      await fetch(uploadStartData.upload_presigned_url, {
         method: "POST",
         body: uploadFormData,
         headers: { "X-CSRFTOKEN": csrf.value },
       })
     }
 
-    // Step 3: Notify server that upload is complete
-    const completeResponse = await post(attachmentData.upload_complete_url)
+    // Notify server that upload is complete
+    const completeResponse = await post(uploadStartData.upload_complete_url)
     const newEntry = {
       ...(await completeResponse.json()),
       size: file.size,
