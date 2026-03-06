@@ -15,5 +15,21 @@
       <p>{{ sample_object.description }}</p>
     </div>
   </div>
+
+  {# START_FEATURE direct_upload #}
+  <div class="my-4 card">
+    <div class="card-body">
+      <h4 class="card-title">Attachments</h4>
+      <file-upload-dashboard
+        field-id="attachments"
+        field-name="field-name"
+        value="{{ attachments|escape }}"
+        :multiple="true"
+        storage-backend="{{ storage_backend }}"
+        upload-start-url="{% url 'attachment_upload_start' %}"
+      ></file-upload-dashboard>
+    </div>
+  </div>
 </div>
+{# END_FEATURE direct_upload #}
 {% endblock %}

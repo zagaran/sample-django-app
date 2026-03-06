@@ -56,6 +56,15 @@ class SampleObjectDetailView(PermissionRequiredMixin, DetailView):
     pk_url_kwarg = SAMPLE_OBJECT_PK_URL_KWARG
     context_object_name = "sample_object"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['storage_backend'] = "s3" if settings.AWS_STORAGE_BUCKET_NAME else "local"
+        context['attachments'] = json.dumps([
+            AttachmentSerializer(attachment).data
+            for attachment in self.get_object().attachments.all()
+        ])
+        return context
+
 
 class SampleObjectEditView(PermissionRequiredMixin, RequestFormMixin, UpdateView):
     permission_required = PermissionType.dashboard

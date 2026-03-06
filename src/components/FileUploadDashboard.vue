@@ -12,7 +12,7 @@
       <tbody>
         <tr v-for="file in files">
           <td>{{ file.name }}</td>
-          <td>{{ file.user }}</td>
+          <td>{{ file.user.email }}</td>
           <td>{{ file.upload_completed_on }}</td>
           <td>{{ file.size }}</td>
           <td>
