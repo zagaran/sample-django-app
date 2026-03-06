@@ -86,6 +86,7 @@ class UploadFile(TimestampedModel):
 
     # START_FEATURE direct_upload
     upload_completed_on = models.DateTimeField(null=True)
+    deleted_on = models.DateTimeField(null=True)
 
     def download_file(self) -> FileResponse | HttpResponse:
         extension = get_attachment_extension(self.file.name)

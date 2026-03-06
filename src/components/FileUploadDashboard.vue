@@ -23,6 +23,7 @@
               <a :href="file.download_url">
                 <button class="btn btn-sm btn-secondary">Download</button>
               </a>
+              <button class="btn btn-sm btn-danger" @click="deleteFile(file)">Delete</button>
             </div>
           </td>
         </tr>
@@ -33,7 +34,9 @@
 
 <script setup>
 import { onMounted } from "vue"
+import { useFetch } from "../composables/fetch.js"
 
+const { post } = useFetch()
 defineOptions({ inheritAttrs: false })
 
 const props = defineProps({
@@ -46,4 +49,9 @@ const files = defineModel("files", { type: Array, default: [] })
 onMounted(() => {
   if (props.value) files.value = JSON.parse(props.value)
 })
+
+const deleteFile = async file => {
+  await post(file.delete_url)
+  files.value = files.value.filter(f => f.id != file.id)
+}
 </script>

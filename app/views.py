@@ -32,9 +32,9 @@ class DashboardView(PermissionRequiredMixin, TemplateView):
         context['storage_backend'] = "s3" if settings.AWS_STORAGE_BUCKET_NAME else "local"
         context['attachments'] = json.dumps([
             AttachmentSerializer(attachment).data
-            for attachment in self.request.user.files.all()
+            for attachment in self.request.user.files.filter(deleted_on=None)
         ])
-        context['sample_objects'] = SampleObject.objects.all()
+        context['sample_objects'] = SampleObject.objects.prefetch_related('attachments')
         return context
 
 
@@ -58,7 +58,7 @@ class SampleObjectDetailView(PermissionRequiredMixin, DetailView):
         context['storage_backend'] = "s3" if settings.AWS_STORAGE_BUCKET_NAME else "local"
         context['attachments'] = json.dumps([
             AttachmentSerializer(attachment).data
-            for attachment in self.get_object().attachments.all()
+            for attachment in self.get_object().attachments.filter(deleted_on=None)
         ])
         return context
 
@@ -169,4 +169,13 @@ class FileOpenView(FileDownloadView):
     def get(self, request, *args, **kwargs):
         instance = self.get_object()
         return instance.view_file()
+
+
+class FileDeleteView(FileUploadStreamView):
+    permission_required = PermissionType.dashboard
+
+    def post(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.update(deleted_on=timezone.now())
+        return HttpResponse(status=200)
 # END_FEATURE direct_upload

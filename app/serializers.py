@@ -21,6 +21,9 @@ class AttachmentSerializer(serializers.ModelSerializer):
         rep["download_url"] = reverse('attachment_download', kwargs={
             ATTACHMENT_PK_URL_KWARG: instance.id,
         })
+        rep["delete_url"] = reverse('attachment_delete', kwargs={
+            ATTACHMENT_PK_URL_KWARG: instance.id,
+        })
         if instance.file.storage.exists(instance.file.name):
             rep["size"] = filesizeformat(instance.file.size)
             rep["path"] = instance.file.name

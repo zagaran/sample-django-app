@@ -42,6 +42,11 @@ urlpatterns = [
         name='attachment_upload_complete'
     ),
     path(
+        f"attachments/<uuid:{ATTACHMENT_PK_URL_KWARG}>/delete/",
+        views.FileDeleteView.as_view(),
+        name='attachment_delete'
+    ),
+    path(
         f"attachments/<uuid:{ATTACHMENT_PK_URL_KWARG}>/download/",
         views.FileDownloadView.as_view(),
         name='attachment_download'
