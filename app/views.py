@@ -1,4 +1,5 @@
 import json
+import re
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, UpdateView
 from app.constants import SAMPLE_OBJECT_PK_URL_KWARG
@@ -7,7 +8,7 @@ from app.models import Attachment, SampleObject
 from django.conf import settings
 from app.serializers import AttachmentSerializer
 from common.constants import ATTACHMENT_PK_URL_KWARG
-from common.mixins import PermissionRequiredMixin, RequestFormMixin
+from common.mixins import PermissionRequiredMixin, RequestMixin
 from common.permissions import PermissionType
 from common.s3 import create_presigned_upload_url
 from django.core.files.storage import default_storage
@@ -15,8 +16,9 @@ from django.core.files.storage.filesystem import FileSystemStorage
 from django.db import transaction
 from django.http import JsonResponse
 from django.http.response import HttpResponse
-from django.shortcuts import reverse
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from django.urls import reverse
 from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import DetailView, SingleObjectMixin
 
@@ -36,17 +38,12 @@ class DashboardView(PermissionRequiredMixin, TemplateView):
         return context
 
 
-class SampleObjectCreateView(PermissionRequiredMixin, RequestFormMixin, CreateView):
+class SampleObjectCreateView(PermissionRequiredMixin, RequestMixin, CreateView):
     permission_required = PermissionType.dashboard
     template_name = "app/sample_object_form.html"
     form_class = SampleObjectCreateForm
     model = SampleObject
     success_url = reverse_lazy('dashboard')
-
-    def post(self, request, *args, **kwargs) -> HttpResponse:
-        form = self.get_form()
-        print(form.data)
-        return super().post(request, *args, **kwargs)
 
 
 class SampleObjectDetailView(PermissionRequiredMixin, DetailView):
@@ -66,7 +63,7 @@ class SampleObjectDetailView(PermissionRequiredMixin, DetailView):
         return context
 
 
-class SampleObjectEditView(PermissionRequiredMixin, RequestFormMixin, UpdateView):
+class SampleObjectEditView(PermissionRequiredMixin, RequestMixin, UpdateView):
     permission_required = PermissionType.dashboard
     template_name = "app/sample_object_form.html"
     form_class = SampleObjectEditForm
@@ -81,9 +78,19 @@ class SampleObjectEditView(PermissionRequiredMixin, RequestFormMixin, UpdateView
 
 
 # START_FEATURE direct_upload
-# TODO: These views should have some permission structure
 class FileUploadStartView(PermissionRequiredMixin, View):
     permission_required = PermissionType.dashboard
+
+    def link_objects(self, attachment: Attachment, request):
+        for key, value in request.GET.items():
+
+            # Expect a query parameter key in this form: '<link_type>__<object>'
+            # The value should be a UUID primary key
+            if re.match(r"(\w+)__(\w+)", key):
+                link_type, obj_accessor = key.split("__")
+                if link_type == "mtm":
+                    if (accessor := getattr(attachment, obj_accessor)):
+                        accessor.add(get_object_or_404(accessor.model, pk=value))
 
     @transaction.atomic
     def post(self, request, *args, **kwargs):
@@ -94,6 +101,7 @@ class FileUploadStartView(PermissionRequiredMixin, View):
             user=request.user,
             name=attachment_name,
         )
+        self.link_objects(attachment, request)
 
         # Generate S3 path for file
         storage_path = Attachment._meta.get_field('file').generate_filename(attachment, attachment_name)

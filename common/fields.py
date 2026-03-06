@@ -23,8 +23,6 @@ class DirectUploadFileInput(forms.SelectMultiple):
             AttachmentSerializer(f).data
             for f in self.queryset.filter(id__in=(value or []))
         ])
-        from rich import print
-        print(context)
         return context
 
 

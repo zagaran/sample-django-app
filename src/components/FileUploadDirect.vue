@@ -62,7 +62,6 @@ const files = defineModel("files", { type: Array, default: [] })
 const fileModelIds = computed(() => (files.value ? files.value.map(f => f.id) : []))
 
 onMounted(() => {
-  console.log(Object.entries(props))
   let restrictions = {}
   if (!props.multiple) restrictions["maxNumberOfFiles"] = 1
   if (props.maxNumberOfFiles) restrictions["maxNumberOfFiles"] = props.maxNumberOfFiles
@@ -137,7 +136,6 @@ onMounted(() => {
       uppyId: file.id,
       size: file.size,
     }
-    console.log(newEntry)
     if (props.multiple) {
       files.value = [newEntry, ...(files.value || [])]
     } else {

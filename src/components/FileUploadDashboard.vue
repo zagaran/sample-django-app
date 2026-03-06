@@ -44,7 +44,6 @@ const props = defineProps({
 const files = defineModel("files", { type: Array, default: [] })
 
 onMounted(() => {
-  console.log(props.value)
   if (props.value) files.value = JSON.parse(props.value)
 })
 </script>

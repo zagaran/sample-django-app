@@ -7,8 +7,8 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block body %}
-  <div id="app">
-    <h2>Sample Object Form</h2>
-    {% crispy form %}
-  </div>
+<div id="app">
+  <h2>{{ form.action_title_formatted }}</h2>
+  {% crispy form %}
+</div>
 {% endblock %}

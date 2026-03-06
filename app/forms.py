@@ -4,19 +4,27 @@ from django import forms
 from django.http import HttpRequest
 from app.models import Attachment, SampleObject
 from common.fields import DirectUploadFileField
-from common.forms import CrispyFormMixin
+from common.forms import ActionFormMixin, CrispyFormMixin
 
 
-class SampleObjectBaseForm(CrispyFormMixin, forms.ModelForm):
+class SampleObjectBaseForm(CrispyFormMixin, ActionFormMixin, forms.ModelForm):
     request: HttpRequest
+    attachments = DirectUploadFileField(queryset=Attachment.objects.all())
 
     class Meta:
         model = SampleObject
         exclude = ['created_by']
 
     layout = Layout(
-        Fieldset("Details", "name", "description"),
-        Fieldset("Attachments", "attachments")
+        Fieldset(
+            "Details",
+            "name",
+            "description"
+        ),
+        Fieldset(
+            "Attachments",
+            "attachments"
+        )
     )
 
     def __init__(self, request: HttpRequest, *args, **kwargs):
@@ -25,7 +33,7 @@ class SampleObjectBaseForm(CrispyFormMixin, forms.ModelForm):
 
 
 class SampleObjectCreateForm(SampleObjectBaseForm):
-    attachments = DirectUploadFileField(queryset=Attachment.objects.all())
+    action_title = "Create Sample Object"
 
     def save(self, commit=True):
         self.instance.created_by = self.request.user
@@ -33,5 +41,4 @@ class SampleObjectCreateForm(SampleObjectBaseForm):
 
 
 class SampleObjectEditForm(SampleObjectBaseForm):
-    attachments = DirectUploadFileField(queryset=Attachment.objects.all())
-    pass
+    action_title = "Edit {item}"

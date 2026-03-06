@@ -26,7 +26,7 @@
         value="{{ attachments|escape }}"
         :multiple="true"
         storage-backend="{{ storage_backend }}"
-        upload-start-url="{% url 'attachment_upload_start' %}"
+        upload-start-url="{% url 'attachment_upload_start' %}?mtm__sample_objects={{ sample_object.id }}"
       ></file-upload-dashboard>
     </div>
   </div>
