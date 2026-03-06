@@ -1,11 +1,19 @@
 <template>
   <div>
-    <div ref="container" />
+    <FileUpload
+      ref="fileUploadRef"
+      :multiple="multiple"
+      :accept="acceptTypes"
+      :file-limit="effectiveMaxFiles"
+      :auto="autoProceed"
+      custom-upload
+      @uploader="handleUpload"
+    />
     <input
-      v-if="props.showInputs"
+      v-if="showInputs"
       v-for="fileId in fileModelIds"
+      :key="fileId"
       type="hidden"
-      required
       :multiple="multiple"
       :name="fieldName"
       :value="fileId"
@@ -14,23 +22,15 @@
 </template>
 
 <script setup>
+import { computed, ref } from "vue"
 import { useFetch } from "../composables/fetch.js"
 import { useCSRF } from "../composables/csrf.js"
-
-import { onMounted, useTemplateRef, computed, watch } from "vue"
-
-import Uppy from "@uppy/core"
-import Dashboard from "@uppy/dashboard"
-import XHRUpload from "@uppy/xhr-upload"
-import AwsS3 from "@uppy/aws-s3"
-
-import "@uppy/core/css/style.min.css"
-import "@uppy/dashboard/css/style.min.css"
+import FileUpload from "primevue/fileupload"
 
 const { post } = useFetch()
 const { csrf } = useCSRF()
 
-const rootRef = useTemplateRef("container")
+const fileUploadRef = ref(null)
 
 const props = defineProps({
   fieldName: String,
@@ -56,84 +56,51 @@ const props = defineProps({
   },
 })
 
-let uppy = null
-
 const files = defineModel("files", { type: Array, default: [] })
 const fileModelIds = computed(() => (files.value ? files.value.map(f => f.id) : []))
 
-onMounted(() => {
-  let restrictions = {}
-  if (!props.multiple) restrictions["maxNumberOfFiles"] = 1
-  if (props.maxNumberOfFiles) restrictions["maxNumberOfFiles"] = props.maxNumberOfFiles
-  if (props.allowedFileTypes && props.allowedFileTypes?.length) {
-    restrictions["allowedFileTypes"] = props.allowedFileTypes
-  }
+const acceptTypes = computed(() =>
+  props.allowedFileTypes?.length ? props.allowedFileTypes.join(",") : undefined,
+)
 
-  uppy = new Uppy({
-    autoProceed: props.autoProceed,
-    restrictions: restrictions,
-  })
+const effectiveMaxFiles = computed(() => {
+  if (!props.multiple) return 1
+  return props.maxNumberOfFiles
+})
 
-  uppy.use(Dashboard, {
-    height: 300,
-    inline: true,
-    proudlyDisplayPoweredByUppy: false,
-    singleFileFullScreen: true,
-    showProgressDetails: true,
-    doneButtonHandler: null,
-    showRemoveButtonAfterComplete: true,
-    target: rootRef.value,
-    width: "100%",
-  })
+async function handleUpload({ files: uploadFiles }) {
+  for (const file of uploadFiles) {
+    // Step 1: Get upload parameters from the server
+    const formData = new FormData()
+    formData.set("name", file.name)
+    const response = await post(props.uploadStartUrl, { body: formData })
+    const attachmentData = await response.json()
 
-  if (props.storageBackend == "s3") {
-    uppy.use(AwsS3, {
-      shouldUseMultipart: false,
-      getUploadParameters: (file, options) => {
-        return {
-          method: "POST",
-          url: file.attachmentData.upload_presigned_url.url,
-          fields: file.attachmentData.upload_presigned_url.fields,
-        }
-      },
-    })
-  } else {
-    uppy.use(XHRUpload, {
-      formData: true,
-      fieldName: "file",
-      endpoint: file => {
-        return file.attachmentData.upload_presigned_url
-      },
-      getResponseData: xhr => {
-        return JSON.parse(xhr.responseText)
-      },
-      withCredentials: true,
-      headers: {
-        "X-CSRFTOKEN": csrf.value,
-      },
-      shouldRetry: false,
-      limit: 1,
-    })
-  }
-
-  uppy.addPreProcessor(async fileIds => {
-    for (const fileId of fileIds) {
-      const file = uppy.getFile(fileId)
-
-      const formData = new FormData()
-      formData.set("name", file.name)
-
-      const response = await post(props.uploadStartUrl, { body: formData })
-      uppy.setFileState(fileId, { attachmentData: await response.json() })
+    // Step 2: Upload the file to the presigned URL
+    if (props.storageBackend === "s3") {
+      const s3FormData = new FormData()
+      for (const [key, value] of Object.entries(attachmentData.upload_presigned_url.fields)) {
+        s3FormData.append(key, value)
+      }
+      s3FormData.append("file", file)
+      await fetch(attachmentData.upload_presigned_url.url, {
+        method: "POST",
+        body: s3FormData,
+      })
+    } else {
+      const uploadFormData = new FormData()
+      uploadFormData.append("file", file)
+      await fetch(attachmentData.upload_presigned_url, {
+        method: "POST",
+        body: uploadFormData,
+        headers: { "X-CSRFTOKEN": csrf.value },
+      })
     }
-  })
 
-  // When files are finished uploading and they are successful, add them to the `files` state
-  uppy.on("upload-success", async (file, response) => {
-    const completeResponse = await post(file.attachmentData.upload_complete_url)
+    // Step 3: Notify server that upload is complete
+    const completeResponse = await post(attachmentData.upload_complete_url)
     const newEntry = {
       ...(await completeResponse.json()),
-      uppyId: file.id,
       size: file.size,
     }
     if (props.multiple) {
@@ -141,8 +108,8 @@ onMounted(() => {
     } else {
       files.value = [newEntry]
     }
-  })
+  }
 
-  return uppy
-})
+  fileUploadRef.value?.clear()
+}
 </script>

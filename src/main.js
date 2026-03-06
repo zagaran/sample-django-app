@@ -1,9 +1,20 @@
 import components from "./components"
 import directives from "./directives"
+import PrimeVue from "primevue/config"
+import Aura from "@primevue/themes/aura"
 
 const MainVueApp = {
   install: (app, options) => {
     app.config.compilerOptions.whitespace = "preserve"
+
+    app.use(PrimeVue, {
+      theme: {
+        preset: Aura,
+        options: {
+          darkModeSelector: ".dark-mode",
+        },
+      },
+    })
 
     for (const componentName in components) {
       const component = components[componentName]

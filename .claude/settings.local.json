@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm uninstall:*)",
+      "Bash(npm install:*)",
+      "Bash(node:*)",
+      "Bash(python3:*)"
+    ]
+  }
+}
