@@ -1,8 +1,14 @@
 <template>
   <div class="d-flex flex-column gap-4">
-    <file-upload-direct v-bind="$attrs" v-model:files="files"></file-upload-direct>
+    <file-upload-direct
+      v-bind="$attrs"
+      v-model:files="files"
+      v-model:selected="selected"
+      :selectable="props.selectable"
+    ></file-upload-direct>
     <table class="table">
       <thead>
+        <th v-if="props.selectable"></th>
         <th>Filename</th>
         <th>Uploaded By</th>
         <th>Uploaded On</th>
@@ -11,6 +17,14 @@
       </thead>
       <tbody>
         <tr v-for="file in files">
+          <td v-if="props.selectable">
+            <input
+              type="checkbox"
+              v-model="selected"
+              :value="file.id"
+              @change="console.log(selected)"
+            />
+          </td>
           <td>{{ file.name }}</td>
           <td>{{ file.user.email }}</td>
           <td>{{ file.upload_completed_on }}</td>
@@ -33,7 +47,7 @@
 </template>
 
 <script setup>
-import { onMounted } from "vue"
+import { onMounted, ref } from "vue"
 import { useFetch } from "../composables/fetch.js"
 
 const { post } = useFetch()
@@ -42,9 +56,14 @@ defineOptions({ inheritAttrs: false })
 const props = defineProps({
   fieldId: String,
   value: String,
+  selectable: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const files = defineModel("files", { type: Array, default: [] })
+const selected = ref([])
 
 onMounted(() => {
   if (props.value) files.value = JSON.parse(props.value)

@@ -45,9 +45,9 @@
             <td>{{ sample_object.created_on }}</td>
             <td>
               {% for attachment in sample_object.attachments.all %}
-                {% if not attachment.deleted_on %}
-                <span class="badge bg-info">{{ attachment.name }}</span>
-                {% endif %}
+              {% if not attachment.deleted_on %}
+              <span class="badge bg-info">{{ attachment.name }}</span>
+              {% endif %}
               {% endfor %}
             </td>
             <td>

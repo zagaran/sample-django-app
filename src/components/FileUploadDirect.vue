@@ -2,7 +2,7 @@
   <div>
     <div ref="container" />
     <input
-      v-if="props.showInputs"
+      v-if="props.formInputs"
       v-for="fileId in fileModelIds"
       type="hidden"
       required
@@ -38,6 +38,10 @@ const props = defineProps({
   storageBackend: String,
   allowedFileTypes: Array, // Allow all file types if unspecified
   maxNumberOfFiles: Number,
+  selectable: {
+    type: Boolean,
+    default: false,
+  },
   autoProceed: {
     type: Boolean,
     default: false,
@@ -50,7 +54,7 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  showInputs: {
+  formInputs: {
     type: Boolean,
     default: true,
   },
@@ -59,9 +63,16 @@ const props = defineProps({
 let uppy = null
 
 const files = defineModel("files", { type: Array, default: [] })
-const fileModelIds = computed(() => (files.value ? files.value.map(f => f.id) : []))
+const selected = defineModel("selected", { type: Array, default: [] })
+const fileModelIds = computed(() => {
+  let fileIds = files.value.map(f => f.id)
+  if (props.selectable) fileIds = fileIds.filter(f => selected.value.includes(f.id))
+  return files.value ? fileIds : []
+})
 
 onMounted(() => {
+  console.log(Object.entries(props))
+  console.log(selected)
   let restrictions = {}
   if (!props.multiple) restrictions["maxNumberOfFiles"] = 1
   if (props.maxNumberOfFiles) restrictions["maxNumberOfFiles"] = props.maxNumberOfFiles
