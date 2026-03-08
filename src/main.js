@@ -1,5 +1,7 @@
 import components from "./components"
 import directives from "./directives"
+import "bootstrap"
+import "bootstrap-icons/font/bootstrap-icons.css"
 
 const MainVueApp = {
   install: (app, options) => {

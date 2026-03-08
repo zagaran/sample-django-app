@@ -8,7 +8,7 @@
 import { useFetch } from "../composables/fetch.js"
 import { useCSRF } from "../composables/csrf.js"
 
-import { onMounted, useTemplateRef, } from "vue"
+import { onMounted, useTemplateRef } from "vue"
 
 import Uppy from "@uppy/core"
 import Dashboard from "@uppy/dashboard"
@@ -28,10 +28,6 @@ const props = defineProps({
   storageBackend: String,
   allowedFileTypes: Array,
   maxNumberOfFiles: Number,
-  selectable: {
-    type: Boolean,
-    default: false,
-  },
   autoProceed: {
     type: Boolean,
     default: false,

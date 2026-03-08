@@ -9,7 +9,7 @@ from common.forms import ActionFormMixin, CrispyFormMixin
 
 class SampleObjectBaseForm(CrispyFormMixin, ActionFormMixin, forms.ModelForm):
     request: HttpRequest
-    attachments = DirectUploadFileField(queryset=Attachment.objects.all())
+    attachments = DirectUploadFileField(queryset=Attachment.objects.filter(deleted_on=None), required=False)
 
     class Meta:
         model = SampleObject

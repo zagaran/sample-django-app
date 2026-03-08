@@ -43,10 +43,10 @@
       <file-upload-dashboard
         field-id="attachments"
         field-name="field-name"
-        value="{{ attachments|escape }}"
-        :multiple="true"
+        queryset_json="{{ attachments|escape }}"
         storage-backend="{{ storage_backend }}"
         upload-start-url="{% url 'attachment_upload_start' %}?mtm__sample_objects={{ sample_object.id }}"
+        :multiple="true"
       ></file-upload-dashboard>
     </div>
   </div>

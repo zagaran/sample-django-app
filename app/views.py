@@ -1,5 +1,6 @@
 import json
 import re
+from django.db.models import ManyToManyRel
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, UpdateView
 from app.constants import SAMPLE_OBJECT_PK_URL_KWARG

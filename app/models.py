@@ -17,6 +17,9 @@ class SampleObject(TimestampedModel):
     def __str__(self) -> str:
         return f'Sample Object {self.name}'
 
+    def get_attachments(self):
+        return self.attachments.filter(deleted_on=None)
+
 
 # START_FEATURE direct_upload
 class Attachment(UploadFile):
