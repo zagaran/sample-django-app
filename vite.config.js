@@ -9,6 +9,7 @@ export default defineConfig(({ mode }) => {
   const DEVELOPMENT = mode === "development"
   return {
     plugins: [vue()],
+    base: "/static/js/dist/",
     resolve: {
       alias: {
         vue: "vue/dist/vue.esm-bundler.js",
