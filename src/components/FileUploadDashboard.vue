@@ -3,6 +3,7 @@
     <file-upload-direct
       v-bind="$attrs"
       v-model:files="files"
+      v-model:selected="selected"
       :selectable="props.selectable"
     ></file-upload-direct>
     <div class="table-responsive">
@@ -53,7 +54,7 @@
 </template>
 
 <script setup>
-import { onMounted, computed } from "vue"
+import { onMounted, watch } from "vue"
 import { useFetch } from "../composables/fetch.js"
 
 const { post } = useFetch()

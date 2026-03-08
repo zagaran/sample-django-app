@@ -45,6 +45,7 @@ const props = defineProps({
 let uppy = null
 
 const files = defineModel("files", { type: Array, default: [] })
+const selected = defineModel("selected", { type: Array, default: [] })
 
 onMounted(() => {
   let restrictions = {}
@@ -123,8 +124,10 @@ onMounted(() => {
     }
     if (props.multiple) {
       files.value = [newEntry, ...(files.value || [])]
+      selected.value = [...selected.value, newEntry.id]
     } else {
       files.value = [newEntry]
+      selected.value = [newEntry.id]
     }
   })
 
