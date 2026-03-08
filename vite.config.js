@@ -1,5 +1,4 @@
 import { defineConfig } from "vite"
-import externalGlobals from "rollup-plugin-external-globals"
 import vue from "@vitejs/plugin-vue"
 import { glob } from "glob"
 
@@ -9,31 +8,21 @@ const DEST_LOCATION = "static/js/dist"
 export default defineConfig(({ mode }) => {
   const DEVELOPMENT = mode === "development"
   return {
-    plugins: [
-      vue(),
-      externalGlobals({
-        vue: "Vue",
-      }),
-    ],
+    plugins: [vue()],
+    resolve: {
+      alias: {
+        vue: "vue/dist/vue.esm-bundler.js",
+      },
+    },
     build: {
       sourcemap: true,
       emptyOutDir: DEVELOPMENT,
       outDir: DEST_LOCATION,
       minify: DEVELOPMENT ? false : "terser",
       rollupOptions: {
-        // make sure to externalize deps that shouldn't be bundled
-        // into your library
         input: glob.sync(`${SRC_LOCATION}/**/*.js`),
         preserveEntrySignatures: true,
-        // make sure to externalize deps that shouldn't be bundled
-        // into your library
-        external: ["vue"],
         output: {
-          // Provide global variables to use in the UMD build
-          // for externalized deps
-          globals: {
-            vue: "Vue",
-          },
           manualChunks(id) {
             if (id.includes("pages") || id.includes("mixins")) {
               // These files are imported by path and must be chunked individually

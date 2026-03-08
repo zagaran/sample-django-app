@@ -1,15 +1,6 @@
 <template>
   <div>
     <div ref="container" />
-    <input
-      v-if="props.formInputs"
-      v-for="fileId in fileModelIds"
-      type="hidden"
-      required
-      :multiple="multiple"
-      :name="fieldName"
-      :value="fileId"
-    />
   </div>
 </template>
 
@@ -17,7 +8,7 @@
 import { useFetch } from "../composables/fetch.js"
 import { useCSRF } from "../composables/csrf.js"
 
-import { onMounted, useTemplateRef, computed, watch } from "vue"
+import { onMounted, useTemplateRef, } from "vue"
 
 import Uppy from "@uppy/core"
 import Dashboard from "@uppy/dashboard"
@@ -33,10 +24,9 @@ const { csrf } = useCSRF()
 const rootRef = useTemplateRef("container")
 
 const props = defineProps({
-  fieldName: String,
   uploadStartUrl: String,
   storageBackend: String,
-  allowedFileTypes: Array, // Allow all file types if unspecified
+  allowedFileTypes: Array,
   maxNumberOfFiles: Number,
   selectable: {
     type: Boolean,
@@ -54,25 +44,13 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  formInputs: {
-    type: Boolean,
-    default: true,
-  },
 })
 
 let uppy = null
 
 const files = defineModel("files", { type: Array, default: [] })
-const selected = defineModel("selected", { type: Array, default: [] })
-const fileModelIds = computed(() => {
-  let fileIds = files.value.map(f => f.id)
-  if (props.selectable) fileIds = fileIds.filter(f => selected.value.includes(f.id))
-  return files.value ? fileIds : []
-})
 
 onMounted(() => {
-  console.log(Object.entries(props))
-  console.log(selected)
   let restrictions = {}
   if (!props.multiple) restrictions["maxNumberOfFiles"] = 1
   if (props.maxNumberOfFiles) restrictions["maxNumberOfFiles"] = props.maxNumberOfFiles

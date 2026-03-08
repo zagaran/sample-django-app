@@ -76,6 +76,12 @@ class SampleObjectEditView(PermissionRequiredMixin, RequestMixin, UpdateView):
             SAMPLE_OBJECT_PK_URL_KWARG: self.get_object().id,
         })
 
+    def form_invalid(self, form) -> HttpResponse:
+        from rich import print
+        print(form.errors)
+        print(form.data)
+        return super().form_invalid(form)
+
 
 # START_FEATURE direct_upload
 class FileUploadStartView(PermissionRequiredMixin, View):

@@ -3,10 +3,30 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block body %}
-<div id="app">
-  <div>
-    <h3>Sample Object {{ sample_object.name }}</h3>
-    <span>Created By {{ sample_object.created_by }} on {{ sample_object.created_on }}</span>
+<div id="app" class="d-flex flex-column">
+  <div class="d-flex justify-content-between">
+    <div>
+      <h3>Sample Object {{ sample_object.name }}</h3>
+      <span>Created By {{ sample_object.created_by }} on {{ sample_object.created_on }}</span>
+    </div>
+
+    <div class="dropdown">
+      <button
+        class="btn btn-primary dropdown-toggle"
+        type="button"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        Actions
+      </button>
+      <ul class="dropdown-menu">
+        <li>
+          <a class="dropdown-item" href="{% url 'sample-object-edit' sample_object.id %}">
+            Edit
+          </a>
+        </li>
+      </ul>
+    </div>
   </div>
 
   <div class="card my-4">

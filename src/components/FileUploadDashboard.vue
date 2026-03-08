@@ -3,7 +3,6 @@
     <file-upload-direct
       v-bind="$attrs"
       v-model:files="files"
-      v-model:selected="selected"
       :selectable="props.selectable"
     ></file-upload-direct>
     <table class="table">
@@ -22,6 +21,8 @@
               type="checkbox"
               v-model="selected"
               :value="file.id"
+              :name="fieldName"
+              :multiple="multiple"
               @change="console.log(selected)"
             />
           </td>
@@ -47,7 +48,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue"
+import { onMounted, computed } from "vue"
 import { useFetch } from "../composables/fetch.js"
 
 const { post } = useFetch()
@@ -55,7 +56,8 @@ defineOptions({ inheritAttrs: false })
 
 const props = defineProps({
   fieldId: String,
-  value: String,
+  fieldName: String,
+  queryset_json: String,
   selectable: {
     type: Boolean,
     default: false,
@@ -63,10 +65,19 @@ const props = defineProps({
 })
 
 const files = defineModel("files", { type: Array, default: [] })
-const selected = ref([])
+const selected = defineModel("selected", { type: Array, default: [] })
+
+// const fileModelIds = computed(() => {
+//   let filesToSubmit = files.value
+//   if (props.selectable) filesToSubmit = filesToSubmit.filter(f => selected.value.includes(f.id))
+//   console.log(filesToSubmit)
+//   return filesToSubmit.map(f => f.id)
+// })
 
 onMounted(() => {
-  if (props.value) files.value = JSON.parse(props.value)
+  if (props.queryset_json) {
+    files.value = JSON.parse(props.queryset_json)
+  }
 })
 
 const deleteFile = async file => {

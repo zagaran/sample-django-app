@@ -19,10 +19,7 @@ class DirectUploadFileInput(forms.SelectMultiple):
         context["widget"]["id"] = uuid4()
         context["upload_start_url"] = reverse("attachment_upload_start")
         context["storage_backend"] = ("filesystem" if isinstance(default_storage, FileSystemStorage) else "s3")
-        context["value_json"] = json.dumps([
-            AttachmentSerializer(f).data
-            for f in self.queryset.filter(id__in=(value or []))
-        ])
+        context["queryset_json"] = json.dumps([AttachmentSerializer(f).data for f in self.queryset.all()])
         return context
 
 

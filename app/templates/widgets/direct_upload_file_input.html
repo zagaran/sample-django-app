@@ -3,12 +3,13 @@
     <file-upload-dashboard
       field-id="{{ widget.id }}"
       field-name="{{ widget.name }}"
-      value="{{ value_json|escape }}"
+      :selected="{{ widget.value }}"
+      queryset_json="{{ queryset_json|escape }}"
       upload-start-url="{{ upload_start_url }}"
       storage-backend="{{ storage_backend }}"
+      multiple="{{ widget.attrs.multiple }}"
+      selectable="{{ widget.attrs.multiple }}"
       :allowed-file-types="{{ widget.attrs.allowed_file_types }}"
-      :multiple="{{ widget.attrs.multiple }}"
-      :selectable="{{ widget.attrs.multiple }}"
       :required="{{ widget.attrs.required }}"
       :max-number-of-files="{{ widget.attrs.max_number_of_files }}"
     ></file-upload-dashboard>
