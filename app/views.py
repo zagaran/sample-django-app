@@ -77,12 +77,6 @@ class SampleObjectEditView(PermissionRequiredMixin, RequestMixin, UpdateView):
             SAMPLE_OBJECT_PK_URL_KWARG: self.get_object().id,
         })
 
-    def form_invalid(self, form) -> HttpResponse:
-        from rich import print
-        print(form.errors)
-        print(form.data)
-        return super().form_invalid(form)
-
 
 # START_FEATURE direct_upload
 class FileUploadStartView(PermissionRequiredMixin, View):
@@ -117,7 +111,7 @@ class FileUploadStartView(PermissionRequiredMixin, View):
 
         # Set the presigned upload and completion URLs on response paylod
         url_kwargs = {"attachment_id": str(attachment.id)}
-        serialized_data = dict(request.POST)
+        serialized_data: dict = AttachmentSerializer(attachment).data
         if isinstance(default_storage, FileSystemStorage):
             serialized_data['upload_presigned_url'] = reverse("attachment_upload_stream", kwargs=url_kwargs)
             serialized_data['upload_complete_url'] = reverse("attachment_upload_complete", kwargs=url_kwargs)

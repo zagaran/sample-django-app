@@ -21,10 +21,7 @@ class SampleObjectBaseForm(CrispyFormMixin, ActionFormMixin, forms.ModelForm):
             "name",
             "description"
         ),
-        Fieldset(
-            "Attachments",
-            "attachments"
-        )
+        "attachments"
     )
 
     def __init__(self, request: HttpRequest, *args, **kwargs):
