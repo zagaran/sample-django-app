@@ -26,6 +26,6 @@ class AttachmentSerializer(serializers.ModelSerializer):
             ATTACHMENT_PK_URL_KWARG: instance.id,
         })
         if instance.file.storage.exists(instance.file.name):
-            rep["size"] = filesizeformat(instance.file.size)
+            rep["size"] = instance.file.size
             rep["path"] = instance.file.name
         return rep

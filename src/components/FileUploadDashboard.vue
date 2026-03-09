@@ -7,7 +7,7 @@
       :selectable="props.selectable"
     ></file-upload-direct>
     <div class="table-responsive">
-      <table class="table" v-if="files.length > 0">
+      <table class="table table-bordered" v-if="files.length > 0">
         <thead>
           <th v-if="props.selectable"></th>
           <th>Filename</th>
@@ -30,7 +30,7 @@
             <td>{{ file.name }}</td>
             <td>{{ file.user.email }}</td>
             <td>{{ file.upload_completed_on }}</td>
-            <td>{{ file.size }}</td>
+            <td>{{ fileSize(file.size) }}</td>
             <td>
               <div class="d-flex gap-2">
                 <a target="_blank" :href="file.view_url">
@@ -54,8 +54,9 @@
 </template>
 
 <script setup>
-import { onMounted, watch } from "vue"
+import { onMounted } from "vue"
 import { useFetch } from "../composables/fetch.js"
+import { fileSize } from "humanize-plus"
 
 const { post } = useFetch()
 defineOptions({ inheritAttrs: false })

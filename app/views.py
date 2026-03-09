@@ -111,7 +111,7 @@ class FileUploadStartView(PermissionRequiredMixin, View):
 
         # Set the presigned upload and completion URLs on response paylod
         url_kwargs = {"attachment_id": str(attachment.id)}
-        serialized_data: dict = AttachmentSerializer(attachment).data
+        serialized_data: dict = {}
         if isinstance(default_storage, FileSystemStorage):
             serialized_data['upload_presigned_url'] = reverse("attachment_upload_stream", kwargs=url_kwargs)
             serialized_data['upload_complete_url'] = reverse("attachment_upload_complete", kwargs=url_kwargs)
@@ -150,7 +150,7 @@ class FileUploadCompleteView(FileUploadStreamView):
     def post(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.update(upload_completed_on=timezone.now())
-        return JsonResponse(instance.get_context_data())
+        return JsonResponse(AttachmentSerializer(instance).data)
 
 
 class FileDownloadView(PermissionRequiredMixin, SingleObjectMixin, View):
