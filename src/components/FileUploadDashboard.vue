@@ -7,14 +7,16 @@
       :selectable="props.selectable"
     ></file-upload-direct>
     <div class="table-responsive">
-      <table class="table table-bordered" v-if="files.length > 0">
+      <table class="table" v-if="files.length > 0">
         <thead>
-          <th v-if="props.selectable"></th>
-          <th>Filename</th>
-          <th>Uploaded By</th>
-          <th>Uploaded On</th>
-          <th>File Size</th>
-          <th>Actions</th>
+          <tr>
+            <th v-if="props.selectable"></th>
+            <th>Filename</th>
+            <th>Uploaded By</th>
+            <th>Uploaded On</th>
+            <th>File Size</th>
+            <th>Actions</th>
+          </tr>
         </thead>
         <tbody>
           <tr v-for="file in files" :class="selected.includes(file.id) ? ['table-primary'] : []">
@@ -34,7 +36,7 @@
             <td>
               <div class="d-flex gap-2">
                 <a target="_blank" :href="file.view_url">
-                  <button class="btn btn-sm btn-outline-secondary">View</button>
+                  <button class="btn btn-sm btn-secondary">View</button>
                 </a>
                 <a :href="file.download_url">
                   <button class="btn btn-sm btn-secondary">Download</button>
@@ -62,7 +64,6 @@ const { post } = useFetch()
 defineOptions({ inheritAttrs: false })
 
 const props = defineProps({
-  fieldId: String,
   fieldName: String,
   queryset_json: String,
   selectable: {
@@ -81,7 +82,7 @@ onMounted(() => {
 })
 
 const deleteFile = async file => {
-  await post(file.delete_url)
-  files.value = files.value.filter(f => f.id != file.id)
+  const response = await post(file.delete_url)
+  if (response.ok) files.value = files.value.filter(f => f.id != file.id)
 }
 </script>

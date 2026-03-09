@@ -16,7 +16,6 @@ class DirectUploadFileInput(forms.SelectMultiple):
 
     def get_context(self, name, value, attrs):
         context: dict = super().get_context(name, value, attrs)
-        context["widget"]["id"] = uuid4()
         context["upload_start_url"] = reverse("attachment_upload_start")
         context["storage_backend"] = ("filesystem" if isinstance(default_storage, FileSystemStorage) else "s3")
         context["queryset_json"] = json.dumps([AttachmentSerializer(f).data for f in self.queryset.all()])
@@ -24,6 +23,14 @@ class DirectUploadFileInput(forms.SelectMultiple):
 
 
 class DirectUploadFileField(forms.ModelMultipleChoiceField):
+    """
+    A field that allows for direct file uploads to S3 in form submissions.
+
+    In order for the `DirectUploadFileField` to work properly in `ModelForm` instances,
+    make sure that ForeignKey relationships between objects and attachments originate
+    from the object and point to the attachment, not the other way around.
+    """
+
     widget = DirectUploadFileInput
 
     def __init__(

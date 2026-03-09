@@ -1,27 +1,27 @@
 import json
 import re
-from django.db.models import ManyToManyRel
-from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView, UpdateView
-from app.constants import SAMPLE_OBJECT_PK_URL_KWARG
-from app.forms import SampleObjectCreateForm, SampleObjectEditForm
-from app.models import Attachment, SampleObject
-from django.conf import settings
-from app.serializers import AttachmentSerializer
+
 from common.constants import ATTACHMENT_PK_URL_KWARG
 from common.mixins import PermissionRequiredMixin, RequestMixin
 from common.permissions import PermissionType
 from common.s3 import create_presigned_upload_url
+from django.conf import settings
 from django.core.files.storage import default_storage
 from django.core.files.storage.filesystem import FileSystemStorage
 from django.db import transaction
 from django.http import JsonResponse
 from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404
+from django.urls import reverse, reverse_lazy
 from django.utils import timezone
-from django.urls import reverse
 from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import DetailView, SingleObjectMixin
+from django.views.generic.edit import CreateView, UpdateView
+
+from app.constants import SAMPLE_OBJECT_PK_URL_KWARG
+from app.forms import SampleObjectCreateForm, SampleObjectEditForm
+from app.models import Attachment, SampleObject
+from app.serializers import AttachmentSerializer
 
 
 class DashboardView(PermissionRequiredMixin, TemplateView):
