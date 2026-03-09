@@ -1,4 +1,5 @@
 from common.constants import ATTACHMENT_PK_URL_KWARG
+from django.utils.formats import date_format
 from common.serializers import UserSerializer
 from django.urls import reverse
 from rest_framework import serializers
@@ -24,6 +25,8 @@ class AttachmentSerializer(serializers.ModelSerializer):
         rep["delete_url"] = reverse('attachment_delete', kwargs={
             ATTACHMENT_PK_URL_KWARG: instance.id,
         })
+        rep["created_on"] = date_format(instance.created_on, format="DATETIME_FORMAT")
+        rep["upload_completed_on"] = date_format(instance.upload_completed_on, format="DATETIME_FORMAT")
         if instance.file.storage.exists(instance.file.name):
             rep["size"] = instance.file.size
             rep["path"] = instance.file.name

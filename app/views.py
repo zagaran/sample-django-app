@@ -110,8 +110,8 @@ class FileUploadStartView(PermissionRequiredMixin, View):
         attachment.save()
 
         # Set the presigned upload and completion URLs on response paylod
-        url_kwargs = {"attachment_id": str(attachment.id)}
-        serialized_data: dict = {}
+        serialized_data = {}
+        url_kwargs = {ATTACHMENT_PK_URL_KWARG: str(attachment.id)}
         if isinstance(default_storage, FileSystemStorage):
             serialized_data['upload_presigned_url'] = reverse("attachment_upload_stream", kwargs=url_kwargs)
             serialized_data['upload_complete_url'] = reverse("attachment_upload_complete", kwargs=url_kwargs)
