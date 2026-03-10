@@ -83,7 +83,6 @@
       <div class="card-body">
         <h3 class="card-title">All Attachments</h3>
         <file-upload-dashboard
-          field-name="field-name"
           queryset_json="{{ attachments|escape }}"
           storage-backend="{{ storage_backend }}"
           upload-start-url="{% url 'attachment_upload_start' %}"

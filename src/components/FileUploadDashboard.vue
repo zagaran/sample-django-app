@@ -4,13 +4,13 @@
       v-bind="$attrs"
       v-model:files="files"
       v-model:selected="selected"
-      :selectable="props.selectable"
+      :selectable="selectable"
     ></file-upload-direct>
     <div class="table-responsive">
       <table class="table" v-if="files.length > 0">
         <thead>
           <tr>
-            <th v-if="props.selectable"></th>
+            <th v-if="selectable"></th>
             <th>Filename</th>
             <th>Uploaded By</th>
             <th>Uploaded On</th>
@@ -20,7 +20,7 @@
         </thead>
         <tbody>
           <tr v-for="file in files" :class="selected.includes(file.id) ? ['table-primary'] : []">
-            <td v-if="props.selectable">
+            <td v-if="selectable && fieldName">
               <input
                 type="checkbox"
                 v-model="selected"

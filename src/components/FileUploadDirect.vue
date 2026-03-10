@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <div ref="container" />
-  </div>
+  <div ref="container" />
 </template>
 
 <script setup>
