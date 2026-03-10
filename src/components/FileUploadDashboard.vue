@@ -19,7 +19,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="file in files" :class="selected.includes(file.id) ? ['table-primary'] : []">
+          <tr v-for="file in files" :class="tableRowClass(file)">
             <td v-if="selectable && fieldName">
               <input
                 type="checkbox"
@@ -80,6 +80,14 @@ onMounted(() => {
     files.value = JSON.parse(props.queryset_json)
   }
 })
+
+const tableRowClass = file => {
+  const classList = []
+  if (selected.value.includes(file.id)) {
+    classList.push(props.selectable ? "table-primary" : "table-info")
+  }
+  return classList
+}
 
 const deleteFile = async file => {
   const response = await post(file.delete_url)
