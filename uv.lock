@@ -497,7 +497,6 @@ dev = [
     { name = "django-stubs", specifier = ">=5.2.7" },
     { name = "ipdb", specifier = ">=0.13.13" },
     { name = "pre-commit", specifier = ">=4.3.0" },
-    { name = "ruff", specifier = ">=0.14.3" },
     { name = "setuptools", specifier = ">=80.9.0" },
 ]
 
