@@ -48,5 +48,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@vue/language-server": "^3.2.5",
+    "@vue/typescript-plugin": "^3.2.5",
+    "typescript-language-server": "^5.1.3"
   }
 }
