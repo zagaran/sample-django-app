@@ -20,7 +20,7 @@ RUN npm run vue-build
 
 # ---------------------------------- Python ---------------------------------- #
 
-FROM python:3.11.4-slim-bookworm
+FROM debian:trixie-slim
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # Set working directory
