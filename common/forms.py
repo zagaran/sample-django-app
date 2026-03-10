@@ -32,4 +32,4 @@ class ActionFormMixin:
 
     @property
     def action_title_formatted(self):
-        return self.action_title.format(item=self.instance)
+        return self.action_title.format(instance=self.instance)

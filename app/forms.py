@@ -38,4 +38,4 @@ class SampleObjectCreateForm(SampleObjectBaseForm):
 
 
 class SampleObjectEditForm(SampleObjectBaseForm):
-    action_title = "Edit {item}"
+    action_title = "Edit {instance}"
