@@ -1,3 +1,4 @@
+import mimetypes
 import os
 import uuid
 
@@ -88,10 +89,13 @@ class UploadFile(TimestampedModel):
     upload_completed_on = models.DateTimeField(null=True)
     deleted_on = models.DateTimeField(null=True)
 
-    def download_file(self) -> FileResponse | HttpResponse:
+    def get_download_url(self, download_on_open: bool = True):
         extension = get_attachment_extension(self.file.name)
         filename = f"{remove_attachment_extension(self.name)}.{extension}".replace('"', '')
+        content_type, _ = mimetypes.guess_type(self.file.name)
         s3_filename = self.file.name
+
+        content_disposition = "attachment" if download_on_open else "inline"
 
         try:
 
@@ -103,29 +107,28 @@ class UploadFile(TimestampedModel):
                     Params={
                         "Bucket": str(s3_bucket_name),
                         "Key": s3_filename,
-                        "ResponseContentDisposition": f'attachment; filename="{filename}"',
+                        "ResponseContentDisposition": f'{content_disposition}; filename="{filename}"',
+                        "ResponseContentType": content_type or "application/octet-stream",
                     },
                     ExpiresIn=900
                 )
                 return HttpResponseRedirect(url)
             else:
-                return FileResponse(self.file.open(), as_attachment=True, filename=filename)
+                return FileResponse(
+                    self.file.open(),
+                    as_attachment=download_on_open,
+                    filename=filename
+                )
 
-        # START_FEATURE sentry
         except Exception:
-            capture_message(f"Failed to download file ({self.id}) from S3 with path ({s3_filename})")
+            capture_message(f"Failed to get object URL from S3 for ({self}) with path ({s3_filename})")
             raise Http404()
-        # END_FEATURE sentry
+
+    def download_file(self) -> FileResponse | HttpResponse:
+        return self.get_download_url(download_on_open=True)
 
     def view_file(self) -> FileResponse | HttpResponse:
-        extension = get_attachment_extension(self.file.name)
-        filename = f"{remove_attachment_extension(self.name)}.{extension}"
-
-        # Get file directly from S3
-        if not settings.LOCALHOST:
-            return HttpResponseRedirect(self.file.url)
-        else:
-            return FileResponse(self.file.open(), as_attachment=False, filename=filename)
+        return self.get_download_url(download_on_open=False)
 
     # TODO: Should replace this with a DRF serializer
     def get_context_data(self):
