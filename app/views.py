@@ -33,7 +33,7 @@ class DashboardView(PermissionRequiredMixin, TemplateView):
         context['storage_backend'] = "s3" if settings.AWS_STORAGE_BUCKET_NAME else "local"
         context['attachments'] = json.dumps([
             AttachmentSerializer(attachment).data
-            for attachment in self.request.user.files.filter(deleted_on=None)
+            for attachment in Attachment.objects.filter(deleted_on=None)
         ])
         context['sample_objects'] = SampleObject.objects.prefetch_related('attachments')
         return context

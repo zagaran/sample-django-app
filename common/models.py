@@ -96,12 +96,12 @@ class UploadFile(TimestampedModel):
         try:
 
             # Download file directly from S3
-            if not settings.LOCALHOST:
+            if (s3_bucket_name := settings.AWS_STORAGE_BUCKET_NAME):
                 s3 = boto3.client('s3')
                 url = s3.generate_presigned_url(
                     'get_object',
                     Params={
-                        "Bucket": str(os.environ.get('AWS_STORAGE_BUCKET_NAME')),
+                        "Bucket": str(s3_bucket_name),
                         "Key": s3_filename,
                         "ResponseContentDisposition": f'attachment; filename="{filename}"',
                     },
