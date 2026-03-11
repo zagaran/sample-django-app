@@ -164,14 +164,8 @@ resource "aws_iam_role_policy" "ecs_task_role_policy" {
 # ------------------------------ Github Actions ------------------------------ #
 
 
-data "aws_iam_openid_connect_provider" "github" {
-  count = local.enable_github_oidc ? 1 : 0
-  arn   = var.github_oidc_provider_arn
-}
-
 resource "aws_iam_role" "github_actions_deployment_role" {
-  count = local.enable_github_oidc ? 1 : 0
-  name  = "${local.app_env_name}-github-actions-deployment-role"
+  name = "${local.app_env_name}-github-actions-deployment-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -179,7 +173,7 @@ resource "aws_iam_role" "github_actions_deployment_role" {
       {
         Effect = "Allow",
         Principal = {
-          Federated = data.aws_iam_openid_connect_provider.github[0].arn
+          Federated = aws_iam_openid_connect_provider.github.arn
         },
         Action = "sts:AssumeRoleWithWebIdentity",
         Condition = {
@@ -198,7 +192,6 @@ resource "aws_iam_role" "github_actions_deployment_role" {
 }
 
 resource "aws_iam_role_policy_attachment" "github_actions_admin_access" {
-  count      = local.enable_github_oidc ? 1 : 0
-  role       = "${local.app_env_name}-github-actions-deployment-role"
+  role       = aws_iam_role.github_actions_deployment_role.id
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }

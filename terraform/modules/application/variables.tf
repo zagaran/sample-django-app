@@ -63,11 +63,6 @@ variable "redis_engine_version" {
   default = "7.1"
 }
 
-variable "github_oidc_provider_arn" {
-  type    = string
-  default = ""
-}
-
 variable "fargate_web_cpu" {
   type    = number
   default = 1024

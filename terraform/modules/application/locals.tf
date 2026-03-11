@@ -22,8 +22,6 @@ locals {
     aws_ecs_cluster.cluster.name
   )
 
-  enable_github_oidc = var.github_oidc_provider_arn != null && var.github_oidc_provider_arn != ""
-
   ecs_infrastructure_secrets = [
     for setting in keys(jsondecode(nonsensitive(
       aws_secretsmanager_secret_version.web_infrastructure.secret_string,
