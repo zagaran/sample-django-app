@@ -1,7 +1,6 @@
 import json
 import re
 
-from common.constants import ATTACHMENT_PK_URL_KWARG
 from common.mixins import PermissionRequiredMixin, RequestMixin
 from common.permissions import PermissionType
 from common.s3 import create_presigned_upload_url
@@ -20,14 +19,19 @@ from django.views.generic.edit import CreateView, UpdateView
 
 from app.constants import SAMPLE_OBJECT_PK_URL_KWARG
 from app.forms import SampleObjectCreateForm, SampleObjectEditForm
+
+# START_FEATURE direct_upload
+from app.constants import ATTACHMENT_PK_URL_KWARG
 from app.models import Attachment, SampleObject
 from app.serializers import AttachmentSerializer
+# END_FEATURE direct_upload
 
 
 class DashboardView(PermissionRequiredMixin, TemplateView):
     permission_required = PermissionType.dashboard
     template_name = "app/dashboard.html"
 
+    # START_FEATURE direct_upload
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['storage_backend'] = "s3" if settings.AWS_STORAGE_BUCKET_NAME else "local"
@@ -37,6 +41,7 @@ class DashboardView(PermissionRequiredMixin, TemplateView):
         ])
         context['sample_objects'] = SampleObject.objects.prefetch_related('attachments')
         return context
+    # END_FEATURE direct_upload
 
 
 class SampleObjectCreateView(PermissionRequiredMixin, RequestMixin, CreateView):
@@ -54,6 +59,7 @@ class SampleObjectDetailView(PermissionRequiredMixin, DetailView):
     pk_url_kwarg = SAMPLE_OBJECT_PK_URL_KWARG
     context_object_name = "sample_object"
 
+    # START_FEATURE direct_upload
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['storage_backend'] = "s3" if settings.AWS_STORAGE_BUCKET_NAME else "local"
@@ -62,6 +68,7 @@ class SampleObjectDetailView(PermissionRequiredMixin, DetailView):
             for attachment in self.get_object().attachments.filter(deleted_on=None)
         ])
         return context
+    # END_FEATURE direct_upload
 
 
 class SampleObjectEditView(PermissionRequiredMixin, RequestMixin, UpdateView):

@@ -9,7 +9,10 @@ from common.forms import ActionFormMixin, CrispyFormMixin
 
 class SampleObjectBaseForm(CrispyFormMixin, ActionFormMixin, forms.ModelForm):
     request: HttpRequest
+
+    # START_FEATURE direct_upload
     attachments = DirectUploadFileField(queryset=Attachment.objects.filter(deleted_on=None), required=False)
+    # END_FEATURE direct_upload
 
     class Meta:
         model = SampleObject
@@ -21,7 +24,9 @@ class SampleObjectBaseForm(CrispyFormMixin, ActionFormMixin, forms.ModelForm):
             "name",
             "description"
         ),
+        # START_FEATURE direct_upload
         "attachments"
+        # END_FEATURE direct_upload
     )
 
     def __init__(self, request: HttpRequest, *args, **kwargs):

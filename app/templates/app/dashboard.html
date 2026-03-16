@@ -37,7 +37,9 @@
                 <th>Name</th>
                 <th>Created By</th>
                 <th>Created On</th>
+                {# START_FEATURE direct_upload #}
                 <th>Attachments</th>
+                {# END_FEATURE direct_upload #}
                 <th>Actions</th>
               </tr>
             </thead>
@@ -47,6 +49,7 @@
                 <td>{{ sample_object.name }}</td>
                 <td>{{ sample_object.created_by }}</td>
                 <td>{{ sample_object.created_on }}</td>
+                {# START_FEATURE direct_upload #}
                 <td>
                   {% for attachment in sample_object.get_attachments %}
                   {% if not attachment.deleted_on %}
@@ -64,6 +67,7 @@
                     </a>
                   </div>
                 </td>
+                {# END_FEATURE direct_upload #}
               </tr>
               {% endfor %}
             </tbody>

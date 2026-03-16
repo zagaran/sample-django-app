@@ -1,3 +1,4 @@
+# START_FEATURE direct_upload
 import os
 
 
@@ -9,3 +10,4 @@ def get_attachment_extension(filename: str):
 def remove_attachment_extension(filename: str):
     name, _ = os.path.splitext(filename)
     return name
+# END_FEATURE direct_upload

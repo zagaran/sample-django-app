@@ -1,5 +1,4 @@
 import mimetypes
-import os
 import uuid
 
 from django.contrib.auth.models import AbstractUser
@@ -10,11 +9,11 @@ import boto3
 
 # START_FEATURE direct_upload
 from django.urls import reverse
-from common.constants import ATTACHMENT_PK_URL_KWARG
 from django.template.defaultfilters import filesizeformat
+from common.helpers import get_attachment_extension, remove_attachment_extension
+from app.constants import ATTACHMENT_PK_URL_KWARG
 # END_FEATURE direct_upload
 
-from common.helpers import get_attachment_extension, remove_attachment_extension
 from common.managers import UserManager
 
 # START_FEATURE sentry

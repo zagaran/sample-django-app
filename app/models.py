@@ -5,7 +5,10 @@ from common.models import TimestampedModel, UploadFile, User
 
 class SampleObject(TimestampedModel):
     created_by = models.ForeignKey(User, related_name="sample_objects", on_delete=models.PROTECT)
+
+    # START_FEATURE direct_upload
     attachments = models.ManyToManyField("Attachment", related_name="sample_objects")
+    # END_FEATURE direct_upload
 
     name = models.CharField(max_length=512, unique=True)
     description = models.TextField(default="", blank=True)

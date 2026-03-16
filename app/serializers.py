@@ -1,4 +1,5 @@
-from common.constants import ATTACHMENT_PK_URL_KWARG
+# START_FEATURE direct_upload
+from app.constants import ATTACHMENT_PK_URL_KWARG
 from django.utils.formats import date_format
 from common.serializers import UserSerializer
 from django.urls import reverse
@@ -31,3 +32,4 @@ class AttachmentSerializer(serializers.ModelSerializer):
             rep["size"] = instance.file.size
             rep["path"] = instance.file.name
         return rep
+# END_FEATURE direct_upload
