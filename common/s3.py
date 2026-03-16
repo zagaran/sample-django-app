@@ -1,4 +1,5 @@
-import boto3 
+# START_FEATURE direct_upload
+import boto3
 
 from django.conf import settings
 
@@ -38,3 +39,4 @@ def create_presigned_upload_url(object_name: str, expiration: int = 3600):
     else:
         raise Exception(f"Cannot create a presigned upload URL for {type(default_storage)} storage")
 
+# END_FEATURE direct_upload
