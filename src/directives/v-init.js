@@ -1,3 +1,4 @@
+// START_FEATURE vue
 import "vue"
 
 function set(context, path, value) {
@@ -55,3 +56,4 @@ const VInit = [
 ]
 
 export default VInit
+// END_FEATURE vue

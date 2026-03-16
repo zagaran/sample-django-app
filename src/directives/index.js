@@ -1,3 +1,4 @@
+// START_FEATURE vue
 const modules = import.meta.glob("./*.js", { eager: true })
 const components = {}
 
@@ -8,3 +9,4 @@ for (const path in modules) {
 }
 
 export default components
+// END_FEATURE vue

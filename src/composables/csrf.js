@@ -1,3 +1,4 @@
+// START_FEATURE vue
 import { onMounted, ref } from "vue"
 
 export function useCSRF() {
@@ -7,3 +8,4 @@ export function useCSRF() {
   })
   return { csrf }
 }
+// END_FEATURE vue

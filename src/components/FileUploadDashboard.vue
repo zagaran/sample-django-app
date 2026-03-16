@@ -1,3 +1,4 @@
+<!-- START_FEATURE vue -->
 <template>
   <div class="d-flex flex-column gap-4">
     <file-upload-direct
@@ -94,3 +95,4 @@ const deleteFile = async file => {
   if (response.ok) files.value = files.value.filter(f => f.id != file.id)
 }
 </script>
+<!-- END_FEATURE vue -->

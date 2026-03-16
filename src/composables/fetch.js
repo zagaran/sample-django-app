@@ -1,3 +1,4 @@
+// START_FEATURE vue
 import { useCSRF } from "./csrf.js"
 
 export function useFetch() {
@@ -60,3 +61,4 @@ export function useFetch() {
   }
   return { post, get, poll }
 }
+// END_FEATURE vue

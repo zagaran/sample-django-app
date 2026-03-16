@@ -1,3 +1,4 @@
+# START_FEATURE vue
 import re
 from django.template.defaultfilters import register
 
@@ -12,3 +13,4 @@ def to_v_init_arg(model_name):
     camel_case_re = re.compile(r'(?<!^)(?=[A-Z])')
     v_init_arg = camel_case_re.sub('-', v_init_arg).lower()
     return v_init_arg
+# END_FEATURE vue

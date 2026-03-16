@@ -1,3 +1,4 @@
+<!-- START_FEATURE vue -->
 <template>
   <div ref="container" />
 </template>
@@ -132,3 +133,4 @@ onMounted(() => {
   return uppy
 })
 </script>
+<!-- END_FEATURE vue -->

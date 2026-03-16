@@ -1,3 +1,4 @@
+// START_FEATURE vue
 import components from "./components"
 import directives from "./directives"
 
@@ -24,3 +25,4 @@ const MainVueApp = {
 export * from "./directives"
 export * from "./components"
 export default MainVueApp
+// END_FEATURE vue
