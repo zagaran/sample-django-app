@@ -1,3 +1,4 @@
+# START_FEATURE ecs
 data "aws_ses_domain_identity" "ses_domain_identity" {
   domain = var.data_email_domain
 }
@@ -25,3 +26,4 @@ resource "aws_ses_identity_policy" "allow_ecs" {
   policy   = data.aws_iam_policy_document.ses_domain_identity_policy.json
   name     = "${local.app_env_name}-Allow-ECS"
 }
+# END_FEATURE ecs

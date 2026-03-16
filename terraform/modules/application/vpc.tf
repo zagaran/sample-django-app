@@ -1,3 +1,4 @@
+# START_FEATURE ecs
 data "aws_region" "current" {}
 
 resource "aws_vpc" "vpc" {
@@ -42,3 +43,4 @@ resource "aws_subnet" "public_subnet_b" {
   availability_zone       = "us-east-1b"
   map_public_ip_on_launch = true
 }
+# END_FEATURE ecs

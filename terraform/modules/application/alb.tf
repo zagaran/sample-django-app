@@ -1,3 +1,4 @@
+# START_FEATURE ecs
 resource "aws_lb" "alb" {
   name                       = "${local.app_env_name}-alb"
   enable_deletion_protection = var.load_balancer_deletion_protection
@@ -121,3 +122,4 @@ resource "aws_lb_listener_rule" "target_group_forwarding" {
     }
   }
 }
+# END_FEATURE ecs

@@ -1,3 +1,4 @@
+# START_FEATURE ecs
 resource "aws_security_group" "web" {
   name   = "${local.app_env_name}-web"
   vpc_id = aws_vpc.vpc.id
@@ -124,3 +125,4 @@ resource "aws_security_group" "redis" {
     create_before_destroy = true
   }
 }
+# END_FEATURE ecs

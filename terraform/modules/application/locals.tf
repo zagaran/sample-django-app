@@ -1,3 +1,4 @@
+# START_FEATURE ecs
 data "aws_caller_identity" "current" {}
 
 locals {
@@ -45,3 +46,4 @@ locals {
   ecs_secrets        = concat(local.ecs_infrastructure_secrets, local.ecs_config_secrets)
   ecs_worker_command = split(" ", "uv run celery -A config worker --beat --scheduler redbeat.RedBeatScheduler --loglevel=INFO -E")
 }
+# END_FEATURE ecs

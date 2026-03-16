@@ -1,3 +1,4 @@
+# START_FEATURE ecs
 resource "random_password" "db_password" {
   length  = 50
   special = false
@@ -32,3 +33,4 @@ resource "aws_db_subnet_group" "database" {
     aws_subnet.public_subnet_b.id
   ]
 }
+# END_FEATURE ecs

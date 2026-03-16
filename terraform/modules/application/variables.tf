@@ -1,3 +1,4 @@
+# START_FEATURE ecs
 # --------------------------------- REQUIRED --------------------------------- #
 
 
@@ -112,3 +113,4 @@ variable "default_from_email" {
   type    = string
   default = "noreply@test.com"
 }
+# END_FEATURE ecs

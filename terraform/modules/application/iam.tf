@@ -1,3 +1,4 @@
+# START_FEATURE ecs
 data "aws_iam_policy_document" "ecs_assume_role_policy" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -195,3 +196,4 @@ resource "aws_iam_role_policy_attachment" "github_actions_admin_access" {
   role       = aws_iam_role.github_actions_deployment_role.id
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
+# END_FEATURE ecs

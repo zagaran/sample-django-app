@@ -1,3 +1,4 @@
+# START_FEATURE ecs
 # --------------------------------- REQUIRED --------------------------------- #
 
 
@@ -8,3 +9,5 @@ variable "environment" {
 variable "application_domain" {
   type = string
 }
+
+# END_FEATURE ecs

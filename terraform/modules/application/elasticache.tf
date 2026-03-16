@@ -1,3 +1,4 @@
+# START_FEATURE ecs
 resource "aws_elasticache_replication_group" "redis" {
   replication_group_id        = "${local.app_env_name}-redis"
   description                 = "Redis replication group"
@@ -32,3 +33,4 @@ resource "aws_cloudwatch_log_group" "redis_log_group" {
   name              = "${local.app_env_name}-redis"
   retention_in_days = 90
 }
+# END_FEATURE ecs

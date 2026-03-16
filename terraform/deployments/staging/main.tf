@@ -1,3 +1,4 @@
+# START_FEATURE ecs
 terraform {
 
   backend "s3" {
@@ -104,3 +105,4 @@ output "s3_bucket_name" {
   description = "The name of the S3 bucket"
   value       = module.staging.s3_bucket_name
 }
+# END_FEATURE ecs

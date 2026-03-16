@@ -1,3 +1,4 @@
+# START_FEATURE ecs
 terraform {
 
   backend "s3" {
@@ -30,3 +31,4 @@ module "shared" {
   environment     = "shared"
   application_url = "staging-deploy.zagaran.com"
 }
+# END_FEATURE ecs

@@ -1,3 +1,4 @@
+# START_FEATURE ecs
 data "aws_route53_zone" "domain" {
   name = var.application_domain
 }
@@ -9,3 +10,5 @@ resource "aws_route53_record" "ses_verification" {
   ttl     = 600
   records = [aws_ses_domain_identity.ses_domain_identity.verification_token]
 }
+
+# END_FEATURE ecs

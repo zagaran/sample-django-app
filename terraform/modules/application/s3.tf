@@ -1,3 +1,4 @@
+# START_FEATURE ecs
 resource "aws_s3_bucket" "bucket" {
   bucket = "${local.app_env_name}-${var.application_url}"
 
@@ -48,3 +49,4 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "bucket" {
     }
   }
 }
+# END_FEATURE ecs

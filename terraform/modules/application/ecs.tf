@@ -1,3 +1,4 @@
+# START_FEATURE ecs
 # --------------------------------- Fargate ---------------------------------- #
 
 
@@ -153,3 +154,4 @@ resource "aws_ecs_service" "worker" {
     assign_public_ip = true
   }
 }
+# END_FEATURE ecs

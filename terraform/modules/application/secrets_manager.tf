@@ -1,3 +1,4 @@
+# START_FEATURE ecs
 data "aws_secretsmanager_secret" "web_config" {
   name = "${local.app_env_name}-web-config"
 }
@@ -33,3 +34,4 @@ resource "random_password" "app_secret_key" {
   length  = 32
   special = false
 }
+# END_FEATURE ecs
