@@ -23,14 +23,12 @@ RUN npm run vue-build
 # END_FEATURE vue
 # ---------------------------------- Python ---------------------------------- #
 
-FROM debian:trixie-slim
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+FROM python:3.12.13-slim-trixie
 
 # Set working directory
 WORKDIR /app
 
-ADD pyproject.toml /app/pyproject.toml
-ADD uv.lock /app/uv.lock
+ADD requirements.txt /app/requirements.txt
 
 # Install system and python dependencies
 RUN set -ex \
@@ -48,23 +46,21 @@ RUN set -ex \
       htop \
     " \
     && apt-get update \
-    && apt-get install -y $buildDeps $deps --no-install-recommends
-
-# Install web app dependencies
-RUN uv sync --frozen --no-install-project
-
-# Remove build dependencies
-RUN set -ex \
+    && apt-get install -y $buildDeps $deps --no-install-recommends \
+    && pip install --no-cache-dir -r /app/requirements.txt \
     && apt-get purge -y --auto-remove $buildDeps \
        $(! command -v gpg > /dev/null || echo 'gnupg dirmngr') \
     && rm -rf /var/lib/apt/lists/*
 
-ENV PATH="/app/.venv/bin:$PATH"
+ENV VIRTUAL_ENV /env
+ENV PATH /env/bin:$PATH
 
+# START_FEATURE vue
 # Copy Node dependencies from node-deps stage
 COPY --from=node-deps /app/node_modules /app/node_modules
 COPY --from=node-deps /app/package*.json /app/
 COPY --from=node-deps /app/static/js/dist/ /app/static/js/dist/
+# END_FEATURE vue
 
 # Copy application files and .env.example
 COPY . /app/
@@ -72,10 +68,12 @@ COPY ./config/.env.example /app/config/.env
 COPY .bashrc /root/
 
 # Compile static assets
-RUN uv run --no-sync manage.py compilescss
-RUN uv run --no-sync manage.py collectstatic --noinput
+# START_FEATURE sass_bootstrap
+RUN python manage.py compilescss
+# END_FEATURE sass_bootstrap
+RUN python manage.py collectstatic --noinput
 RUN rm /app/config/.env
 
 EXPOSE 8080
-CMD ["uv", "run", "--frozen", "gunicorn", "--bind", ":8080", "--workers", "15", "config.wsgi:application"]
+CMD ["gunicorn", "--bind", ":8080", "--workers", "15", "config.wsgi:application"]
 # END_FEATURE ecs

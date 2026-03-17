@@ -1,3 +1,4 @@
+// START_FEATURE vue
 import { defineConfig } from "vite"
 import vue from "@vitejs/plugin-vue"
 import { glob } from "glob"
@@ -52,3 +53,4 @@ export default defineConfig(({ mode }) => {
     },
   }
 })
+// END_FEATURE vue

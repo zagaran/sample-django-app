@@ -3,6 +3,7 @@ django-environ
 django-extensions>=3.2
 requests
 psycopg2
+whitenoise
 
 ####### OPTIONAL FEATURES #######
 
