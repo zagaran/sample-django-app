@@ -1,3 +1,5 @@
+# START_FEATURE ecs
+# START_FEATURE vue
 # ----------------------------------- NPM ------------------------------------ #
 
 FROM node:24-slim AS node-deps
@@ -18,6 +20,7 @@ RUN npm install && npm cache clean --force
 COPY . /app/
 RUN npm run vue-build
 
+# END_FEATURE vue
 # ---------------------------------- Python ---------------------------------- #
 
 FROM debian:trixie-slim
@@ -75,3 +78,4 @@ RUN rm /app/config/.env
 
 EXPOSE 8080
 CMD ["uv", "run", "--frozen", "gunicorn", "--bind", ":8080", "--workers", "15", "config.wsgi:application"]
+# END_FEATURE ecs
