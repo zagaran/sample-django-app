@@ -35,6 +35,8 @@ def sample_task():
 
 
 SCHEDULED_TASKS = {
-    TaskFrequency.five_minutes: {sample_task},
+    TaskFrequency.five_minutes: {
+        "sample_task": sample_task,
+    },
     TaskFrequency.daily: {},
 }

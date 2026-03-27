@@ -54,7 +54,7 @@ def deploy(args):
         logging.info("Skipping database migration")
     else:
         # Stop worker before running migrations
-        stop_worker_service(env)
+        stop_worker_service(args.env)
         # Run and wait for migrations
         run_migrations(args.env)
 
