@@ -23,14 +23,15 @@ class UserActionTrackingMiddleware:
         
         url_name = None
         if request.resolver_match:
-            url_name = request.resolver_match.url_name
+            url_name = request.resolver_match.view_name
         
         if url_name in settings.USER_TRACKING_EXEMPT_ROUTES:
             return
-        
+
+        max_url_length = UserAction._meta.get_field('url').max_length
         UserAction.objects.create(
             user=user,
-            url=request.build_absolute_uri(),
+            url=request.build_absolute_uri()[0:max_url_length], # truncate URL to max length of UserAction
             method=request.method,
             url_name=url_name,
             status_code=response.status_code,
