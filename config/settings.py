@@ -130,6 +130,10 @@ MIDDLEWARE = [
     "common.middleware.MaintenanceModeMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    
+    # START_FEATURE django_social
+    "social_django.middleware.SocialAuthExceptionMiddleware",
+    # END_FEATURE django_social
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # START_FEATURE user_action_tracking
@@ -273,6 +277,7 @@ AUTHENTICATION_BACKENDS = [
 
 LOGIN_URL = "index"
 LOGIN_REDIRECT_URL = "index"
+LOGIN_ERROR_URL = "index"
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = env("GOOGLE_OAUTH2_KEY")
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env("GOOGLE_OAUTH2_SECRET")
