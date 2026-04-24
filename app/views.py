@@ -35,10 +35,10 @@ class DashboardView(PermissionRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['storage_backend'] = "s3" if settings.AWS_STORAGE_BUCKET_NAME else "local"
-        context['attachments'] = json.dumps([
+        context['attachments'] = [
             AttachmentSerializer(attachment).data
             for attachment in Attachment.objects.filter(deleted_on=None)
-        ])
+        ]
         context['sample_objects'] = SampleObject.objects.prefetch_related('attachments')
         return context
     # END_FEATURE direct_upload
