@@ -66,7 +66,7 @@ defineOptions({ inheritAttrs: false })
 
 const props = defineProps({
   fieldName: String,
-  queryset_json: String,
+  queryset_json_script: String,
   selectable: {
     type: Boolean,
     default: false,
@@ -77,8 +77,10 @@ const files = defineModel("files", { type: Array, default: [] })
 const selected = defineModel("selected", { type: Array, default: [] })
 
 onMounted(() => {
-  if (props.queryset_json) {
-    files.value = JSON.parse(props.queryset_json)
+  if (props.queryset_json_script) {
+    const script_element = document.getElementById(props.queryset_json_script)
+    files.value = JSON.parse(script_element.innerHTML)
+    console.log(files.value)
   }
 })
 

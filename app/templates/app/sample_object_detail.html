@@ -42,7 +42,7 @@
       <h4 class="card-title">Attachments</h4>
       <file-upload-dashboard
         field-name="field-name"
-        queryset_json="{{ attachments|escape }}"
+        queryset_json="{{ attachments }}"
         storage-backend="{{ storage_backend }}"
         upload-start-url="{% url 'attachment_upload_start' %}?mtm__sample_objects={{ sample_object.id }}"
         :multiple="true"

@@ -46,6 +46,11 @@
         {% block body %}
         {% endblock %}
       </div>
+
+      {# This block is just for sending `json_script` information to vue components. (vue does not like these within vue #}
+      {# components/apps) #}
+      {% block json_script %}
+      {% endblock json_script %}
     </div>
     {# END_FEATURE bootstrap_messages #}
 
