@@ -1,4 +1,3 @@
-import json
 import re
 
 from common.mixins import PermissionRequiredMixin, RequestMixin
@@ -62,11 +61,12 @@ class SampleObjectDetailView(PermissionRequiredMixin, DetailView):
     # START_FEATURE direct_upload
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        obj = self.get_object()
         context['storage_backend'] = "s3" if settings.AWS_STORAGE_BUCKET_NAME else "local"
-        context['attachments'] = json.dumps([
+        context['attachments'] = [
             AttachmentSerializer(attachment).data
-            for attachment in self.get_object().attachments.filter(deleted_on=None)
-        ])
+            for attachment in obj.get_attachments()
+        ]
         return context
     # END_FEATURE direct_upload
 
@@ -81,24 +81,13 @@ class SampleObjectEditView(PermissionRequiredMixin, RequestMixin, UpdateView):
 
     def get_success_url(self):
         return reverse('sample-object', kwargs={
-            SAMPLE_OBJECT_PK_URL_KWARG: self.get_object().id,
+            SAMPLE_OBJECT_PK_URL_KWARG: self.object.id,
         })
 
 
 # START_FEATURE direct_upload
 class FileUploadStartView(PermissionRequiredMixin, View):
     permission_required = PermissionType.dashboard
-
-    def link_objects(self, attachment: Attachment, request):
-        for key, value in request.GET.items():
-
-            # Expect a query parameter key in this form: '<link_type>__<object>'
-            # The value should be a UUID primary key
-            if re.match(r"(\w+)__(\w+)", key):
-                link_type, obj_accessor = key.split("__")
-                if link_type == "mtm":
-                    if (accessor := getattr(attachment, obj_accessor)):
-                        accessor.add(get_object_or_404(accessor.model, pk=value))
 
     @transaction.atomic
     def post(self, request, *args, **kwargs):
@@ -109,7 +98,6 @@ class FileUploadStartView(PermissionRequiredMixin, View):
             user=request.user,
             name=attachment_name,
         )
-        self.link_objects(attachment, request)
 
         # Generate S3 path for file
         storage_path = Attachment._meta.get_field('file').generate_filename(attachment, attachment_name)
@@ -154,9 +142,22 @@ class FileUploadStreamView(PermissionRequiredMixin, SingleObjectMixin, View):
 class FileUploadCompleteView(FileUploadStreamView):
     permission_required = PermissionType.dashboard
 
+    def link_objects(self, attachment: Attachment, request):
+        for key, value in request.GET.items():
+
+            # Expect a query parameter key in this form: '<link_type>__<object>'
+            # The value should be a UUID primary key
+            if re.match(r"(\w+)__(\w+)", key):
+                link_type, obj_accessor = key.split("__")
+                if link_type == "mtm":
+                    if (accessor := getattr(attachment, obj_accessor)):
+                        accessor.add(get_object_or_404(accessor.model, pk=value))
+
+    @transaction.atomic
     def post(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.update(upload_completed_on=timezone.now())
+        self.link_objects(instance, request)
         return JsonResponse(AttachmentSerializer(instance).data)
 
 

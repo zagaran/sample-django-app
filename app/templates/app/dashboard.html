@@ -1,17 +1,10 @@
 {% extends "base_templates/base.html" %}
 
 
-{# START_FEATURE sass_bootstrap #}
-{% load sass_tags %}
-{# END_FEATURE sass_bootstrap #}
-
 {% block title %}Dashboard{% endblock %}
 
 {% block head %}
 
-{# START_FEATURE sass_bootstrap #}
-  <link href="{% sass_src 'styles/pages/index.scss' %}" rel="stylesheet">
-{# END_FEATURE sass_bootstrap #}
 {% endblock %}
 
 {% block body %}
@@ -52,9 +45,7 @@
                 {# START_FEATURE direct_upload #}
                 <td>
                   {% for attachment in sample_object.get_attachments %}
-                  {% if not attachment.deleted_on %}
                   <span class="badge bg-info">{{ attachment.name }}</span>
-                  {% endif %}
                   {% endfor %}
                 </td>
                 <td>
