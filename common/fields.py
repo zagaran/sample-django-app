@@ -1,6 +1,4 @@
 # START_FEATURE direct_upload
-import json
-from uuid import uuid4
 from django import forms
 from django.core.files.storage import default_storage
 from django.core.files.storage.filesystem import FileSystemStorage
