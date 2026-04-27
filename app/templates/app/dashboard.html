@@ -87,7 +87,7 @@
       <div class="card-body">
         <h3 class="card-title">All Attachments</h3>
         <file-upload-dashboard
-          queryset_json_script="attachments"
+          :files="{{ attachments }}"
           storage-backend="{{ storage_backend }}"
           upload-start-url="{% url 'attachment_upload_start' %}"
           :multiple="true"
@@ -97,7 +97,3 @@
     {# END_FEATURE direct_upload #}
   </div>
 {% endblock %}
-
-{% block json_script %}
-{{ attachments|json_script:"attachments" }}
-{% endblock json_script %}
