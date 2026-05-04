@@ -48,7 +48,7 @@ env = environ.Env(
     DEBUG_TOOLBAR=(bool, False),
     # END_FEATURE debug_toolbar
 )
-# If ALLWED_HOSTS has been configured, then we're running on a server and
+# If ALLOWED_HOSTS has been configured, then we're running on a server and
 # can skip looking for a .env file (this assumes that .env files
 # file is only used for local development and servers use environment variables)
 if not env("ALLOWED_HOSTS"):
