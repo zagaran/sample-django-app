@@ -77,7 +77,8 @@ PRODUCTION = env("PRODUCTION")
 
 ALLOWED_HOSTS = env("ALLOWED_HOSTS")
 if LOCALHOST is True:
-    ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+    ALLOWED_HOSTS += ["127.0.0.1", "localhost"]
+    CSRF_TRUSTED_ORIGINS = [f"http://{host}" for host in ALLOWED_HOSTS] + [f"https://{host}" for host in ALLOWED_HOSTS]
 else:
     ALLOWED_HOSTS.append("localhost")
 
