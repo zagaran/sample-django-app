@@ -58,4 +58,16 @@ class Migration(migrations.Migration):
                 'abstract': False,
             },
         ),
+        migrations.CreateModel(
+            name='TaskMonitor',
+            fields=[
+                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
+                ('created_on', models.DateTimeField(auto_now_add=True)),
+                ('updated_on', models.DateTimeField(auto_now=True)),
+                ('last_run', models.DateTimeField(auto_now_add=True)),
+            ],
+            options={
+                'abstract': False,
+            },
+        ),
     ]

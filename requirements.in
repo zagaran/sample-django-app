@@ -30,7 +30,13 @@ django-storages
 
 # START_FEATURE docker
 gunicorn
+whitenoise
 # END_FEATURE docker
+
+# START_FEATURE celery
+celery[redis]
+celery-redbeat
+# END_FEATURE celery
 
 # START_FEATURE django_ses
 django-ses
@@ -41,7 +47,6 @@ django-compressor
 django-sass-processor
 libsass
 # END_FEATURE sass_bootstrap
-
 ################################
 
 # Convenience
