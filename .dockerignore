@@ -16,3 +16,12 @@
 
 # Operating system metafiles
 .DS_Store
+
+# Local build artifacts
+node_modules/
+media/
+staticfiles/
+
+# Deployment configuration
+terraform/
+deploy.py

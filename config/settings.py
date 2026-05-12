@@ -21,6 +21,11 @@ env = environ.Env(
     DEBUG=(bool, False),
     # Set to True when running locally for development purposes
     LOCALHOST=(bool, False),
+
+    # START_FEATURE docker
+    # Set to True in Docker build environment
+    BUILD=(bool, False),
+    # END_FEATURE docker
     # Set to True in order to put the site in maintenance mode
     MAINTENANCE_MODE=(bool, False),
     # Set to True on the production server environment; setting to False makes the
@@ -48,7 +53,7 @@ env = environ.Env(
     DEBUG_TOOLBAR=(bool, False),
     # END_FEATURE debug_toolbar
 )
-# If ALLWED_HOSTS has been configured, then we're running on a server and
+# If ALLOWED_HOSTS has been configured, then we're running on a server and
 # can skip looking for a .env file (this assumes that .env files
 # file is only used for local development and servers use environment variables)
 if not env("ALLOWED_HOSTS"):
@@ -74,6 +79,11 @@ LOCALHOST = env("LOCALHOST")
 # them from being indexed by search engines and to have a banner warning
 # that this is not the production site
 PRODUCTION = env("PRODUCTION")
+
+# START_FEATURE docker
+# set BUILD to true to produce a production-ready docker image
+BUILD = env("BUILD")
+# END_FEATURE docker
 
 ALLOWED_HOSTS = env("ALLOWED_HOSTS")
 if LOCALHOST is True:
@@ -118,6 +128,9 @@ if DEBUG_TOOLBAR:
 
 LOCAL_APPS = [
     "common",
+    # START_FEATURE celery
+    "tasks",
+    # END_FEATURE celery
 ]
 
 INSTALLED_APPS = THIRD_PARTY_APPS + LOCAL_APPS
@@ -125,6 +138,10 @@ INSTALLED_APPS = THIRD_PARTY_APPS + LOCAL_APPS
 MIDDLEWARE = [
     "common.middleware.HealthCheckMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    
+    # START_FEATURE docker
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    # END_FEATURE docker
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "common.middleware.MaintenanceModeMiddleware",
@@ -198,7 +215,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # START_FEATURE django_ses
-if LOCALHOST:
+if LOCALHOST or BUILD:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
     DEFAULT_FROM_EMAIL = "webmaster@localhost"
 else:
@@ -303,7 +320,7 @@ MESSAGE_TAGS = {
 
 
 # START_FEATURE django_storages
-if LOCALHOST is True:
+if LOCALHOST or BUILD:
     DEFAULT_STORAGE = {"BACKEND": "django.core.files.storage.FileSystemStorage"}
     MEDIA_ROOT = ""
 else:
@@ -316,6 +333,7 @@ else:
         }
     }
 # END_FEATURE django_storages
+STATIC_BACKEND = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage" if LOCALHOST else "whitenoise.storage.CompressedManifestStaticFilesStorage"
 STORAGES = {
     "default": DEFAULT_STORAGE,
     # START_FEATURE sass_bootstrap
@@ -329,7 +347,7 @@ STORAGES = {
     },
     # END_FEATURE sass_bootstrap
     "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+        "BACKEND": STATIC_BACKEND,
     },
 }
 
@@ -411,3 +429,12 @@ SASS_PROCESSOR_INCLUDE_DIRS = [
 ]
 COMPRESS_ROOT = STORAGES["sass_processor"]["ROOT"]
 # END_FEATURE sass_bootstrap
+
+# START_FEATURE celery
+# Celery configuration
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_BROKER_URL = env("CELERY_BROKER_URL", default="")
+# If no broker URL configured, run tasks in the web process
+CELERY_TASK_ALWAYS_EAGER = not CELERY_BROKER_URL
+CELERY_TASK_EAGER_PROPAGATES = True
+# END_FEATURE celery

@@ -64,3 +64,8 @@ staticfiles/*
 static/webpack_bundles/
 webpack-stats.json
 # END_FEATURE django_react
+
+# START_FEATURE ecs
+.terraform.lock.hcl
+.terraform/
+# END_FEATURE ecs

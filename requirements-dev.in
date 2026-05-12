@@ -18,3 +18,8 @@ isort
 # START_FEATURE debug_toolbar
 django-debug-toolbar
 # END_FEATURE debug_toolbar
+
+# START_FEATURE ecs
+# For deploy script
+pygit2
+# END_FEATURE ecs

@@ -7,6 +7,10 @@ from django.http.response import HttpResponse
 from django.views.generic.edit import FormView
 from common.forms import SampleForm
 # END_FEATURE crispy_forms
+# START_FEATURE celery
+from datetime import timedelta
+from django.utils import timezone
+# END_FEATURE celery
 
 
 class IndexView(TemplateView):
