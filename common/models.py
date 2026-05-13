@@ -150,8 +150,6 @@ class UploadFile(TimestampedModel):
     # END_FEATURE direct_upload
 
 # END_FEATURE django_storages
-
-
 # START_FEATURE user_action_tracking
 class UserAction(TimestampedModel):
     user = models.ForeignKey(User, related_name="user_actions", on_delete=models.PROTECT)

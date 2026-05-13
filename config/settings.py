@@ -21,6 +21,11 @@ env = environ.Env(
     DEBUG=(bool, False),
     # Set to True when running locally for development purposes
     LOCALHOST=(bool, False),
+
+    # START_FEATURE docker
+    # Set to True in Docker build environment
+    BUILD=(bool, False),
+    # END_FEATURE docker
     # Set to True in order to put the site in maintenance mode
     MAINTENANCE_MODE=(bool, False),
     # Set to True on the production server environment; setting to False makes the
@@ -52,7 +57,7 @@ env = environ.Env(
     AWS_STORAGE_BUCKET_NAME=(str, ""),
     # END_FEATURE direct_upload
 )
-# If ALLWED_HOSTS has been configured, then we're running on a server and
+# If ALLOWED_HOSTS has been configured, then we're running on a server and
 # can skip looking for a .env file (this assumes that .env files
 # file is only used for local development and servers use environment variables)
 if not env("ALLOWED_HOSTS"):
@@ -78,6 +83,11 @@ LOCALHOST = env("LOCALHOST")
 # them from being indexed by search engines and to have a banner warning
 # that this is not the production site
 PRODUCTION = env("PRODUCTION")
+
+# START_FEATURE docker
+# set BUILD to true to produce a production-ready docker image
+BUILD = env("BUILD")
+# END_FEATURE docker
 
 ALLOWED_HOSTS = env("ALLOWED_HOSTS")
 if LOCALHOST is True:
@@ -123,6 +133,9 @@ if DEBUG_TOOLBAR:
 LOCAL_APPS = [
     "common",
     "app",
+    # START_FEATURE celery
+    "tasks",
+    # END_FEATURE celery
 ]
 
 INSTALLED_APPS = THIRD_PARTY_APPS + LOCAL_APPS
@@ -131,11 +144,19 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "common.middleware.HealthCheckMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    
+    # START_FEATURE docker
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    # END_FEATURE docker
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "common.middleware.MaintenanceModeMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    
+    # START_FEATURE django_social
+    "social_django.middleware.SocialAuthExceptionMiddleware",
+    # END_FEATURE django_social
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # START_FEATURE user_action_tracking
@@ -200,7 +221,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # START_FEATURE django_ses
-if LOCALHOST:
+if LOCALHOST or BUILD:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
     DEFAULT_FROM_EMAIL = "webmaster@localhost"
 else:
@@ -279,6 +300,7 @@ AUTHENTICATION_BACKENDS = [
 
 LOGIN_URL = "index"
 LOGIN_REDIRECT_URL = "index"
+LOGIN_ERROR_URL = "index"
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = env("GOOGLE_OAUTH2_KEY")
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env("GOOGLE_OAUTH2_SECRET")
@@ -305,7 +327,10 @@ MESSAGE_TAGS = {
 
 # START_FEATURE django_storages
 AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
-if AWS_STORAGE_BUCKET_NAME:
+if LOCALHOST or BUILD:
+    DEFAULT_STORAGE = {"BACKEND": "django.core.files.storage.FileSystemStorage"}
+    MEDIA_ROOT = ""
+else:
     DEFAULT_STORAGE = {
         "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
         "OPTIONS": {
@@ -318,6 +343,7 @@ else:
     DEFAULT_STORAGE = {"BACKEND": "django.core.files.storage.FileSystemStorage"}
     MEDIA_ROOT = ""
 # END_FEATURE django_storages
+STATIC_BACKEND = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage" if LOCALHOST else "whitenoise.storage.CompressedManifestStaticFilesStorage"
 STORAGES = {
     "default": DEFAULT_STORAGE,
     # START_FEATURE sass_bootstrap
@@ -417,3 +443,12 @@ SASS_PROCESSOR_INCLUDE_DIRS = [
 ]
 COMPRESS_ROOT = STORAGES["sass_processor"]["ROOT"]
 # END_FEATURE sass_bootstrap
+
+# START_FEATURE celery
+# Celery configuration
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_BROKER_URL = env("CELERY_BROKER_URL", default="")
+# If no broker URL configured, run tasks in the web process
+CELERY_TASK_ALWAYS_EAGER = not CELERY_BROKER_URL
+CELERY_TASK_EAGER_PROPAGATES = True
+# END_FEATURE celery
