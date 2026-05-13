@@ -70,6 +70,11 @@ variable "container_web_count" {
   type = number
   default = 1
 }
+
+variable "github_actions_deployment_role_name" {
+  type = string
+  default = null
+}
 # START_FEATURE celery
 variable "container_worker_cpu" {
   type = number
@@ -82,8 +87,8 @@ variable "container_worker_memory" {
 }
 
 variable "container_worker_count" {
-type = number
-default = 1
+  type = number
+  default = 1
 }
 
 variable "redis_instance_type" {
@@ -95,3 +100,4 @@ variable "ssl_policy" {
   type = string
   default = "ELBSecurityPolicy-TLS13-1-2-Res-FIPS-2023-04"
 }
+

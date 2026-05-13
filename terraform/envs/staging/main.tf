@@ -19,6 +19,20 @@ provider "aws" {
   profile = "sample-django-app"  # TODO: FILL ME IN
 }
 
+
+module "github_actions_role" {
+  source = "../../modules/github_actions_role"
+
+  role_name = "github_actions_deployment_role"
+  github_repo_name = "sample-django-app"  # TODO: FILL ME IN
+  github_repo_owner_name = ""  # TODO: Fill ME IN
+}
+
+output "github_actions_deployment_role_arn" {
+  value = module.github_actions_role.github_actions_deployment_role_arn
+}
+
+
 module "ecs_deployment" {
     source = "../../modules/ecs_deployment"
 
@@ -42,6 +56,7 @@ module "ecs_deployment" {
     container_web_memory = 1024
     container_web_count = 1
     ssl_policy = "ELBSecurityPolicy-TLS13-1-2-Res-FIPS-2023-04"
+    github_actions_deployment_role_name = module.github_actions_role.github_actions_deployment_role_name
 }
 
 output "cluster_id" {
