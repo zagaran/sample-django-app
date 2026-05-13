@@ -5,30 +5,6 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # disables output buffering so logs are flushed to console
 ENV PYTHONUNBUFFERED=1
 
-FROM node:24-slim AS node-deps
-
-WORKDIR /app
-
-# Install required system dependencies
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends bzip2
-
-# Add only files needed for dependency installation
-COPY package.json ./
-
-# Install Node dependencies with caching
-RUN npm install && npm cache clean --force
-
-# Build vue dist
-COPY . /app/
-RUN npm run vue-build
-
-# END_FEATURE vue
-# ---------------------------------- Python ---------------------------------- #
-
-FROM python:3.12.13-slim-trixie
-
-# Set working directory
 WORKDIR /app
 
 # LTS Version of Node is 22
@@ -41,7 +17,6 @@ ARG NODE_VERSION=16
 RUN curl -fsSL https://deb.nodesource.com/setup_{$NODE_VERSION}.x | bash -
 RUN apt-get update && apt install nodejs -y
 
-# Install system and python dependencies
 RUN set -ex \
     && buildDeps=" \
       build-essential \
@@ -53,12 +28,6 @@ RUN set -ex \
       nano \
       procps \
       postgresql-client \
-      git \
-      # (editing)
-      vim \
-      # (debug)
-      curl \
-      htop \
     " \
     && apt-get update && apt-get install -y $buildDeps $deps --no-install-recommends
 
@@ -117,11 +86,16 @@ COPY . /app/
 # Add temporary copy of env file to allow running management commands
 COPY ./config/.env.build /app/config/.env
 
-# Compile static assets
+# START_FEATURE django_react
+RUN ./node_modules/.bin/nwb build --no-vendor
+# END_FEATURE django_react
+
 # START_FEATURE sass_bootstrap
 RUN python manage.py compilescss
 # END_FEATURE sass_bootstrap
+
 RUN python manage.py collectstatic --noinput
+
 RUN rm /app/config/.env
 
 # Remove node_modules to save space

@@ -1,9 +1,8 @@
 import re
 
-from common.mixins import PermissionRequiredMixin, RequestMixin
-from common.permissions import PermissionType
+from common.mixins import PermissionRequiredMixin, RequestFormMixin
+from common.permissions import Permission
 from common.s3 import create_presigned_upload_url
-from django.conf import settings
 from django.core.files.storage import default_storage
 from django.core.files.storage.filesystem import FileSystemStorage
 from django.db import transaction
@@ -27,24 +26,20 @@ from app.serializers import AttachmentSerializer
 
 
 class DashboardView(PermissionRequiredMixin, TemplateView):
-    permission_required = PermissionType.dashboard
+    permission_required = Permission.dashboard
     template_name = "app/dashboard.html"
 
     # START_FEATURE direct_upload
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['storage_backend'] = "s3" if settings.AWS_STORAGE_BUCKET_NAME else "local"
-        context['attachments'] = [
-            AttachmentSerializer(attachment).data
-            for attachment in Attachment.objects.filter(deleted_on=None)
-        ]
+        context['attachments'] = AttachmentSerializer(Attachment.objects.filter(deleted_on=None), many=True).data
         context['sample_objects'] = SampleObject.objects.prefetch_related('attachments')
         return context
     # END_FEATURE direct_upload
 
 
-class SampleObjectCreateView(PermissionRequiredMixin, RequestMixin, CreateView):
-    permission_required = PermissionType.dashboard
+class SampleObjectCreateView(PermissionRequiredMixin, RequestFormMixin, CreateView):
+    permission_required = Permission.dashboard
     template_name = "app/sample_object_form.html"
     form_class = SampleObjectCreateForm
     model = SampleObject
@@ -52,7 +47,7 @@ class SampleObjectCreateView(PermissionRequiredMixin, RequestMixin, CreateView):
 
 
 class SampleObjectDetailView(PermissionRequiredMixin, DetailView):
-    permission_required = PermissionType.dashboard
+    permission_required = Permission.dashboard
     template_name = "app/sample_object_detail.html"
     model = SampleObject
     pk_url_kwarg = SAMPLE_OBJECT_PK_URL_KWARG
@@ -62,17 +57,13 @@ class SampleObjectDetailView(PermissionRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         obj = self.get_object()
-        context['storage_backend'] = "s3" if settings.AWS_STORAGE_BUCKET_NAME else "local"
-        context['attachments'] = [
-            AttachmentSerializer(attachment).data
-            for attachment in obj.get_attachments()
-        ]
+        context['attachments'] = AttachmentSerializer(obj.get_attachments(), many=True).data
         return context
     # END_FEATURE direct_upload
 
 
-class SampleObjectEditView(PermissionRequiredMixin, RequestMixin, UpdateView):
-    permission_required = PermissionType.dashboard
+class SampleObjectEditView(PermissionRequiredMixin, RequestFormMixin, UpdateView):
+    permission_required = Permission.dashboard
     template_name = "app/sample_object_form.html"
     form_class = SampleObjectEditForm
     model = SampleObject
@@ -87,7 +78,18 @@ class SampleObjectEditView(PermissionRequiredMixin, RequestMixin, UpdateView):
 
 # START_FEATURE direct_upload
 class FileUploadStartView(PermissionRequiredMixin, View):
-    permission_required = PermissionType.dashboard
+    permission_required = Permission.dashboard
+
+    def _link_objects(self, attachment: Attachment, request):
+        for key, value in request.GET.items():
+
+            # Expect a query parameter key in this form: '<link_type>__<object>'
+            # The value should be a UUID primary key
+            if re.match(r"(\w+)__(\w+)", key):
+                link_type, obj_accessor = key.split("__")
+                if link_type == "mtm":
+                    if (accessor := getattr(attachment, obj_accessor)):
+                        accessor.add(get_object_or_404(accessor.model, pk=value))
 
     @transaction.atomic
     def post(self, request, *args, **kwargs):
@@ -98,6 +100,7 @@ class FileUploadStartView(PermissionRequiredMixin, View):
             user=request.user,
             name=attachment_name,
         )
+        self._link_objects(attachment, request)
 
         # Generate S3 path for file
         storage_path = Attachment._meta.get_field('file').generate_filename(attachment, attachment_name)
@@ -117,11 +120,13 @@ class FileUploadStartView(PermissionRequiredMixin, View):
         return JsonResponse(serialized_data)
 
 
-class FileUploadStreamView(PermissionRequiredMixin, SingleObjectMixin, View):
-    permission_required = PermissionType.dashboard
-
+class FileUploadBaseView(PermissionRequiredMixin, SingleObjectMixin, View):
+    permission_required = Permission.dashboard
     model = Attachment
     pk_url_kwarg = ATTACHMENT_PK_URL_KWARG
+
+
+class FileUploadStreamView(FileUploadBaseView):
 
     def post(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -139,30 +144,17 @@ class FileUploadStreamView(PermissionRequiredMixin, SingleObjectMixin, View):
         })
 
 
-class FileUploadCompleteView(FileUploadStreamView):
-    permission_required = PermissionType.dashboard
-
-    def link_objects(self, attachment: Attachment, request):
-        for key, value in request.GET.items():
-
-            # Expect a query parameter key in this form: '<link_type>__<object>'
-            # The value should be a UUID primary key
-            if re.match(r"(\w+)__(\w+)", key):
-                link_type, obj_accessor = key.split("__")
-                if link_type == "mtm":
-                    if (accessor := getattr(attachment, obj_accessor)):
-                        accessor.add(get_object_or_404(accessor.model, pk=value))
+class FileUploadCompleteView(FileUploadBaseView):
 
     @transaction.atomic
     def post(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.update(upload_completed_on=timezone.now())
-        self.link_objects(instance, request)
         return JsonResponse(AttachmentSerializer(instance).data)
 
 
 class FileDownloadView(PermissionRequiredMixin, SingleObjectMixin, View):
-    permission_required = PermissionType.dashboard
+    permission_required = Permission.dashboard
 
     model = Attachment
     pk_url_kwarg = ATTACHMENT_PK_URL_KWARG
@@ -173,15 +165,14 @@ class FileDownloadView(PermissionRequiredMixin, SingleObjectMixin, View):
 
 
 class FileOpenView(FileDownloadView):
-    permission_required = PermissionType.dashboard
+    permission_required = Permission.dashboard
 
     def get(self, request, *args, **kwargs):
         instance = self.get_object()
         return instance.view_file()
 
 
-class FileDeleteView(FileUploadStreamView):
-    permission_required = PermissionType.dashboard
+class FileDeleteView(FileUploadBaseView):
 
     def post(self, request, *args, **kwargs):
         instance = self.get_object()

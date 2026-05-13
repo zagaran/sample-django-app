@@ -141,10 +141,10 @@ LOCAL_APPS = [
 INSTALLED_APPS = THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
-    "whitenoise.middleware.WhiteNoiseMiddleware",
     "common.middleware.HealthCheckMiddleware",
     "django.middleware.security.SecurityMiddleware",
-    
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+
     # START_FEATURE docker
     "whitenoise.middleware.WhiteNoiseMiddleware",
     # END_FEATURE docker
@@ -153,7 +153,7 @@ MIDDLEWARE = [
     "common.middleware.MaintenanceModeMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    
+
     # START_FEATURE django_social
     "social_django.middleware.SocialAuthExceptionMiddleware",
     # END_FEATURE django_social
@@ -327,10 +327,10 @@ MESSAGE_TAGS = {
 
 # START_FEATURE django_storages
 AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
-if LOCALHOST or BUILD:
-    DEFAULT_STORAGE = {"BACKEND": "django.core.files.storage.FileSystemStorage"}
-    MEDIA_ROOT = ""
-else:
+if PRODUCTION and not AWS_STORAGE_BUCKET_NAME:
+    raise Exception('config/settings.py: `AWS_STORAGE_BUCKET_NAME` is required when `PRODUCTION=true`')
+
+if AWS_STORAGE_BUCKET_NAME:
     DEFAULT_STORAGE = {
         "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
         "OPTIONS": {
@@ -343,7 +343,7 @@ else:
     DEFAULT_STORAGE = {"BACKEND": "django.core.files.storage.FileSystemStorage"}
     MEDIA_ROOT = ""
 # END_FEATURE django_storages
-STATIC_BACKEND = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage" if LOCALHOST else "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 STORAGES = {
     "default": DEFAULT_STORAGE,
     # START_FEATURE sass_bootstrap

@@ -27,7 +27,8 @@ class AttachmentSerializer(serializers.ModelSerializer):
             ATTACHMENT_PK_URL_KWARG: instance.id,
         })
         rep["created_on"] = date_format(instance.created_on, format="DATETIME_FORMAT")
-        rep["upload_completed_on"] = date_format(instance.upload_completed_on, format="DATETIME_FORMAT")
+        if instance.upload_completed_on:
+            rep["upload_completed_on"] = date_format(instance.upload_completed_on, format="DATETIME_FORMAT")
         if instance.file.storage.exists(instance.file.name):
             rep["size"] = instance.file.size
             rep["path"] = instance.file.name

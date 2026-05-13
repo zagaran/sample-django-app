@@ -10,11 +10,10 @@ class UserRole(TextChoices):
     standard = ("standard", "Standard")
 
 
-class PermissionType(TextChoices):
+class Permission(TextChoices):
     dashboard = ("dashboard", "View Dashboard")
-    none = ("none", "No permission required")
 
 
 ROLE_PERMISSIONS = {}
 ROLE_PERMISSIONS[UserRole.guest] = []
-ROLE_PERMISSIONS[UserRole.standard] = list(PermissionType)
+ROLE_PERMISSIONS[UserRole.standard] = list(Permission)

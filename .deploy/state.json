@@ -1,0 +1,18 @@
+{
+    "terraform": {
+        "staging": {
+            "cluster_id": "arn:aws:ecs:us-east-1:745415963933:cluster/deploy-staging-cluster",
+            "ecr_image_uri": "745415963933.dkr.ecr.us-east-1.amazonaws.com/deploy-staging-ecr:latest",
+            "ecr_repository_name": "deploy-staging-ecr",
+            "s3_bucket_name": "deploy-staging-staging-deploy.dev.zagaran.com",
+            "web_log_group_name": "deploy-staging-web",
+            "web_network_configuration_security_group": "sg-07b0e269a067068e6",
+            "web_network_configuration_subnet": "subnet-00553ef2b3e969274",
+            "web_service_name": "deploy-staging-web",
+            "web_task_definition_arn": "arn:aws:ecs:us-east-1:745415963933:task-definition/deploy-staging-web:2",
+            "worker_log_group_name": "deploy-staging-worker",
+            "worker_service_name": "deploy-staging-worker",
+            "worker_task_desired_count": 0
+        }
+    }
+}

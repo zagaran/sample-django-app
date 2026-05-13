@@ -4,7 +4,7 @@ import "vue"
 function set(context, path, value) {
   /**
    * set is a helper function which allows us to dynamically target and set values within an object, allowing
-   * v-init to interpret a model like 'listPullParams.housing_type' as context['listPullParams']['housing_type']
+   * v-init to interpret a model like 'abc.def' as context['abc']['def']
    */
   var pList = path.split(".")
   if (pList.length > 2) {

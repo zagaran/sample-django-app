@@ -57,7 +57,6 @@
 </template>
 
 <script setup>
-import { onMounted } from "vue"
 import { useFetch } from "../composables/fetch.js"
 import { fileSize } from "humanize-plus"
 

@@ -9,7 +9,7 @@ class CrispyFormMixin:
     cancel_label: str = "Cancel"
     form_action: str = ""
     form_tag: bool = True
-    default_inputs: bool = True
+    default_actions: bool = True
     layout: Layout | None = None
 
     def __init__(self, *args, **kwargs):
@@ -19,7 +19,7 @@ class CrispyFormMixin:
         self.helper.form_action = self.form_action
         if self.layout is not None:
             self.helper.layout = self.layout
-        if self.default_inputs:
+        if self.default_actions:
             self.helper.add_input(Submit("submit", self.submit_label))
             self.helper.add_input(Button("cancel", self.cancel_label,
                                   css_class="btn-secondary", onclick="history.back()"))

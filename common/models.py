@@ -3,15 +3,11 @@ import uuid
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.http import FileResponse, Http404, HttpResponse, HttpResponseRedirect
-from django.conf import settings
-import boto3
+from django.http import FileResponse, Http404, HttpResponse
 
 # START_FEATURE direct_upload
-from django.urls import reverse
-from django.template.defaultfilters import filesizeformat
+from django.core.files.storage import FileSystemStorage
 from common.helpers import get_attachment_extension, remove_attachment_extension
-from app.constants import ATTACHMENT_PK_URL_KWARG
 # END_FEATURE direct_upload
 
 from common.managers import UserManager
@@ -97,27 +93,19 @@ class UploadFile(TimestampedModel):
         content_disposition = "attachment" if download_on_open else "inline"
 
         try:
-
-            # Download file directly from S3
-            if (s3_bucket_name := settings.AWS_STORAGE_BUCKET_NAME):
-                s3 = boto3.client('s3')
-                url = s3.generate_presigned_url(
-                    'get_object',
-                    Params={
-                        "Bucket": str(s3_bucket_name),
-                        "Key": s3_filename,
-                        "ResponseContentDisposition": f'{content_disposition}; filename="{filename}"',
-                        "ResponseContentType": content_type or "application/octet-stream",
-                    },
-                    ExpiresIn=900
-                )
-                return HttpResponseRedirect(url)
-            else:
+            if isinstance(self.file.storage, FileSystemStorage):
                 return FileResponse(
                     self.file.open(),
                     as_attachment=download_on_open,
                     filename=filename
                 )
+
+            # Download file directly from S3
+            else:
+                return self.file.storage.url(self.file.name, parameters={
+                    "ResponseContentDisposition": f'{content_disposition}; filename="{filename}"',
+                    "ResponseContentType": content_type or "application/octet-stream",
+                })
 
         except Exception:
             capture_message(f"Failed to get object URL from S3 for ({self}) with path ({s3_filename})")
@@ -128,29 +116,12 @@ class UploadFile(TimestampedModel):
 
     def view_file(self) -> FileResponse | HttpResponse:
         return self.get_download_url(download_on_open=False)
-
-    # TODO: Should replace this with a DRF serializer
-    def get_context_data(self):
-        context = {
-            "id": self.id,
-            "user": self.user.email,
-            "name": self.name,
-            "upload_completed_on": self.upload_completed_on,
-            "view_url": reverse('attachment_open', kwargs={
-                ATTACHMENT_PK_URL_KWARG: self.id,
-            }),
-            "download_url": reverse('attachment_download', kwargs={
-                ATTACHMENT_PK_URL_KWARG: self.id,
-            })
-        }
-        if self.file.storage.exists(self.file.name):
-            context["size"] = filesizeformat(self.file.size)
-            context["path"] = self.file.name
-        return context
     # END_FEATURE direct_upload
 
 # END_FEATURE django_storages
 # START_FEATURE user_action_tracking
+
+
 class UserAction(TimestampedModel):
     user = models.ForeignKey(User, related_name="user_actions", on_delete=models.PROTECT)
     url = models.URLField(max_length=2083)

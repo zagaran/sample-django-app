@@ -3,7 +3,7 @@ import { defineConfig } from "vite"
 import vue from "@vitejs/plugin-vue"
 import { glob } from "glob"
 
-const SRC_LOCATION = "src/pages"
+const SRC_LOCATION = "vue/pages"
 const DEST_LOCATION = "static/js/dist"
 
 export default defineConfig(({ mode }) => {
@@ -12,9 +12,9 @@ export default defineConfig(({ mode }) => {
     plugins: [vue()],
     base: "/" + DEST_LOCATION,
     resolve: {
-      alias: {
-        vue: "vue/dist/vue.esm-bundler.js",
-      },
+      alias: [
+        { find: /^vue$/, replacement: "vue/dist/vue.esm-bundler.js" },
+      ],
     },
     build: {
       sourcemap: true,
@@ -28,14 +28,14 @@ export default defineConfig(({ mode }) => {
           manualChunks(id) {
             if (id.includes("pages") || id.includes("mixins")) {
               // These files are imported by path and must be chunked individually
-              return id.split("src/")[1].split(".js")[0]
+              return id.split("vue/")[1].split(".js")[0]
             }
             // otherwise, add to combined chunk
             return "vue/main"
           },
           entryFileNames(chunkInfo) {
             if (chunkInfo.isEntry) {
-              const name = chunkInfo.facadeModuleId.split("src/")[1]
+              const name = chunkInfo.facadeModuleId.split("vue/")[1]
               if (!name.includes("pages")) {
                 // This is not a 'real' entrypoint, should contain hash for cache busting
                 const path = name.split(".js")[0]

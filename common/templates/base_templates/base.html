@@ -20,7 +20,7 @@
   </head>
   <body>
     {% include "base_templates/navbar.html" %}
-    {% if not PRODUCTION and not LOCALHOST %}
+    {% if not settings.PRODUCTION and not settings.LOCALHOST %}
     <div class="container-fluid alert alert-danger">
       <div class="row">
         <div class="col-lg-2"></div>
@@ -49,15 +49,14 @@
     </div>
     {# END_FEATURE bootstrap_messages #}
 
-    {# START_FEATURE direct_upload #}
+    {# START_FEATURE vue #}
     <script>
       window.csrfmiddlewaretoken = '{{ csrf_token }}'
     </script>
-    {# END_FEATURE direct_upload #}
-
     {% block bottom_javascript %}
       <script type="module" src="{% static "js/dist/pages/default.js" %}"></script>
     {% endblock %}
+    {# END_FEATURE vue #}
 
   </body>
 </html>

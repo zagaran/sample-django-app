@@ -5,16 +5,7 @@ from django.views.generic.base import TemplateView, View
 from django.http.response import HttpResponse
 
 from common.mixins import PermissionRequiredMixin
-from common.permissions import PermissionType
-
-# START_FEATURE crispy_forms
-from django.views.generic.edit import FormView
-from common.forms import SampleForm
-# END_FEATURE crispy_forms
-# START_FEATURE celery
-from datetime import timedelta
-from django.utils import timezone
-# END_FEATURE celery
+from common.permissions import Permission
 
 
 class IndexView(TemplateView):
@@ -48,7 +39,7 @@ class RobotsTxtView(View):
 # START_FEATURE django_react
 class DjangoReactView(PermissionRequiredMixin, TemplateView):
     # TODO: delete me; this is just a reference example
-    permission_required = PermissionType.dashboard
+    permission_required = Permission.dashboard
     template_name = 'common/sample_django_react.html'
 
     def get_context_data(self, **kwargs):

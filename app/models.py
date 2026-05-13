@@ -17,7 +17,11 @@ class SampleObject(TimestampedModel):
         return f'Sample Object {self.name}'
 
     def get_attachments(self):
-        return self.attachments.filter(deleted_on=None)
+        qs = self.attachments.prefetch_related('user')
+        return [
+            attachment for attachment in qs
+            if not attachment.deleted_on
+        ]
 
 
 # START_FEATURE direct_upload
