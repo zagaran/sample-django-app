@@ -27,6 +27,10 @@ const props = defineProps({
   storageBackend: String,
   allowedFileTypes: Array,
   maxNumberOfFiles: Number,
+  relations: {
+    type: Object,
+    default: () => ({}),
+  },
   autoProceed: {
     type: Boolean,
     default: false,
@@ -115,7 +119,9 @@ onMounted(() => {
 
   // When files are finished uploading and they are successful, add them to the `files` state
   uppy.on("upload-success", async (file, response) => {
-    const completeResponse = await post(file.attachmentData.upload_complete_url)
+    const formData = new FormData()
+    formData.set("relations", JSON.stringify(props.relations))
+    const completeResponse = await post(file.attachmentData.upload_complete_url, { body: formData })
     const newEntry = {
       ...(await completeResponse.json()),
       uppyId: file.id,

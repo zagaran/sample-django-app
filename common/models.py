@@ -3,7 +3,7 @@ import uuid
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.http import FileResponse, Http404, HttpResponse
+from django.http import FileResponse, Http404, HttpResponse, HttpResponseRedirect
 
 # START_FEATURE direct_upload
 from django.core.files.storage import FileSystemStorage
@@ -102,10 +102,11 @@ class UploadFile(TimestampedModel):
 
             # Download file directly from S3
             else:
-                return self.file.storage.url(self.file.name, parameters={
+                url = self.file.storage.url(self.file.name, parameters={
                     "ResponseContentDisposition": f'{content_disposition}; filename="{filename}"',
                     "ResponseContentType": content_type or "application/octet-stream",
                 })
+                return HttpResponseRedirect(url)
 
         except Exception:
             capture_message(f"Failed to get object URL from S3 for ({self}) with path ({s3_filename})")

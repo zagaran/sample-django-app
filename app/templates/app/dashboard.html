@@ -79,7 +79,7 @@
         <h3 class="card-title">All Attachments</h3>
         <file-upload-dashboard
           :files="{{ attachments }}"
-          storage-backend="{{ storage_backend }}"
+          storage-backend="{{ settings.DEFAULT_STORAGE_TYPE }}"
           upload-start-url="{% url 'attachment_upload_start' %}"
           :multiple="true"
         ></file-upload-dashboard>

@@ -1,4 +1,3 @@
-import re
 
 from common.mixins import PermissionRequiredMixin, RequestFormMixin
 from common.permissions import Permission
@@ -19,6 +18,7 @@ from app.constants import SAMPLE_OBJECT_PK_URL_KWARG
 from app.forms import SampleObjectCreateForm, SampleObjectEditForm
 
 # START_FEATURE direct_upload
+import json
 from app.constants import ATTACHMENT_PK_URL_KWARG
 from app.models import Attachment, SampleObject
 from app.serializers import AttachmentSerializer
@@ -80,17 +80,6 @@ class SampleObjectEditView(PermissionRequiredMixin, RequestFormMixin, UpdateView
 class FileUploadStartView(PermissionRequiredMixin, View):
     permission_required = Permission.dashboard
 
-    def _link_objects(self, attachment: Attachment, request):
-        for key, value in request.GET.items():
-
-            # Expect a query parameter key in this form: '<link_type>__<object>'
-            # The value should be a UUID primary key
-            if re.match(r"(\w+)__(\w+)", key):
-                link_type, obj_accessor = key.split("__")
-                if link_type == "mtm":
-                    if (accessor := getattr(attachment, obj_accessor)):
-                        accessor.add(get_object_or_404(accessor.model, pk=value))
-
     @transaction.atomic
     def post(self, request, *args, **kwargs):
         attachment_name = request.POST['name']
@@ -100,7 +89,6 @@ class FileUploadStartView(PermissionRequiredMixin, View):
             user=request.user,
             name=attachment_name,
         )
-        self._link_objects(attachment, request)
 
         # Generate S3 path for file
         storage_path = Attachment._meta.get_field('file').generate_filename(attachment, attachment_name)
@@ -146,10 +134,21 @@ class FileUploadStreamView(FileUploadBaseView):
 
 class FileUploadCompleteView(FileUploadBaseView):
 
+    def _link_objects(self, attachment: Attachment):
+        relations = json.loads(self.request.POST.get("relations", "{}"))
+        for accessor_name, value in relations.items():
+            accessor = getattr(attachment, accessor_name, None)
+            if accessor is None:
+                raise Exception(f'Accesor {accessor_name} does not exist on {attachment}')
+            pks = value if isinstance(value, list) else [value]
+            for pk in pks:
+                accessor.add(get_object_or_404(accessor.model, pk=pk))
+
     @transaction.atomic
     def post(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.update(upload_completed_on=timezone.now())
+        self._link_objects(instance)
         return JsonResponse(AttachmentSerializer(instance).data)
 
 

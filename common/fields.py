@@ -1,5 +1,6 @@
 # START_FEATURE direct_upload
 from django import forms
+from django.conf import settings
 from django.db.models import QuerySet
 from django.urls import reverse
 
@@ -14,6 +15,7 @@ class DirectUploadFileInput(forms.SelectMultiple):
         context: dict = super().get_context(name, value, attrs)
         context["upload_start_url"] = reverse("attachment_upload_start")
         context['queryset_json'] = AttachmentSerializer(self.queryset.all(), many=True).data
+        context["storage_backend"] = settings.DEFAULT_STORAGE_TYPE
         return context
 
 

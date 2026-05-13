@@ -43,8 +43,9 @@
       <file-upload-dashboard
         field-name="field-name"
         :files="{{ attachments }}"
-        storage-backend="{{ storage_backend }}"
-        upload-start-url="{% url 'attachment_upload_start' %}?mtm__sample_objects={{ sample_object.id }}"
+        storage-backend="{{ settings.DEFAULT_STORAGE_TYPE }}"
+        upload-start-url="{% url 'attachment_upload_start' %}"
+        :relations="{ sample_objects: '{{ sample_object.id }}' }"
         :multiple="true"
       ></file-upload-dashboard>
     </div>
