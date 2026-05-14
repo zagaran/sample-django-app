@@ -345,7 +345,7 @@ if AWS_STORAGE_BUCKET_NAME:
 else:
     DEFAULT_STORAGE_TYPE = StorageBackendType.filesystem
     DEFAULT_STORAGE = {"BACKEND": "django.core.files.storage.FileSystemStorage"}
-    MEDIA_ROOT = ""
+    MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 # END_FEATURE django_storages
 
 STORAGES = {

@@ -68,7 +68,7 @@ webpack-stats.json
 
 
 # Locally uploaded files
-uploads/
+media/
 
 # START_FEATURE ecs
 .terraform/

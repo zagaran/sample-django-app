@@ -1,17 +1,19 @@
 {# START_FEATURE direct_upload #}
+{% load vue %}
 <div id="app-{{ widget.id }}" class="card">
   <div class="card-body">
     <file-upload-dashboard
       field-name="{{ widget.name }}"
       :selected="{{ widget.value }}"
-      :files="{{ queryset_json }}"
+      :files="{{ queryset_json|jsonify }}"
       upload-start-url="{{ upload_start_url }}"
       storage-backend="{{ storage_backend }}"
-      multiple="{{ widget.attrs.multiple }}"
-      selectable="{{ widget.attrs.multiple }}"
+      :multiple="{{ widget.attrs.multiple|yesno:'true,false' }}"
+      :selectable="{{ widget.attrs.multiple|yesno:'true,false' }}"
       :allowed-file-types="{{ widget.attrs.allowed_file_types }}"
-      :required="{{ widget.attrs.required }}"
-      :max-number-of-files="{{ widget.attrs.max_number_of_files }}"
+      :required="{{ widget.attrs.required|yesno:'true,false' }}"
+      :max-number-of-files="{{ widget.attrs.max_number_of_files|default_if_none:'null' }}"
+      :max-file-size="{{ widget.attrs.max_file_size|default_if_none:'null' }}"
     ></file-upload-dashboard>
   </div>
 </div>

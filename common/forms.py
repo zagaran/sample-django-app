@@ -28,7 +28,7 @@ class CrispyFormMixin:
 
 class ActionFormMixin:
     instance: type[Model]
-    action_title: str = "Perform Action"
+    action_title: str = "Continue"
 
     @property
     def action_title_formatted(self):

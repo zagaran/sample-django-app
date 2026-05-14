@@ -20,7 +20,7 @@ class SampleObject(TimestampedModel):
         qs = self.attachments.prefetch_related('user')
         return [
             attachment for attachment in qs
-            if not attachment.deleted_on
+            if not attachment.deleted_on and attachment.upload_completed_on
         ]
 
 

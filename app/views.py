@@ -32,7 +32,10 @@ class DashboardView(PermissionRequiredMixin, TemplateView):
     # START_FEATURE direct_upload
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['attachments'] = AttachmentSerializer(Attachment.objects.filter(deleted_on=None), many=True).data
+        context['attachments'] = AttachmentSerializer(
+            Attachment.objects.filter(deleted_on=None, upload_completed_on__isnull=False),
+            many=True,
+        ).data
         context['sample_objects'] = SampleObject.objects.prefetch_related('attachments')
         return context
     # END_FEATURE direct_upload

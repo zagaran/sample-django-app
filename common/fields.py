@@ -14,7 +14,10 @@ class DirectUploadFileInput(forms.SelectMultiple):
     def get_context(self, name, value, attrs):
         context: dict = super().get_context(name, value, attrs)
         context["upload_start_url"] = reverse("attachment_upload_start")
-        context['queryset_json'] = AttachmentSerializer(self.queryset.all(), many=True).data
+        context['queryset_json'] = AttachmentSerializer(
+            self.queryset.filter(upload_completed_on__isnull=False),
+            many=True,
+        ).data
         context["storage_backend"] = settings.DEFAULT_STORAGE_TYPE
         return context
 
@@ -30,13 +33,13 @@ class DirectUploadFileField(forms.ModelMultipleChoiceField):
         self,
         queryset: QuerySet,
         allowed_file_types: list[str] = [],
-        multiple: bool = True,
         max_number_of_files: int | None = None,
+        max_file_size: int | None = None,
         **kwargs,
     ):
         self.allowed_file_types = [ft if ft.startswith(".") else "." + ft for ft in allowed_file_types]
-        self.multiple = multiple
         self.max_number_of_files = max_number_of_files
+        self.max_file_size = max_file_size
         super().__init__(queryset=queryset, **kwargs)
         self.widget.queryset = self.queryset
 
@@ -45,9 +48,9 @@ class DirectUploadFileField(forms.ModelMultipleChoiceField):
 
     def widget_attrs(self, widget):
         attrs = super().widget_attrs(widget)
-        attrs['multiple'] = self.multiple
         attrs['required'] = self.required
         attrs['max_number_of_files'] = self.max_number_of_files
+        attrs['max_file_size'] = self.max_file_size
         attrs['allowed_file_types'] = self.allowed_file_types
         return attrs
 # END_FEATURE direct_upload

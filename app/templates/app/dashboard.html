@@ -1,4 +1,5 @@
 {% extends "base_templates/base.html" %}
+{% load vue %}
 
 
 {% block title %}Dashboard{% endblock %}
@@ -78,7 +79,7 @@
       <div class="card-body">
         <h3 class="card-title">All Attachments</h3>
         <file-upload-dashboard
-          :files="{{ attachments }}"
+          :files="{{ attachments|jsonify }}"
           storage-backend="{{ settings.DEFAULT_STORAGE_TYPE }}"
           upload-start-url="{% url 'attachment_upload_start' %}"
           :multiple="true"

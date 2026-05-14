@@ -27,6 +27,7 @@ const props = defineProps({
   storageBackend: String,
   allowedFileTypes: Array,
   maxNumberOfFiles: Number,
+  maxFileSize: Number,
   relations: {
     type: Object,
     default: () => ({}),
@@ -34,10 +35,6 @@ const props = defineProps({
   autoProceed: {
     type: Boolean,
     default: false,
-  },
-  multiple: {
-    type: Boolean,
-    default: true,
   },
   required: {
     type: Boolean,
@@ -52,8 +49,8 @@ const selected = defineModel("selected", { type: Array, default: [] })
 
 onMounted(() => {
   let restrictions = {}
-  if (!props.multiple) restrictions["maxNumberOfFiles"] = 1
   if (props.maxNumberOfFiles) restrictions["maxNumberOfFiles"] = props.maxNumberOfFiles
+  if (props.maxFileSize) restrictions["maxFileSize"] = props.maxFileSize
   if (props.allowedFileTypes && props.allowedFileTypes?.length) {
     restrictions["allowedFileTypes"] = props.allowedFileTypes
   }
@@ -127,13 +124,8 @@ onMounted(() => {
       uppyId: file.id,
       size: file.size,
     }
-    if (props.multiple) {
-      files.value = [newEntry, ...(files.value || [])]
-      selected.value = [...selected.value, newEntry.id]
-    } else {
-      files.value = [newEntry]
-      selected.value = [newEntry.id]
-    }
+    files.value = [newEntry, ...(files.value || [])]
+    selected.value = [...selected.value, newEntry.id]
   })
 
   return uppy

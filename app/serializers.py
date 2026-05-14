@@ -10,27 +10,36 @@ from app.models import Attachment
 
 class AttachmentSerializer(serializers.ModelSerializer):
     user = UserSerializer()
+    view_url = serializers.SerializerMethodField()
+    download_url = serializers.SerializerMethodField()
+    delete_url = serializers.SerializerMethodField()
+    created_on = serializers.SerializerMethodField()
+    upload_completed_on = serializers.SerializerMethodField()
+    size = serializers.SerializerMethodField()
+    path = serializers.SerializerMethodField()
 
     class Meta:
         model = Attachment
         exclude = []
 
-    def to_representation(self, instance):
-        rep = super().to_representation(instance)
-        rep["view_url"] = reverse('attachment_open', kwargs={
-            ATTACHMENT_PK_URL_KWARG: instance.id,
-        })
-        rep["download_url"] = reverse('attachment_download', kwargs={
-            ATTACHMENT_PK_URL_KWARG: instance.id,
-        })
-        rep["delete_url"] = reverse('attachment_delete', kwargs={
-            ATTACHMENT_PK_URL_KWARG: instance.id,
-        })
-        rep["created_on"] = date_format(instance.created_on, format="DATETIME_FORMAT")
-        if instance.upload_completed_on:
-            rep["upload_completed_on"] = date_format(instance.upload_completed_on, format="DATETIME_FORMAT")
-        if instance.file.storage.exists(instance.file.name):
-            rep["size"] = instance.file.size
-            rep["path"] = instance.file.name
-        return rep
+    def get_view_url(self, instance):
+        return reverse('attachment_open', kwargs={ATTACHMENT_PK_URL_KWARG: instance.id})
+
+    def get_download_url(self, instance):
+        return reverse('attachment_download', kwargs={ATTACHMENT_PK_URL_KWARG: instance.id})
+
+    def get_delete_url(self, instance):
+        return reverse('attachment_delete', kwargs={ATTACHMENT_PK_URL_KWARG: instance.id})
+
+    def get_created_on(self, instance):
+        return date_format(instance.created_on, format="DATETIME_FORMAT")
+
+    def get_upload_completed_on(self, instance):
+        return date_format(instance.upload_completed_on, format="DATETIME_FORMAT")
+
+    def get_size(self, instance):
+        return instance.file.size
+
+    def get_path(self, instance):
+        return instance.file.name
 # END_FEATURE direct_upload
