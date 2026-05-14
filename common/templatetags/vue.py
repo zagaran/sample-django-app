@@ -20,5 +20,9 @@ def to_v_init_arg(model_name):
 
 @register.filter
 def jsonify(value):
-    return json.dumps(value, cls=DjangoJSONEncoder)
+    return json.dumps(value, cls=DjangoJSONEncoder).translate({
+        ord(">"): "\\u003E",
+        ord("<"): "\\u003C",
+        ord("&"): "\\u0026",
+    })
 # END_FEATURE vue
