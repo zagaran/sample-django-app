@@ -1,0 +1,27 @@
+name: Build and deploy application
+run-name: Deploy to ${{ inputs.environment }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: environment to deploy to
+        default: staging
+        options:
+          - staging
+      skip_migration:
+        description: skip migrating data?
+        type: boolean
+        default: false
+jobs:
+  container-job:
+    name: Build and deploy application
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.11]
+    steps:
+      - name: Placeholder
+      - run: echo "Hello"
