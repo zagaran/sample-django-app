@@ -39,7 +39,10 @@ class DirectUploadFileField(forms.ModelMultipleChoiceField):
     ):
         self.allowed_file_types = [ft if ft.startswith(".") else "." + ft for ft in allowed_file_types]
         self.max_number_of_files = max_number_of_files
+
+        # Max file size in bytes
         self.max_file_size = max_file_size
+
         super().__init__(queryset=queryset, **kwargs)
         self.widget.queryset = self.queryset
 
