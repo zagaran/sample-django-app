@@ -77,9 +77,8 @@ onMounted(() => {
       shouldUseMultipart: false,
       getUploadParameters: (file, options) => {
         return {
-          method: "POST",
-          url: file.attachmentData.upload_presigned_url.url,
-          fields: file.attachmentData.upload_presigned_url.fields,
+          method: "PUT",
+          url: file.attachmentData.upload_presigned_url,
         }
       },
     })

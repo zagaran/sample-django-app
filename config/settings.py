@@ -340,6 +340,7 @@ if AWS_STORAGE_BUCKET_NAME:
             "bucket_name": AWS_STORAGE_BUCKET_NAME,
             "file_overwrite": False,
             "default_acl": "private",
+            "signature_version": "s3v4",
         }
     }
 else:
