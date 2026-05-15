@@ -4,6 +4,8 @@ import re
 
 from django.core.serializers.json import DjangoJSONEncoder
 from django.template.defaultfilters import register
+from django.utils.html import escapejs
+from django.utils.safestring import mark_safe
 
 
 @register.filter
@@ -20,9 +22,6 @@ def to_v_init_arg(model_name):
 
 @register.filter
 def jsonify(value):
-    return json.dumps(value, cls=DjangoJSONEncoder).translate({
-        ord(">"): "\\u003E",
-        ord("<"): "\\u003C",
-        ord("&"): "\\u0026",
-    })
+    json_str = json.dumps(value, cls=DjangoJSONEncoder)
+    return mark_safe(f"JSON.parse('{escapejs(json_str)}')")
 # END_FEATURE vue
