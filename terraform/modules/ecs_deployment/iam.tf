@@ -225,14 +225,9 @@ data "aws_iam_policy_document" "github_actions_deployment_policy" {
   }
 }
 
-data "aws_iam_role" "github_actions_deployment_role" {
-  count = var.github_actions_deployment_role_name == null ? 0 : 1
-  name  = var.github_actions_deployment_role_name
-}
-
 resource "aws_iam_role_policy" "github_actions_deployment_policy" {
-  count  = var.github_actions_deployment_role_name == null ? 0 : 1
+  count  = var.github_actions_deployment_role == null ? 0 : 1
   name   = "${local.app_env_name}-github-actions-deployment-policy"
-  role   = data.aws_iam_role.github_actions_deployment_role[0].id
+  role   = var.github_actions_deployment_role.id
   policy = data.aws_iam_policy_document.github_actions_deployment_policy.json
 }

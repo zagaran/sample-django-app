@@ -56,7 +56,7 @@ module "ecs_deployment" {
     container_web_memory = 1024
     container_web_count = 1
     ssl_policy = "ELBSecurityPolicy-TLS13-1-2-Res-FIPS-2023-04"
-    github_actions_deployment_role_name = module.github_actions_role.github_actions_deployment_role_name
+    github_actions_deployment_role = module.github_actions_role.github_actions_deployment_role
 }
 
 output "cluster_id" {

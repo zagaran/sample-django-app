@@ -30,9 +30,9 @@ jobs:
         python-version: [3.11]
     steps:
       - name: Git clone the repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
       - name: Configure AWS credentials
@@ -51,7 +51,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v4
         with:
-          terraform_version: 1.10.3
+          terraform_version: 1.15.4
       - name: Terraform init
         working-directory: ./terraform/envs/${{inputs.environment}}
         run: |

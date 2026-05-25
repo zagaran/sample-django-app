@@ -71,8 +71,11 @@ variable "container_web_count" {
   default = 1
 }
 
-variable "github_actions_deployment_role_name" {
-  type = string
+variable "github_actions_deployment_role" {
+  type = object({
+    name = string
+    id = string
+  })
   default = null
 }
 # START_FEATURE celery
