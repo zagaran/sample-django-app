@@ -1,4 +1,3 @@
-
 name: Build and deploy application
 run-name: Deploy to ${{ inputs.environment }}
 
@@ -50,7 +49,7 @@ jobs:
       - name: Check Profile
         run: aws sts get-caller-identity --profile ${{ vars.AWS_PROFILE_NAME }}
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: 1.10.3
       - name: Terraform init
