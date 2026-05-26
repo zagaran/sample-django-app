@@ -1,9 +1,9 @@
 terraform {
   backend "s3" {
-    bucket = ""  # TODO: FILL ME IN
-    key = "staging.tfstate"
+    bucket = "zagaran-terraform-test"  # TODO: FILL ME IN
+    key = "sample-django-app-staging.tfstate"
     region = "us-east-1"  # TODO: FILL ME IN
-    profile = "sample-django-app"  # TODO: FILL ME IN
+    profile = "zagaran-dev"  # TODO: FILL ME IN
   }
 
   required_providers {
@@ -16,7 +16,7 @@ terraform {
 
 provider "aws" {
   region = "us-east-1"  # TODO: FILL ME IN
-  profile = "sample-django-app"  # TODO: FILL ME IN
+  profile = "zagaran-dev"  # TODO: FILL ME IN
 }
 
 
