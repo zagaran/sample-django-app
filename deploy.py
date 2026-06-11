@@ -102,7 +102,7 @@ def build_and_push_image(env, profile, use_remote_cache):
             "--cache-to",
             f"type=registry,ref={cache_url},mode=max,image-manifest=true",
             "--cache-from",
-            f"type=registry,ref={cache_url}-cache"
+            f"type=registry,ref={cache_url}"
         ])
     subprocess.run(build_command, check=True)
 
