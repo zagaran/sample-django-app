@@ -61,5 +61,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install boto3 pygit2
+      - name: Set up Docker Buildx builder
+        run: |
+          docker buildx create --name containerd-builder --driver docker-container --use || true
+          docker buildx inspect --bootstrap
       - name: Build and deploy image to ${{ inputs.environment }}
         run: python deploy.py ${{ inputs.environment }} ${{ inputs.skip_migration && '--skip-migration' || '' }} --no-input --profile ${{ vars.AWS_PROFILE_NAME }} --use-remote-cache
