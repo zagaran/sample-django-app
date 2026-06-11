@@ -98,6 +98,7 @@ def build_and_push_image(env, profile, use_remote_cache):
     ]
     if use_remote_cache:
         build_command.extend([
+            "--builder=container",
             "--cache-to",
             f"type=registry,ref={ecr_image_uri}build",
             "--cache-from",
