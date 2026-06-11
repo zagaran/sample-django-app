@@ -25,7 +25,8 @@ module "github_actions_role" {
 
   role_name = "github_actions_deployment_role"
   github_repo_name = "sample-django-app"  # TODO: FILL ME IN
-  github_repo_owner_name = ""  # TODO: Fill ME IN
+  github_repo_owner_name = "zagaran"  # TODO: Fill ME IN
+  terraform_state_bucket_name = "zagaran-terraform-test"
 }
 
 output "github_actions_deployment_role_arn" {
