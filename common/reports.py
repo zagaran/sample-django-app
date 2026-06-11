@@ -175,7 +175,7 @@ class UsersReport(ReportSerializerBase):
         ReportColumn("full_name", callable=lambda user: user.get_full_name()),
         ReportColumn("email"),
         ReportColumn("created_on"),
-        ReportColumn("last_activity", callable=lambda user: user.user_actions.latest("created_on").created_on), # From UserAction model
+        ReportColumn("last_activity"),
     ]
     filter_kwargs = {"is_active": True}
     prefetch_related = ["user_actions"]
