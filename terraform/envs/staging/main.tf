@@ -40,13 +40,13 @@ module "ecs_deployment" {
     # Required Variables
     environment_name = "staging"  # Should match directory name
     application_name = "sample-django-app"  # Base application slug for resource naming
-    vpc_id = ""  # TODO: VPCs -> VPC ID
-    web_config_secret_name = ""  # TODO: Secrets Manager -> Store a new secret -> Secret name
-    s3_bucket_prefix = ""  # TODO: Base slug for S3 bucket names (unique among applications, shared among environments)
-    rds_engine_version = ""  # TODO: Desired Postgres major version, e.g. "18"
-    ses_from_email = ""  # TODO: Desired sending email within the provided SES identity
-    certificate_manager_arn =  ""  # TODO: Certificate manager -> Request -> ARN
-    ecr_repository_name =  ""  # TODO: ECR -> Create repository -> Repository name
+    vpc_id = "vpc-8fcb9af5"  # TODO: VPCs -> VPC ID
+    web_config_secret_name = "sample-django-app-web-config"  # TODO: Secrets Manager -> Store a new secret -> Secret name
+    s3_bucket_prefix = "zagaran-sample-dj-app-ecs"  # TODO: Base slug for S3 bucket names (unique among applications, shared among environments)
+    rds_engine_version = "18"  # TODO: Desired Postgres major version, e.g. "18"
+    ses_from_email = "alvin@zagaran.com"  # TODO: Desired sending email within the provided SES identity
+    certificate_manager_arn =  "arn:aws:acm:us-east-1:745415963933:certificate/270bf871-92aa-4c3e-99c2-b75b0b4e3e1d"  # TODO: Certificate manager -> Request -> ARN
+    ecr_repository_name =  "sample-django-app-test"  # TODO: ECR -> Create repository -> Repository name
 
     # Optional Variables
     rds_backup_retention_period = 10
