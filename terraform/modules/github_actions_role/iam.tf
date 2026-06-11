@@ -36,8 +36,8 @@ data "aws_iam_policy_document" "github_actions_shared_access_policy" {
       "s3:*"
     ]
     resources = [
-      "arn:aws:s3:::mbta-edms-terraform-state",
-      "arn:aws:s3:::mbta-edms-terraform-state/*"
+      format("arn:aws:s3:::%s", var.terraform_state_bucket_name),
+      format("arn:aws:s3:::%s/*", var.terraform_state_bucket_name)
     ]
   }
 
