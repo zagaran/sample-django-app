@@ -9,7 +9,7 @@ from django.core.files.storage import default_storage
 from django.db import models
 from django.db.models import TextChoices
 
-from common.models import User
+from common.models import User, UserAction
 
 
 def queryset_to_pages(queryset, page_size=2000):
@@ -171,16 +171,30 @@ class UsersReport(ReportSerializerBase):
     report_filename = 'users_report'
     model = User
     columns = [
-        ReportColumn("uuid", model_field="id"),
+        ReportColumn("id"),
         ReportColumn("full_name", callable=lambda user: user.get_full_name()),
         ReportColumn("email"),
-        ReportColumn("created_on"),
         ReportColumn("last_activity"),
     ]
     filter_kwargs = {"is_active": True}
     prefetch_related = ["user_actions"]
 
     def _get_row_values(self, user):
-        # This logic could be implemented via the callable kwarg, but we need
-        # an example of _get_row_values
+        # This logic could also be implemented via the `callable` kwarg, but it
+        # is implemented here to demonstrate usage of `_get_row_values`.
         return {"last_activity": user.user_actions.latest("created_on").created_on}
+
+
+class UserActionsReport(ReportSerializerBase):
+    """
+    Example user actions report.
+
+    `acting_user_email` field demonstrates foreign key traversal
+    """
+    report_filename = 'user_actions_report'
+    model = UserAction
+    columns = [
+        ReportColumn("id"),
+        ReportColumn("acting_user_email", model_field="user__email"),
+        ReportColumn("url"),
+    ]
