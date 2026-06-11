@@ -98,7 +98,10 @@ def build_and_push_image(env, profile, use_remote_cache):
     ]
     if use_remote_cache:
         build_command.extend([
-            "--cache-to", "type=inline", "--cache-from", f"type=registry,ref={ecr_image_uri}"
+            "--cache-to",
+            f"type=registry,ref={ecr_image_uri}build",
+            "--cache-from",
+            f"type=registry,ref={ecr_image_uri}build"
         ])
     subprocess.run(build_command, check=True)
 
