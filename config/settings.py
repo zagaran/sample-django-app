@@ -342,7 +342,6 @@ STORAGES = {
             "base_url": "/reports/",
             "location": os.path.join(BASE_DIR, 'reports'),
         },
-        "ROOT": os.path.join(BASE_DIR, 'static'),
     },
     # START_FEATURE sass_bootstrap
     "sass_processor": {
