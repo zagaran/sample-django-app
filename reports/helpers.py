@@ -1,15 +1,12 @@
 import csv
-from datetime import date, datetime
 import gc
 import io
 import logging
+from datetime import datetime, date
 
 from django.core.files.base import ContentFile
 from django.core.files.storage import storages
 from django.db import models
-from django.db.models import TextChoices
-
-from common.models import User, UserAction
 
 
 def queryset_to_pages(queryset, page_size=2000):
@@ -19,43 +16,44 @@ def queryset_to_pages(queryset, page_size=2000):
         pk = max(obj.pk for obj in page)
         page = queryset.filter(pk__gt=pk).order_by("pk")[:page_size]
 
+def get_object_attr(obj, attr):
+    """
+    Gets attribute from object, with support for foreign key traversal via `__`
+    """
+    parts = attr.split("__")
+    val = obj
+    for part in parts:
+        val = getattr(val, part, None)
+        if val is None:
+            # no related object, stop traversing
+            break
+    return val
 
-class ReportWriter(object):        
+
+class ReportWriter(object):
     def __init__(self, report_filename, columns_list, autoformat=False):
         """
         Takes in report_filename and columns_list.
-        columns_list can be a list of strings or a TextChoices object.
-        If it is a TextChoices object then columns will be TextChoices.labels
-        
-        If `autoformat` is True, automatic formatting will be applied to 
+
+        If `autoformat` is True, automatic formatting will be applied to
         non-string data types
         """
         self.report_filename = report_filename
         self.csv_string_io = io.StringIO()
         self.current_date = datetime.now().date()
         self.autoformat = autoformat
-
-        if isinstance(columns_list, TextChoices):
-            self.columns_list = columns_list.labels
-            self.text_choices = True
-        else:
-            self.columns_list = columns_list
-            self.text_choices = False
+        self.columns_list = columns_list
 
         self.dict_writer = csv.DictWriter(self.csv_string_io, fieldnames=self.columns_list)
         self.dict_writer.writeheader()
 
         self.storage = storages["reports"]
-    
-    def writerow(self, rowdict):
-        self.dict_writer.writerow(self.format_row(rowdict))
 
-    def writerows(self, rowdicts):
-        rowdicts = map(self.format_row, rowdicts)
-        self.dict_writer.writerows(rowdicts)
+    def writerow(self, row_dict):
+        self.dict_writer.writerow(self.format_row(row_dict))
 
-    def format_row(self, rowdict):
-        return {self.format_header(key): self.format_value(value) for (key, value) in rowdict.items()}
+    def format_row(self, row_dict):
+        return {key: self.format_value(value) for (key, value) in row_dict.items()}
 
     def format_value(self, value):
         if not self.autoformat:
@@ -68,16 +66,11 @@ class ReportWriter(object):
             return ""
         return value
 
-    def format_header(self, header):
-        if self.text_choices:
-            return header.label
-        return header
-
     def get_filename(self):
         filename = f"{self.report_filename}.csv"
         formatted_date = self.current_date.isoformat()
         return f"{formatted_date}/{filename}"
-    
+
     def save(self):
         self.csv_string_io.seek(0)
         report_file = ContentFile(self.csv_string_io.read().encode('utf-8'))
@@ -99,8 +92,7 @@ class ReportSerializerBase(object):
     related_model_args = []
     prefetch_related = []
     filter_kwargs = {}
-    Writer = ReportWriter
-    
+
     def __init__(self):
         # Save the select_related arguments for any model_fields that need foreign key traversal
         related_model_args = [*self.related_model_args]
@@ -124,9 +116,6 @@ class ReportSerializerBase(object):
         )
         return queryset
 
-    def get_paged_iterable(self):
-        return queryset_to_pages(self.get_iterable())
-
     def _get_row_values(self, obj):
         """If any column needs more complex handling, fill them out here"""
         return {}
@@ -139,62 +128,15 @@ class ReportSerializerBase(object):
             if column.callable is not None:
                 val = column.callable(obj)
             else:
-                val = self.get_object_attr(obj, column.model_field)
+                val = get_object_attr(obj, column.model_field)
             row[column.name] = val
         return row
 
-    def get_object_attr(self, obj, attr):
-        # handle foreign key traversal, because a simple getattr() won't work for those
-        parts = attr.split("__")
-        val = obj
-        for part in parts:
-            val = getattr(val, part, None)
-            if val is None:
-                # no related object, stop traversing
-                break
-        return val
-
     def write_report(self):
-        writer = self.Writer(self.report_filename, columns_list=[column.name for column in self.columns], autoformat=True)
-        for page in self.get_paged_iterable():
+        writer = ReportWriter(self.report_filename, columns_list=[column.name for column in self.columns], autoformat=True)
+        for page in queryset_to_pages(self.get_iterable()):
             for obj in page:
                 writer.writerow(self.get_row(obj))
             gc.collect()
         writer.save()
         logging.info("Done!")
-
-
-class UsersReport(ReportSerializerBase):
-    """
-    Example user report
-    """
-    report_filename = 'users_report'
-    model = User
-    columns = [
-        ReportColumn("id"),
-        ReportColumn("full_name", callable=lambda user: user.get_full_name()),
-        ReportColumn("email"),
-        ReportColumn("last_activity"),
-    ]
-    filter_kwargs = {"is_active": True}
-    prefetch_related = ["user_actions"]
-
-    def _get_row_values(self, user):
-        # This logic could also be implemented via the `callable` kwarg, but it
-        # is implemented here to demonstrate usage of `_get_row_values`.
-        return {"last_activity": user.user_actions.latest("created_on").created_on}
-
-
-class UserActionsReport(ReportSerializerBase):
-    """
-    Example user actions report.
-
-    `acting_user_email` field demonstrates foreign key traversal
-    """
-    report_filename = 'user_actions_report'
-    model = UserAction
-    columns = [
-        ReportColumn("id"),
-        ReportColumn("acting_user_email", model_field="user__email"),
-        ReportColumn("url"),
-    ]

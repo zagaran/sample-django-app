@@ -339,8 +339,8 @@ STORAGES = {
     "reports": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
         "OPTIONS": {
-            "base_url": "/reports/",
-            "location": os.path.join(BASE_DIR, 'reports'),
+            "base_url": "/report_files/",
+            "location": os.path.join(BASE_DIR, 'report_files'),
         },
     },
     # START_FEATURE sass_bootstrap

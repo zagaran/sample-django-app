@@ -71,4 +71,4 @@ webpack-stats.json
 # END_FEATURE ecs
 
 # Reporting
-reports/
+report_files/
