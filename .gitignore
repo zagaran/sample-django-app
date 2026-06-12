@@ -70,5 +70,5 @@ webpack-stats.json
 .terraform/
 # END_FEATURE ecs
 
-# User-uploaded files
-media/
+# Reporting
+reports/

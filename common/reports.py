@@ -5,7 +5,7 @@ import io
 import logging
 
 from django.core.files.base import ContentFile
-from django.core.files.storage import default_storage
+from django.core.files.storage import storages
 from django.db import models
 from django.db.models import TextChoices
 
@@ -45,7 +45,7 @@ class ReportWriter(object):
         self.dict_writer = csv.DictWriter(self.csv_string_io, fieldnames=self.columns_list)
         self.dict_writer.writeheader()
 
-        self.storage = default_storage
+        self.storage = storages["reports"]
     
     def writerow(self, rowdict):
         self.dict_writer.writerow(self.format_row(rowdict))

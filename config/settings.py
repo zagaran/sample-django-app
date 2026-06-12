@@ -322,7 +322,7 @@ MESSAGE_TAGS = {
 # START_FEATURE django_storages
 if LOCALHOST or BUILD:
     DEFAULT_STORAGE = {"BACKEND": "django.core.files.storage.FileSystemStorage"}
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+    MEDIA_ROOT = ""
 else:
     DEFAULT_STORAGE = {
         "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
@@ -336,6 +336,14 @@ else:
 STATIC_BACKEND = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage" if LOCALHOST else "whitenoise.storage.CompressedManifestStaticFilesStorage"
 STORAGES = {
     "default": DEFAULT_STORAGE,
+    "reports": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "OPTIONS": {
+            "base_url": "/reports/",
+            "location": os.path.join(BASE_DIR, 'reports'),
+        },
+        "ROOT": os.path.join(BASE_DIR, 'static'),
+    },
     # START_FEATURE sass_bootstrap
     "sass_processor": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
