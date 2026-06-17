@@ -11,6 +11,7 @@ urlpatterns = [
     # END_FEATURE django_react
     path("logout", views.LogoutView.as_view(), name="logout"),
     path("robots.txt", views.RobotsTxtView.as_view(), name="robots_txt"),
+    path("report-demo/", views.SampleReportView.as_view(), name="report_generation_demo"),
 ]
 
 # START_FEATURE debug_toolbar

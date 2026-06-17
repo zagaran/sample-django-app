@@ -8,17 +8,12 @@ from django.core.files.base import ContentFile
 from django.core.files.storage import storages
 from django.db import models
 
+from common.utils import queryset_to_pages
 
-def queryset_to_pages(queryset, page_size=2000):
-    page = queryset.order_by("pk")[:page_size]
-    while page:
-        yield page
-        pk = max(obj.pk for obj in page)
-        page = queryset.filter(pk__gt=pk).order_by("pk")[:page_size]
 
 def get_object_attr(obj, attr):
     """
-    Gets attribute from object, with support for foreign key traversal via `__`
+    Gets attribute from object, with support for foreign key traversal via __
     """
     parts = attr.split("__")
     val = obj
@@ -30,12 +25,12 @@ def get_object_attr(obj, attr):
     return val
 
 
-class ReportWriter(object):
-    def __init__(self, report_filename, columns_list, autoformat=False):
+class ReportWriter:
+    def __init__(self, report_filename, columns_list, autoformat=True):
         """
-        Takes in report_filename and columns_list.
+        Takes in report_folder and columns_list.
 
-        If `autoformat` is True, automatic formatting will be applied to
+        If autoformat is True (default), automatic formatting will be applied to
         non-string data types
         """
         self.report_filename = report_filename
@@ -44,7 +39,8 @@ class ReportWriter(object):
         self.autoformat = autoformat
         self.columns_list = columns_list
 
-        self.dict_writer = csv.DictWriter(self.csv_string_io, fieldnames=self.columns_list)
+        self.dict_writer = csv.DictWriter(self.csv_string_io,
+                                          fieldnames=self.columns_list)
         self.dict_writer.writeheader()
 
         self.storage = storages["reports"]
@@ -53,7 +49,8 @@ class ReportWriter(object):
         self.dict_writer.writerow(self.format_row(row_dict))
 
     def format_row(self, row_dict):
-        return {key: self.format_value(value) for (key, value) in row_dict.items()}
+        return {key: self.format_value(value) for (key, value) in
+                row_dict.items()}
 
     def format_value(self, value):
         if not self.autoformat:
@@ -67,9 +64,8 @@ class ReportWriter(object):
         return value
 
     def get_filename(self):
-        filename = f"{self.report_filename}.csv"
         formatted_date = self.current_date.isoformat()
-        return f"{formatted_date}/{filename}"
+        return f"{self.report_filename}/{formatted_date}.csv"
 
     def save(self):
         self.csv_string_io.seek(0)
@@ -78,20 +74,52 @@ class ReportWriter(object):
         return report_file
 
 
-class ReportColumn(object):
+class ReportColumn:
+    """
+    When instantiated with only name, the report will have a column with that
+    field.
+
+    Passing model_field in addition to name will add a column called name,
+    where the row value comes from model_field.
+
+    Passing callable in addition to name will add a column called callable,
+    where the row value comes from the result of evaluating callable on an
+    instance of the model. callable takes priority over model_field.
+    """
+
     def __init__(self, name, model_field=None, callable=None):
         self.name = name
         self.callable = callable
         self.model_field = None if callable else (model_field or name)
 
 
-class ReportSerializerBase(object):
-    report_filename = None
+class ReportSerializerBase:
+    """ Generic model serializer intended for report writing.
+
+    Takes a Django model and list of columns and generates a
+    CSV report of specified fields on database objects.
+    """
+
+    report_folder = ""
+    """Folder where the report file will be saved"""
+
     model: type[models.Model]
+    """Django model that will be serialized into a report"""
+
     columns: list[ReportColumn]
+    """
+    List of columns that will be the headers of the CSV report. 
+    See ReportColumn for details on column configuration options.
+    """
+
     related_model_args = []
+    """List of arguments to select_related"""
+
     prefetch_related = []
+    """List of arguments to prefetch_related (strings or Prefetch objects)"""
+
     filter_kwargs = {}
+    """Dictionary of keyword arguments that will be passed to filter"""
 
     def __init__(self):
         # Save the select_related arguments for any model_fields that need foreign key traversal
@@ -104,7 +132,8 @@ class ReportSerializerBase(object):
                 parts = model_field.split("__")
                 related_model_args.append("__".join(parts[:-1]))
         self.related_model_args = related_model_args
-        logging.info(f"Beginning export of {self.model.objects.count()} {self.model.__name__} objects")
+        logging.info(
+            f"Beginning export of {self.model.objects.count()} {self.model.__name__} objects")
 
     def get_iterable(self):
         queryset = self.model.objects.filter(
@@ -133,7 +162,9 @@ class ReportSerializerBase(object):
         return row
 
     def write_report(self):
-        writer = ReportWriter(self.report_filename, columns_list=[column.name for column in self.columns], autoformat=True)
+        writer = ReportWriter(self.report_folder,
+                              columns_list=[column.name for column in
+                                            self.columns])
         for page in queryset_to_pages(self.get_iterable()):
             for obj in page:
                 writer.writerow(self.get_row(obj))

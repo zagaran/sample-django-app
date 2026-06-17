@@ -1,0 +1,36 @@
+{% extends "base_templates/base.html" %}
+
+{% block title %}Report Demo{% endblock %}
+
+{% block body %}
+  <h1>Report Generation Demo</h1>
+  <form action="{% url 'report_generation_demo' %}" method="post">
+    {% csrf_token %}
+    <button class="btn btn-primary">Generate new reports</button>
+  </form>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Report Name</th>
+        <th>Generated On</th>
+        <th>Path to Report</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for report in reports %}
+        <tr>
+          <td>
+            {{ report.name }}
+          </td>
+          <td>
+            {{ report.generated_on }}
+          </td>
+          <td>
+            {{ report.url }}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

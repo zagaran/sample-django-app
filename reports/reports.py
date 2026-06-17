@@ -5,7 +5,7 @@ from reports.helpers import ReportColumn, ReportSerializerBase
 
 
 class UsersReport(ReportSerializerBase):
-    report_filename = 'users_report'
+    report_folder = 'users_report'
     model = User
     columns = [
         ReportColumn("email"),
@@ -15,7 +15,7 @@ class UsersReport(ReportSerializerBase):
 
 
 class PermissionsReport(ReportSerializerBase):
-    report_filename = 'permissions_report'
+    report_folder = 'permissions_report'
     model = Permission
     columns = [
         ReportColumn("name"),
