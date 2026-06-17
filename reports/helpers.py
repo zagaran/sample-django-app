@@ -75,22 +75,24 @@ class ReportWriter:
 
 
 class ReportColumn:
-    """
-    When instantiated with only name, the report will have a column with that
-    field.
+    """ Defines a column and how it is populated for a report """
 
-    Passing model_field in addition to name will add a column called name,
-    where the row value comes from model_field.
-
-    Passing callable in addition to name will add a column called callable,
-    where the row value comes from the result of evaluating callable on an
-    instance of the model. callable takes priority over model_field.
-    """
-
-    def __init__(self, name, model_field=None, callable=None):
+    def __init__(self, name, model_field=None, callable_fn=None):
         self.name = name
-        self.callable = callable
-        self.model_field = None if callable else (model_field or name)
+        """
+        Used to specify the column name in the report. When neither model_field
+        nor callable_fn is passed, this will also be the Django model field that is
+        used to populate the column.
+        """
+
+        self.callable_fn = callable_fn
+        """
+        Function that will be called with model instance to populate the column.
+        Takes precedence over model_field.
+        """
+
+        self.model_field = None if callable_fn else (model_field or name)
+        """Name of the field on the model that should populate the column"""
 
 
 class ReportSerializerBase:
@@ -154,8 +156,8 @@ class ReportSerializerBase:
         for column in self.columns:
             if column.name in row:
                 continue
-            if column.callable is not None:
-                val = column.callable(obj)
+            if column.callable_fn is not None:
+                val = column.callable_fn(obj)
             else:
                 val = get_object_attr(obj, column.model_field)
             row[column.name] = val

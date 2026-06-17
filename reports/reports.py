@@ -9,7 +9,8 @@ class UsersReport(ReportSerializerBase):
     model = User
     columns = [
         ReportColumn("email"),
-        ReportColumn("full_name", callable=lambda user: user.get_full_name()),
+        ReportColumn("full_name",
+                     callable_fn=lambda user: user.get_full_name()),
     ]
     filter_kwargs = {"is_active": True}
 
