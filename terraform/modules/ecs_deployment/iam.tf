@@ -148,3 +148,86 @@ resource "aws_iam_role_policy" "ecs_task_role_policy" {
   role = aws_iam_role.ecs_task_role.id
   policy = data.aws_iam_policy_document.ecs_task_role_policy.json
 }
+
+
+# Github actions deployment policy -- conditional on role name being passed in
+data "aws_iam_policy_document" "github_actions_deployment_policy" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "ecr:CompleteLayerUpload",
+      "ecr:UploadLayerPart",
+      "ecr:InitiateLayerUpload",
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:PutImage",
+      "ecr:BatchGetImage",
+      "ecr:Get*",
+    ]
+    resources = [local.ecr_repository_arn]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = ["ecr:GetAuthorizationToken"]
+    resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "ecs:Get*",
+      "ecs:RunTask",
+      "ecs:UpdateService",
+    ]
+    resources = [
+      local.ecs_arn_format,
+      "${local.ecs_arn_format}/*",
+      # START_FEATURE celery
+      aws_ecs_task_definition.worker.arn,
+      # END_FEATURE celery
+      aws_ecs_task_definition.web.arn,
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:Describe*",
+      "s3:Get*",
+      "s3:List*",
+    ]
+    resources = [
+      format("arn:aws:s3:::%s", aws_s3_bucket.bucket.id),
+      format("arn:aws:s3:::%s/*", aws_s3_bucket.bucket.id),
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "secretsmanager:Describe*",
+      "secretsmanager:Get*",
+    ]
+    resources = [
+      aws_secretsmanager_secret.web_infrastructure.arn,
+      data.aws_secretsmanager_secret.web_config.arn,
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "iam:PassRole"
+    ]
+    resources = [
+      aws_iam_role.ecs_execution_role.arn
+    ]
+  }
+}
+
+resource "aws_iam_role_policy" "github_actions_deployment_policy" {
+  count  = var.github_actions_deployment_role == null ? 0 : 1
+  name   = "${local.app_env_name}-github-actions-deployment-policy"
+  role   = var.github_actions_deployment_role.id
+  policy = data.aws_iam_policy_document.github_actions_deployment_policy.json
+}
