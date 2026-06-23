@@ -97,8 +97,12 @@ def build_and_push_image(env, profile, use_remote_cache):
         "docker", "buildx", "build", "--platform=linux/amd64", "--push", "-t", ecr_image_uri, ".",
     ]
     if use_remote_cache:
+        cache_url = ecr_image_uri + "-cache"
         build_command.extend([
-            "--cache-to", "type=inline", "--cache-from", f"type=registry,ref={ecr_image_uri}"
+            "--cache-to",
+            f"type=registry,ref={cache_url},mode=max,image-manifest=true",
+            "--cache-from",
+            f"type=registry,ref={cache_url}"
         ])
     subprocess.run(build_command, check=True)
 
