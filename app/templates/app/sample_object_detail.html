@@ -1,0 +1,56 @@
+{% extends "base_templates/base.html" %}
+{% load vue %}
+
+{% block title %}Sample Object {{sample_object.name }}{% endblock %}
+
+{% block body %}
+<div id="app" class="d-flex flex-column">
+  <div class="d-flex justify-content-between">
+    <div>
+      <h3>Sample Object {{ sample_object.name }}</h3>
+      <span>Created by <b>{{ sample_object.created_by }}</b> on {{ sample_object.created_on }}</span>
+    </div>
+
+    <div class="dropdown">
+      <button
+        class="btn btn-primary dropdown-toggle"
+        type="button"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        Actions
+      </button>
+      <ul class="dropdown-menu">
+        <li>
+          <a class="dropdown-item" href="{% url 'sample-object-edit' sample_object.id %}">
+            Edit
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card my-4">
+    <div class="card-body">
+      <h4 class="card-title">Description</h4>
+      <p style="white-space: pre-wrap">{{ sample_object.description }}</p>
+    </div>
+  </div>
+
+  {# START_FEATURE direct_upload #}
+  <div class="my-4 card">
+    <div class="card-body">
+      <h4 class="card-title">Attachments</h4>
+      <file-upload-dashboard
+        field-name="field-name"
+        :files="{{ attachments|jsonify }}"
+        storage-backend="{{ settings.DEFAULT_STORAGE_TYPE }}"
+        upload-start-url="{% url 'attachment_upload_start' %}"
+        :relations="{ sample_objects: '{{ sample_object.id }}' }"
+        :multiple="true"
+      ></file-upload-dashboard>
+    </div>
+  </div>
+</div>
+{# END_FEATURE direct_upload #}
+{% endblock %}

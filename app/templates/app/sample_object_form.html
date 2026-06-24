@@ -1,0 +1,12 @@
+{% extends "base_templates/base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}{{ form.action_title_formatted }}{% endblock %}
+
+{% block body %}
+<div id="app">
+  <h2>{{ form.action_title_formatted }}</h2>
+  {% crispy form %}
+</div>
+{% endblock %}

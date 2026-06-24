@@ -1,0 +1,58 @@
+<nav class="navbar navbar-expand-sm navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      [PROJECT]
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbar-items"
+      aria-controls="navbar-items"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    {% if user.is_authenticated %}
+    <div class="navbar-nav gap-1">
+      <a href="{% url 'dashboard' %}" class="btn btn-primary navbar-btn">
+        Dashboard
+      </a>
+    </div>
+    {% endif %}
+    <div class="collapse navbar-collapse justify-content-end" id="navbar-items">
+      <div class="navbar-nav gap-1">
+        {% if user.is_authenticated %}
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              id="user-menu-dropdown"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <span class="bi-person"></span> {{ user }}
+            </a>
+            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="user-menu-dropdown">
+              <form method="post" action="{% url 'logout' %}" class="nav-item d-grid">
+                {% csrf_token %}
+                <button type="submit" class="dropdown-item">Log Out</button>
+              </form>
+            </div>
+          </li>
+        {% else %}
+          <li class="nav-item d-grid">
+            {# START_FEATURE django_social #}
+            <a
+              href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.GET.next }}"
+              class="btn btn-primary navbar-btn"
+            >Log in with Google</a>
+            {# END_FEATURE django_social #}
+          </li>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</nav>

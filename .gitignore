@@ -54,6 +54,7 @@ venv.bak/
 node_modules/
 
 # Compiled Files
+static/js/dist*
 staticfiles/
 staticfiles/*
 # START_FEATURE sass_bootstrap
@@ -65,7 +66,10 @@ static/webpack_bundles/
 webpack-stats.json
 # END_FEATURE django_react
 
+
+# Locally uploaded files
+media/
+
 # START_FEATURE ecs
-.terraform.lock.hcl
 .terraform/
 # END_FEATURE ecs

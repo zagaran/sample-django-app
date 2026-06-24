@@ -1,0 +1,46 @@
+from crispy_forms.helper import Layout
+from crispy_forms.layout import Fieldset
+from django import forms
+from django.http import HttpRequest
+from app.models import Attachment, SampleObject
+from common.fields import DirectUploadFileField
+from common.forms import ActionFormMixin, CrispyFormMixin
+
+
+class SampleObjectBaseForm(CrispyFormMixin, ActionFormMixin, forms.ModelForm):
+    request: HttpRequest
+
+    # START_FEATURE direct_upload
+    attachments = DirectUploadFileField(queryset=Attachment.objects.filter(deleted_on=None), required=False)
+    # END_FEATURE direct_upload
+
+    class Meta:
+        model = SampleObject
+        exclude = ['created_by']
+
+    layout = Layout(
+        Fieldset(
+            "Details",
+            "name",
+            "description"
+        ),
+        # START_FEATURE direct_upload
+        "attachments"
+        # END_FEATURE direct_upload
+    )
+
+    def __init__(self, request: HttpRequest, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.request = request
+
+
+class SampleObjectCreateForm(SampleObjectBaseForm):
+    action_title = "Create Sample Object"
+
+    def save(self, commit=True):
+        self.instance.created_by = self.request.user
+        return super().save(commit)
+
+
+class SampleObjectEditForm(SampleObjectBaseForm):
+    action_title = "Edit {instance}"

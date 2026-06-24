@@ -13,6 +13,8 @@ import os
 
 from django.contrib.messages import constants as messages
 
+from common.constants import StorageBackendType
+
 
 env = environ.Env(
     # Sets Django's ALLOWED_HOSTS setting
@@ -52,6 +54,10 @@ env = environ.Env(
     # Set to True to enable the Django Debug Toolbar
     DEBUG_TOOLBAR=(bool, False),
     # END_FEATURE debug_toolbar
+
+    # START_FEATURE direct_upload
+    AWS_STORAGE_BUCKET_NAME=(str, ""),
+    # END_FEATURE direct_upload
 )
 # If ALLOWED_HOSTS has been configured, then we're running on a server and
 # can skip looking for a .env file (this assumes that .env files
@@ -128,6 +134,7 @@ if DEBUG_TOOLBAR:
 
 LOCAL_APPS = [
     "common",
+    "app",
     # START_FEATURE celery
     "tasks",
     # END_FEATURE celery
@@ -138,7 +145,8 @@ INSTALLED_APPS = THIRD_PARTY_APPS + LOCAL_APPS
 MIDDLEWARE = [
     "common.middleware.HealthCheckMiddleware",
     "django.middleware.security.SecurityMiddleware",
-    
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+
     # START_FEATURE docker
     "whitenoise.middleware.WhiteNoiseMiddleware",
     # END_FEATURE docker
@@ -147,7 +155,7 @@ MIDDLEWARE = [
     "common.middleware.MaintenanceModeMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    
+
     # START_FEATURE django_social
     "social_django.middleware.SocialAuthExceptionMiddleware",
     # END_FEATURE django_social
@@ -320,20 +328,27 @@ MESSAGE_TAGS = {
 
 
 # START_FEATURE django_storages
-if LOCALHOST or BUILD:
-    DEFAULT_STORAGE = {"BACKEND": "django.core.files.storage.FileSystemStorage"}
-    MEDIA_ROOT = ""
-else:
+AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
+if PRODUCTION and not AWS_STORAGE_BUCKET_NAME:
+    raise Exception('config/settings.py: `AWS_STORAGE_BUCKET_NAME` is required when `PRODUCTION=true`')
+
+if AWS_STORAGE_BUCKET_NAME:
+    DEFAULT_STORAGE_TYPE = StorageBackendType.s3
     DEFAULT_STORAGE = {
         "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
         "OPTIONS": {
-            "bucket_name": env("AWS_STORAGE_BUCKET_NAME"),
+            "bucket_name": AWS_STORAGE_BUCKET_NAME,
             "file_overwrite": False,
             "default_acl": "private",
+            "signature_version": "s3v4",
         }
     }
+else:
+    DEFAULT_STORAGE_TYPE = StorageBackendType.filesystem
+    DEFAULT_STORAGE = {"BACKEND": "django.core.files.storage.FileSystemStorage"}
+    MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 # END_FEATURE django_storages
-STATIC_BACKEND = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage" if LOCALHOST else "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 STORAGES = {
     "default": DEFAULT_STORAGE,
     # START_FEATURE sass_bootstrap
@@ -347,7 +362,11 @@ STORAGES = {
     },
     # END_FEATURE sass_bootstrap
     "staticfiles": {
-        "BACKEND": STATIC_BACKEND,
+        "BACKEND": (
+            "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
+            if DEBUG else
+            "whitenoise.storage.CompressedManifestStaticFilesStorage"
+        ),
     },
 }
 

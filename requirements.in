@@ -3,6 +3,7 @@ django-environ
 django-extensions>=3.2
 requests
 psycopg2
+whitenoise
 
 ####### OPTIONAL FEATURES #######
 
@@ -27,6 +28,10 @@ sentry-sdk
 # START_FEATURE django_storages
 django-storages
 # END_FEATURE django_storages
+
+# START_FEATURE direct_upload
+boto3
+# END_FEATURE
 
 # START_FEATURE docker
 gunicorn

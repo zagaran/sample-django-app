@@ -1,6 +1,9 @@
 {# START_FEATURE sass_bootstrap #}
 {% load sass_tags %}
 {# END_FEATURE sass_bootstrap #}
+
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -11,43 +14,13 @@
     <link href="{% sass_src 'styles/base.scss' %}" rel="stylesheet">
     {# END_FEATURE sass_bootstrap #}
     <link rel="icon" type="image/png" href="/static/favicon.png">
+    <link rel="stylesheet" href="{% static 'js/dist/vue/main.css' %}">
+
     {% block head %}{% endblock %}
   </head>
   <body>
-    <nav class="navbar navbar-expand-sm navbar-light bg-light">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="/">
-          [PROJECT]
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-items" aria-controls="navbar-items" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-end" id="navbar-items">
-          <div class="navbar-nav gap-1">
-            {% if user.is_authenticated %}
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" id="user-menu-dropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  <span class="bi-person"></span> {{ user }}
-                </a>
-                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="user-menu-dropdown">
-                  <form method="post" action="{% url 'logout' %}" class="nav-item d-grid">
-                    {% csrf_token %}
-                    <button type="submit" class="dropdown-item">Log Out</button>
-                  </form>
-                </div>
-              </li>
-            {% else %}
-              <li class="nav-item d-grid">
-                {# START_FEATURE django_social #}
-                <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.GET.next }}" class="btn btn-primary navbar-btn">Log in with Google</a>
-                {# END_FEATURE django_social #}
-              </li>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-    </nav>
-    {% if not PRODUCTION and not LOCALHOST %}
+    {% include "base_templates/navbar.html" %}
+    {% if not settings.PRODUCTION and not settings.LOCALHOST %}
     <div class="container-fluid alert alert-danger">
       <div class="row">
         <div class="col-lg-2"></div>
@@ -69,9 +42,21 @@
           {{ message }}
         </div>
       {% endfor %}
-      {% block body %}{% endblock %}
+      <div class="container py-5">
+        {% block body %}
+        {% endblock %}
+      </div>
     </div>
     {# END_FEATURE bootstrap_messages #}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    {# START_FEATURE vue #}
+    <script>
+      window.csrfmiddlewaretoken = '{{ csrf_token }}'
+    </script>
+    {% block bottom_javascript %}
+      <script type="module" src="{% static "js/dist/pages/default.js" %}"></script>
+    {% endblock %}
+    {# END_FEATURE vue #}
+
   </body>
 </html>
