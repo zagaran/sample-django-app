@@ -1,4 +1,5 @@
-# START_FEATURE reportsimport csv
+# START_FEATURE reports
+import csv
 import gc
 import io
 import logging
@@ -172,4 +173,5 @@ class ReportSerializerBase:
                 writer.writerow(self.get_row(obj))
             gc.collect()
         writer.save()
-        logging.info("Done!")# END_FEATURE reports
+        logging.info("Done!")
+# END_FEATURE reports

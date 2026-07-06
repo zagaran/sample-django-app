@@ -34,4 +34,5 @@ class PermissionsReport(ReportSerializerBase):
         else:
             val = None
         row_values["groups_with_permission"] = val
-        return row_values# END_FEATURE reports
+        return row_values
+# END_FEATURE reports
