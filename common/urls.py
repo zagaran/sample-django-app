@@ -9,6 +9,10 @@ urlpatterns = [
     # TODO: delete me; this is just a reference example
     path("django-react/", views.DjangoReactView.as_view(), name='django_react_demo'),
     # END_FEATURE django_react
+    # START_FEATURE reports
+    # TODO: delete me; this is just a reference example
+    path("report-demo/", views.SampleReportView.as_view(), name='report_generation_demo'),
+    # END_FEATURE reports
     path("logout", views.LogoutView.as_view(), name="logout"),
     path("robots.txt", views.RobotsTxtView.as_view(), name="robots_txt"),
 ]
