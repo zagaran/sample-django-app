@@ -69,3 +69,7 @@ webpack-stats.json
 .terraform.lock.hcl
 .terraform/
 # END_FEATURE ecs
+
+# START_FEATURE reports
+report_files/
+# END_FEATURE reports
