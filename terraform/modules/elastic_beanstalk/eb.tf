@@ -179,7 +179,7 @@ data "aws_elastic_beanstalk_solution_stack" "python_3_11" {
 
 resource "aws_elastic_beanstalk_environment" "eb_web" {
   name = format("%s-web", lower(var.environment_name))
-  application = "var.eb_application_name"
+  application = var.eb_application_name
   solution_stack_name = data.aws_elastic_beanstalk_solution_stack.python_3_11.name
   cname_prefix = var.cname_prefix != "" ? var.cname_prefix : lower(var.environment_name)
   tier = "WebServer"
@@ -203,7 +203,28 @@ resource "aws_elastic_beanstalk_environment" "eb_web" {
 }
 
 resource "aws_elastic_beanstalk_environment" "eb_worker" {
-  count = var.create_worker
+  count = var.create_worker ? 1 : 0
+  name = format("%s-worker", lower(var.environment_name))
+  application = var.eb_application_name
+  solution_stack_name = data.aws_elastic_beanstalk_solution_stack.python_3_11.name
+  tier = "Worker"
+
+  # Dynamically apply settings defined in locals above
+  dynamic setting {
+    for_each = local.eb_web_settings
+    content {
+      namespace = setting.value["namespace"]
+      name = setting.value["name"]
+      value = setting.value["value"]
+    }
+  }
+
+  # Settings overrides
+  lifecycle {
+    # Auto-environment updates change solution_stack_name
+    # Don't trigger terraform to recreate environments when settings are changed via config changes in `.ebextensions` directory
+    ignore_changes = [setting, solution_stack_name]
+  }
 }
 
 

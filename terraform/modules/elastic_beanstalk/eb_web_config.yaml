@@ -1,0 +1,144 @@
+ settings:
+  AWSEBAutoScalingScaleDownPolicy.aws:autoscaling:trigger:
+    LowerBreachScaleIncrement: '-1'
+  AWSEBAutoScalingScaleUpPolicy.aws:autoscaling:trigger:
+    UpperBreachScaleIncrement: '1'
+  AWSEBCloudwatchAlarmHigh.aws:autoscaling:trigger:
+    UpperThreshold: '6'
+  AWSEBCloudwatchAlarmLow.aws:autoscaling:trigger:
+    BreachDuration: '5'
+    EvaluationPeriods: '1'
+    LowerThreshold: '3'
+    MeasureName: Latency
+    Period: '5'
+    Statistic: Average
+    Unit: Seconds
+  AWSEBLoadBalancerSecurityGroup.aws:ec2:vpc:
+    VPCId: # emily todo
+  AWSEBV2LoadBalancerListener.aws:elbv2:listener:default:
+    DefaultProcess: default
+    ListenerEnabled: 'true'
+    Protocol: HTTP
+    Rules: null
+    SSLCertificateArns: null
+    SSLPolicy: null
+  AWSEBV2LoadBalancerListener443.aws:elbv2:listener:443:
+    DefaultProcess: default
+    ListenerEnabled: 'true'
+    Protocol: HTTPS
+    Rules: null
+    SSLCertificateArns: # emily todo
+    SSLPolicy: ELBSecurityPolicy-FS-1-2-Res-2020-10
+  aws:autoscaling:asg:
+    Availability Zones: Any
+    Cooldown: '360'
+    Custom Availability Zones: ''
+    EnableCapacityRebalancing: 'false'
+    MaxSize: '4'
+    MinSize: '2'
+  aws:autoscaling:launchconfiguration:
+    BlockDeviceMappings: null
+    DisableIMDSv1: 'false'
+    EC2KeyName: null
+    IamInstanceProfile: aws-elasticbeanstalk-ec2-role
+    InstanceType: m6i.large
+    LaunchTemplateTagPropagationEnabled: null
+    MonitoringInterval: 5 minute
+    RootVolumeIOPS: null
+    RootVolumeSize: null
+    RootVolumeThroughput: null
+    RootVolumeType: null
+    SSHSourceRestriction: tcp,22,22,0.0.0.0/0
+    SecurityGroups: # emily todo
+  aws:autoscaling:updatepolicy:rollingupdate:
+    MaxBatchSize: null
+    MinInstancesInService: null
+    PauseTime: null
+    RollingUpdateEnabled: 'false'
+    RollingUpdateType: Time
+    Timeout: PT30M
+  aws:ec2:instances:
+    EnableSpot: 'false'
+    InstanceTypes: m6i.large
+    SpotFleetOnDemandAboveBasePercentage: '70'
+    SpotFleetOnDemandBase: '0'
+    SpotMaxPrice: null
+    SupportedArchitectures: x86_64
+  aws:ec2:vpc:
+    ELBScheme: internal
+    ELBSubnets: # emily todo
+    Subnets: # emily todo
+    VPCId: # emily todo
+  aws:elasticbeanstalk:application:
+    Application Healthcheck URL: /health-check/
+  aws:elasticbeanstalk:cloudwatch:logs:
+    DeleteOnTerminate: 'false'
+    RetentionInDays: '7'
+    StreamLogs: 'false'
+  aws:elasticbeanstalk:cloudwatch:logs:health:
+    DeleteOnTerminate: 'false'
+    HealthStreamingEnabled: 'false'
+    RetentionInDays: '7'
+  aws:elasticbeanstalk:command:
+    BatchSize: '100'
+    BatchSizeType: Percentage
+    DeploymentPolicy: AllAtOnce
+    IgnoreHealthCheck: 'false'
+    Timeout: '600'
+  aws:elasticbeanstalk:container:python:
+    NumProcesses: '1'
+    NumThreads: '15'
+  aws:elasticbeanstalk:control:
+    DefaultSSHPort: '22'
+    LaunchTimeout: '0'
+    LaunchType: Migration
+    RollbackLaunchOnFailure: 'false'
+  aws:elasticbeanstalk:environment:
+    EnvironmentType: LoadBalanced
+    ExternalExtensionsS3Bucket: null
+    ExternalExtensionsS3Key: null
+    LoadBalancerIsShared: 'true'
+    LoadBalancerType: application
+    ServiceRole: # emily todo
+  aws:elasticbeanstalk:environment:process:default:
+    DeregistrationDelay: '20'
+    HealthCheckInterval: '10'
+    HealthyThresholdCount: '5'
+    Port: '80'
+    Protocol: HTTP
+    StickinessEnabled: 'false'
+    StickinessLBCookieDuration: '86400'
+    StickinessType: lb_cookie
+    UnhealthyThresholdCount: '5'
+  aws:elasticbeanstalk:environment:proxy:
+    ProxyServer: apache
+  aws:elasticbeanstalk:environment:proxy:staticfiles:
+    /static: staticfiles
+  aws:elasticbeanstalk:healthreporting:system:
+    ConfigDocument: '{"Version":1,"CloudWatchMetrics":{"Instance":{"RootFilesystemUtil":null,"CPUIrq":null,"LoadAverage5min":null,"ApplicationRequests5xx":null,"ApplicationRequests4xx":null,"CPUUser":null,"LoadAverage1min":null,"ApplicationLatencyP50":null,"CPUIdle":null,"InstanceHealth":null,"ApplicationLatencyP95":null,"ApplicationLatencyP85":null,"ApplicationLatencyP90":null,"CPUSystem":null,"ApplicationLatencyP75":null,"CPUSoftirq":null,"ApplicationLatencyP10":null,"ApplicationLatencyP99":null,"ApplicationRequestsTotal":null,"ApplicationLatencyP99.9":null,"ApplicationRequests3xx":null,"ApplicationRequests2xx":null,"CPUIowait":null,"CPUNice":null},"Environment":{"InstancesSevere":null,"InstancesDegraded":null,"ApplicationRequests5xx":null,"ApplicationRequests4xx":null,"ApplicationLatencyP50":null,"ApplicationLatencyP95":null,"ApplicationLatencyP85":null,"InstancesUnknown":null,"ApplicationLatencyP90":null,"InstancesInfo":null,"InstancesPending":null,"ApplicationLatencyP75":null,"ApplicationLatencyP10":null,"ApplicationLatencyP99":null,"ApplicationRequestsTotal":null,"InstancesNoData":null,"ApplicationLatencyP99.9":null,"ApplicationRequests3xx":null,"ApplicationRequests2xx":null,"InstancesOk":null,"InstancesWarning":null}},"Rules":{"Environment":{"ELB":{"ELBRequests4xx":{"Enabled":true}},"Application":{"ApplicationRequests4xx":{"Enabled":true}}}}}'
+    EnhancedHealthAuthEnabled: 'true'
+    HealthCheckSuccessThreshold: Ok
+    SystemType: enhanced
+  aws:elasticbeanstalk:hostmanager:
+    LogPublicationControl: 'false'
+  aws:elasticbeanstalk:managedactions:
+    ManagedActionsEnabled: 'true'
+    PreferredStartTime: SUN:08:00
+    ServiceRoleForManagedUpdates: # emily todo
+  aws:elasticbeanstalk:managedactions:platformupdate:
+    InstanceRefreshEnabled: 'false'
+    UpdateLevel: minor
+  aws:elasticbeanstalk:monitoring:
+    Automatically Terminate Unhealthy Instances: 'true'
+  aws:elasticbeanstalk:sns:topics:
+    Notification Endpoint: null
+    Notification Protocol: email
+    Notification Topic ARN: null
+    Notification Topic Name: null
+  aws:elasticbeanstalk:trafficsplitting:
+    EvaluationTime: null
+    NewVersionPercent: null
+  aws:elasticbeanstalk:xray:
+    XRayEnabled: 'false'
+  aws:rds:dbinstance:
+    HasCoupledDatabase: 'false'
