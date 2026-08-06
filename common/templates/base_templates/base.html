@@ -39,7 +39,12 @@
             {% else %}
               <li class="nav-item d-grid">
                 {# START_FEATURE django_social #}
-                <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.GET.next }}" class="btn btn-primary navbar-btn">Log in with Google</a>
+                <form action="{% url 'social:begin' 'google-oauth2' %}?next={{ request.GET.next }}" method="post">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-primary navbar-btn">
+                    Log in with Google
+                  </button>
+                </form>
                 {# END_FEATURE django_social #}
               </li>
             {% endif %}
