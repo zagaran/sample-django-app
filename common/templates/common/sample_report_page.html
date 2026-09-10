@@ -3,10 +3,7 @@
 {# TODO: delete me; this is just a reference example #}
 {% extends "base_templates/base.html" %}
 
-{% block title %}Report Demo{% endblock %}
-
 {% block body %}
-  <h1>Report Generation Demo</h1>
   <form action="{% url 'report_generation_demo' %}" method="post">
     {% csrf_token %}
     <button class="btn btn-primary">Generate new reports</button>

@@ -322,6 +322,7 @@ MESSAGE_TAGS = {
 def get_storage_config(storage_location=""):
     # START_FEATURE django_storages
     if LOCALHOST or BUILD:
+        storage_location = f"media/{storage_location}"
         backend = "django.core.files.storage.FileSystemStorage"
         options = {
             "base_url": f"/{storage_location}/",

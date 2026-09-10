@@ -13,11 +13,15 @@ from django.utils import timezone
 # END_FEATURE celery
 # START_FEATURE reports
 from django.core.files.storage import storages
+
+from common.mixins import CommonContextMixin
 from reports.reports import UsersReport, PermissionsReport
 # END_FEATURE reports
 
-class IndexView(TemplateView):
+class IndexView(CommonContextMixin, TemplateView):
     template_name = "common/index.html"
+    page_header = "Home"
+    is_root_view = True
 
 
 class LogoutView(View):
@@ -57,23 +61,27 @@ class SampleFormView(FormView):
     form_class = SampleForm
 # END_FEATURE crispy_forms
 # START_FEATURE reports
-class SampleReportView(TemplateView):
+class SampleReportView(CommonContextMixin, TemplateView):
     # TODO: delete me; this is just a reference example
     report_classes = [UsersReport, PermissionsReport]
     template_name = 'common/sample_report_page.html'
+    parent_url_name = "index"
+    page_header = "Report Generation Demo"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         reports = []
+        report_storage = storages["reports"]
         for ReportClass in self.report_classes:
             prefix = ReportClass.report_folder
+            if not report_storage.exists(prefix):
+                continue
             report_file_paths = [f"{prefix}/{file_name}" for file_name in
-                                 storages["reports"].listdir(prefix)[1]]
+                                 report_storage.listdir(prefix)[1]]
             reports.extend({
                                "name": prefix,
-                               "generated_on": storages[
-                                   "reports"].get_created_time(file),
-                               "url": storages["reports"].url(file)
+                               "generated_on": report_storage.get_created_time(file),
+                               "url": report_storage.url(file)
                            } for file in report_file_paths)
         context["reports"] = reports
         return context

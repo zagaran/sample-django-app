@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>[PROJECT] - {% block title %}{% endblock %}</title>
+    <title>[PROJECT] - {% block title %}{{ page_title }}{% endblock %}</title>
     {# START_FEATURE sass_bootstrap #}
     <link href="{% sass_src 'styles/base.scss' %}" rel="stylesheet">
     {# END_FEATURE sass_bootstrap #}
@@ -74,6 +74,28 @@
           {{ message }}
         </div>
       {% endfor %}
+
+      {% if breadcrumbs and not is_root_view %}
+        <nav class="mt-3" aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0">
+            {% for breadcrumb in breadcrumbs %}
+              {% if not forloop.last %}
+                <li class="breadcrumb-item"><a href="{{ breadcrumb.url }}">{{ breadcrumb.text }}</a></li>
+              {% else %}
+                <li class="breadcrumb-item active" aria-current="page">{{ breadcrumb.text }}</li>
+              {% endif %}
+            {% endfor %}
+          </ol>
+        </nav>
+      {% endif %}
+
+      {% if page_header %}
+        <h1 class="my-4">{{ page_header }}</h1>
+      {% elif warn_missing_page_header %}
+        <div class="alert bg-danger text-light" title="Please set a page_header on the view.">
+            MISSING PAGE HEADER
+        </div>
+      {% endif %}
       {% block body %}{% endblock %}
     </div>
     {# END_FEATURE bootstrap_messages #}
