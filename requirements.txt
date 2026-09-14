@@ -179,7 +179,7 @@ social-auth-app-django==6.0.0
     # via -r requirements.in
 social-auth-core==5.0.2
     # via social-auth-app-django
-sqlparse==0.5.5
+sqlparse==0.6.0
     # via django
 stack-data==0.6.3
     # via ipython

@@ -342,7 +342,7 @@ social-auth-core==5.0.2
     # via
     #   -c requirements.txt
     #   social-auth-app-django
-sqlparse==0.5.5
+sqlparse==0.6.0
     # via
     #   -c requirements.txt
     #   django
