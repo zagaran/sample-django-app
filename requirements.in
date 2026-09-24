@@ -30,8 +30,9 @@ django-storages
 # END_FEATURE django_storages
 
 # START_FEATURE direct_upload
-boto3
-# END_FEATURE
+# Local editable install while django-attachments-framework is developed alongside this app
+-e ../django-attachments-framework
+# END_FEATURE direct_upload
 
 # START_FEATURE docker
 gunicorn

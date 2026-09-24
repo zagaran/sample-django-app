@@ -2,8 +2,11 @@ from crispy_forms.helper import Layout
 from crispy_forms.layout import Fieldset
 from django import forms
 from django.http import HttpRequest
-from app.models import Attachment, SampleObject
-from common.fields import DirectUploadFileField
+
+# START_FEATURE direct_upload
+from attachments_framework.forms import AttachmentsField
+# END_FEATURE direct_upload
+from app.models import SampleObject
 from common.forms import ActionFormMixin, CrispyFormMixin
 
 
@@ -11,7 +14,8 @@ class SampleObjectBaseForm(CrispyFormMixin, ActionFormMixin, forms.ModelForm):
     request: HttpRequest
 
     # START_FEATURE direct_upload
-    attachments = DirectUploadFileField(queryset=Attachment.objects.filter(deleted_on=None), required=False)
+    # `browse` lists every attachment so existing uploads can be selected, not just the ones already attached
+    attachments = AttachmentsField(required=False, browse=True)
     # END_FEATURE direct_upload
 
     class Meta:

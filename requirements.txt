@@ -4,6 +4,8 @@
 #
 #    pip-compile requirements.in
 #
+-e ../django-attachments-framework
+    # via -r requirements.in
 asgiref==3.8.1
     # via django
 asttokens==3.0.0

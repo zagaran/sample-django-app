@@ -78,12 +78,11 @@
     <div class="my-4 card">
       <div class="card-body">
         <h3 class="card-title">All Attachments</h3>
-        <file-upload-dashboard
+        <attachment-manager
           :files="{{ attachments|jsonify }}"
-          storage-backend="{{ settings.DEFAULT_STORAGE_TYPE }}"
-          upload-start-url="{% url 'attachment_upload_start' %}"
+          upload-start-url="{% url 'attachments_framework:upload_start' %}"
           :multiple="true"
-        ></file-upload-dashboard>
+        ></attachment-manager>
       </div>
     </div>
     {# END_FEATURE direct_upload #}

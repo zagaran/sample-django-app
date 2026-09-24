@@ -13,8 +13,6 @@ import os
 
 from django.contrib.messages import constants as messages
 
-from common.constants import StorageBackendType
-
 
 env = environ.Env(
     # Sets Django's ALLOWED_HOSTS setting
@@ -135,6 +133,9 @@ if DEBUG_TOOLBAR:
 LOCAL_APPS = [
     "common",
     "app",
+    # START_FEATURE direct_upload
+    "attachments_framework",
+    # END_FEATURE direct_upload
     # START_FEATURE celery
     "tasks",
     # END_FEATURE celery
@@ -333,7 +334,6 @@ if PRODUCTION and not AWS_STORAGE_BUCKET_NAME:
     raise Exception('config/settings.py: `AWS_STORAGE_BUCKET_NAME` is required when `PRODUCTION=true`')
 
 if AWS_STORAGE_BUCKET_NAME:
-    DEFAULT_STORAGE_TYPE = StorageBackendType.s3
     DEFAULT_STORAGE = {
         "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
         "OPTIONS": {
@@ -344,10 +344,16 @@ if AWS_STORAGE_BUCKET_NAME:
         }
     }
 else:
-    DEFAULT_STORAGE_TYPE = StorageBackendType.filesystem
     DEFAULT_STORAGE = {"BACKEND": "django.core.files.storage.FileSystemStorage"}
     MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 # END_FEATURE django_storages
+
+# START_FEATURE direct_upload
+# Uploads go directly to S3 when the default storage is S3, and are proxied through Django otherwise
+ATTACHMENTS_FRAMEWORK = {
+    "PERMISSION_CLASS": "common.permissions.AttachmentPermission",
+}
+# END_FEATURE direct_upload
 
 STORAGES = {
     "default": DEFAULT_STORAGE,

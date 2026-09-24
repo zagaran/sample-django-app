@@ -2,12 +2,21 @@
 import components from "./components"
 import directives from "./directives"
 
+// START_FEATURE direct_upload
+import AttachmentsFramework from "attachments-framework"
+// END_FEATURE direct_upload
+
 import "bootstrap"
 import "bootstrap-icons/font/bootstrap-icons.css"
 
 const MainVueApp = {
   install: (app, options) => {
     app.config.compilerOptions.whitespace = "preserve"
+
+    // START_FEATURE direct_upload
+    // Registers <attachment-manager>, <attachment-uploader>, and <attachment-table>
+    app.use(AttachmentsFramework)
+    // END_FEATURE direct_upload
 
     for (const componentName in components) {
       const component = components[componentName]

@@ -25,6 +25,9 @@ urlpatterns = [
     path("oauth/", include("social_django.urls", namespace="social")),
     path('', include("common.urls")),
     path('', include("app.urls")),
+    # START_FEATURE direct_upload
+    path("attachments/", include("attachments_framework.urls")),
+    # END_FEATURE direct_upload
     # Health check is actually handled by the HealthCheckMiddleware
     path("health-check/", lambda request: HttpResponse("ok"), name=HEALTH_CHECK_URL_NAME),
 ]
