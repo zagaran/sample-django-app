@@ -1,0 +1,70 @@
+
+name: Build and deploy application
+run-name: Deploy to ${{ inputs.environment }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: environment to deploy to
+        default: staging
+        options:
+          - staging
+      skip_migration:
+        description: skip migrating data?
+        type: boolean
+        default: false
+
+permissions:
+  id-token: write
+  contents: read
+concurrency:
+  group: ${{ inputs.environment }}
+jobs:
+  container-job:
+    name: Build and deploy application
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.11]
+    steps:
+      - name: Git clone the repository
+        uses: actions/checkout@v6
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Configure AWS credentials
+        id: aws-credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-east-1
+          role-to-assume: ${{ vars.AWS_ROLE_TO_ASSUME }}
+      - name: Create AWS profile
+        run: |
+          aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile ${{ vars.AWS_PROFILE_NAME }}
+          aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile ${{ vars.AWS_PROFILE_NAME }}
+          aws configure set aws_session_token ${{ env.AWS_SESSION_TOKEN }} --profile ${{ vars.AWS_PROFILE_NAME }}
+      - name: Check Profile
+        run: aws sts get-caller-identity --profile ${{ vars.AWS_PROFILE_NAME }}
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: 1.15.4
+      - name: Terraform init
+        working-directory: ./terraform/envs/${{inputs.environment}}
+        run: |
+          terraform init
+          terraform refresh
+      - name: Install python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install boto3 pygit2
+      - name: Set up Docker Buildx builder
+        run: |
+          docker buildx create --name containerd-builder --driver docker-container --use || true
+          docker buildx inspect --bootstrap
+      - name: Build and deploy image to ${{ inputs.environment }}
+        run: python deploy.py ${{ inputs.environment }} ${{ inputs.skip_migration && '--skip-migration' || '' }} --no-input --profile ${{ vars.AWS_PROFILE_NAME }} --use-remote-cache
