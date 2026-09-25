@@ -11,8 +11,9 @@ const DEST_LOCATION = "static/js/dist"
 
 // START_FEATURE direct_upload
 // The Vue sources ship inside the installed django-attachments-framework Python package
+// TODO: remove this when development is done
 const ATTACHMENTS_FRAMEWORK_LOCATION = execSync(
-  `${process.env.PYTHON || "python"} -c "import attachments_framework, os; print(os.path.join(os.path.dirname(attachments_framework.__file__), 'frontend'))"`,
+  `${process.env.PYTHON || "uv run python"} -c "import attachments_framework, os; print(os.path.join(os.path.dirname(attachments_framework.__file__), 'frontend'))"`,
 )
   .toString()
   .trim()
