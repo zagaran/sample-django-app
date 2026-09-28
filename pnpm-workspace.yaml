@@ -1,0 +1,7 @@
+allowBuilds:
+  core-js: false
+  esbuild: false
+  fsevents: false
+  inferno: false
+  phantomjs-prebuilt: false
+  snyk: false

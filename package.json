@@ -1,6 +1,7 @@
 {
   "name": "sample-django-app",
   "version": "0.1.0",
+  "packageManager": "pnpm@11.25.0",
   "private": true,
   "dependencies": {
     "@babel/plugin-transform-react-jsx": "~7.16.7",
@@ -17,13 +18,10 @@
     "webpack-bundle-tracker": "^0.4.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "vue-dev": "vite build --watch --mode development",
-    "vue-build": "vite build",
-    "vue-preview": "vite preview"
+    "vue:dev": "vite build --watch --mode development",
+    "vue:build": "vite build",
+    "vue:preview": "vite preview",
+    "django:dev": "uv run manage.py runserver_plus 8500"
   },
   "eslintConfig": {
     "extends": [
