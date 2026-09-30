@@ -81,8 +81,6 @@
         <attachment-manager
           :files="{{ attachments|jsonify }}"
           upload-start-url="{% url 'attachments_framework:upload_start' %}"
-          :multiple="true"
-          :auto-proceed="false"
         ></attachment-manager>
       </div>
     </div>

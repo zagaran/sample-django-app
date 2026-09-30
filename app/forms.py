@@ -15,7 +15,7 @@ class SampleObjectBaseForm(CrispyFormMixin, ActionFormMixin, forms.ModelForm):
 
     # START_FEATURE direct_upload
     # `browse` lists every attachment so existing uploads can be selected, not just the ones already attached
-    attachments = AttachmentsField(required=False, browse=True)
+    attachments = AttachmentsField(required=False, browse=True, google_drive=True)
     # END_FEATURE direct_upload
 
     class Meta:
