@@ -55,6 +55,8 @@ env = environ.Env(
 
     # START_FEATURE direct_upload
     AWS_STORAGE_BUCKET_NAME=(str, ""),
+    GOOGLE_DRIVE_API_KEY=(str, ""),
+    GOOGLE_DRIVE_APP_ID=(str, "")
     # END_FEATURE direct_upload
 )
 # If ALLOWED_HOSTS has been configured, then we're running on a server and
@@ -352,6 +354,15 @@ else:
 # Uploads go directly to S3 when the default storage is S3, and are proxied through Django otherwise
 ATTACHMENTS_FRAMEWORK = {
     "PERMISSION_CLASS": "common.permissions.AttachmentPermission",
+    "GOOGLE_DRIVE_API_KEY": env('GOOGLE_DRIVE_API_KEY'),
+    "GOOGLE_DRIVE_APP_ID": "123456789012",
+}
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ["https://www.googleapis.com/auth/drive.file"]
+SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {
+    "access_type": "offline",
+    "prompt": "consent",
+    "include_granted_scopes": "true",
 }
 # END_FEATURE direct_upload
 
