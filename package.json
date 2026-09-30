@@ -18,10 +18,12 @@
     "webpack-bundle-tracker": "^0.4.3"
   },
   "scripts": {
-    "vue:dev": "vite build --watch --mode development",
-    "vue:build": "vite build",
-    "vue:preview": "vite preview",
-    "django:dev": "uv run manage.py runserver_plus 8500"
+    "vite:dev": "vite build --watch --mode development",
+    "vite:build": "vite build",
+    "vite:preview": "vite preview",
+    "django:dev": "uv run manage.py runserver_plus 8500",
+    "celery:dev": "docker compose up -d && uv run celery -A config worker --beat --scheduler redbeat.RedBeatScheduler --loglevel=INFO -Q celery,file_downloads",
+    "flower:dev": "uv run celery -A config flower --port=5555"
   },
   "eslintConfig": {
     "extends": [

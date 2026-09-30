@@ -15,12 +15,7 @@ def safe_deserialize_model(o):
     return apps.get_model(o[0]).objects.get(pk=o[1])
 
 # Allow serialization of django models by pk
-register_type(
-    Model,
-    "model",
-    lambda o: [o._meta.label, o.pk],
-    safe_deserialize_model,
-)
+register_type(Model, "model", lambda o: [o._meta.label, o.pk], safe_deserialize_model)
 
 # Set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')

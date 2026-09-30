@@ -355,7 +355,7 @@ else:
 ATTACHMENTS_FRAMEWORK = {
     "PERMISSION_CLASS": "common.permissions.AttachmentPermission",
     "GOOGLE_DRIVE_API_KEY": env('GOOGLE_DRIVE_API_KEY'),
-    "GOOGLE_DRIVE_APP_ID": "123456789012",
+    "GOOGLE_DRIVE_APP_ID": env("GOOGLE_DRIVE_APP_ID"),
 }
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ["https://www.googleapis.com/auth/drive.file"]
