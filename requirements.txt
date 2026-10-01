@@ -143,7 +143,7 @@ pygments==2.20.0
     # via
     #   ipython
     #   ipython-pygments-lexers
-pyjwt[crypto]==2.13.0
+pyjwt[crypto]==2.15.0
     # via
     #   pyjwt
     #   social-auth-core
