@@ -4,6 +4,8 @@ from django.shortcuts import redirect, render
 from django.views.generic.base import TemplateView, View
 from django.http.response import HttpResponse
 # START_FEATURE crispy_forms
+from django.contrib import messages
+from django.urls import reverse_lazy
 from django.views.generic.edit import FormView
 from common.forms import SampleForm
 # END_FEATURE crispy_forms
@@ -55,6 +57,13 @@ class DjangoReactView(TemplateView):
 class SampleFormView(FormView):
     # TODO: delete me; this is just a reference example
     form_class = SampleForm
+    template_name = "common/sample_form.html"
+    success_url = reverse_lazy("sample_form")
+
+    def form_valid(self, form):
+        # This is where submitted data would be saved, e.g. form.save() for a ModelForm
+        messages.success(self.request, "Sample form submitted")
+        return super().form_valid(form)
 # END_FEATURE crispy_forms
 # START_FEATURE reports
 class SampleReportView(TemplateView):
