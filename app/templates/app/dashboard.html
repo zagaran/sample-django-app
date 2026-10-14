@@ -81,6 +81,7 @@
         <attachment-manager
           :files="{{ attachments|jsonify }}"
           upload-start-url="{% url 'attachments_framework:upload_start' %}"
+          :extract-zips="true"
         ></attachment-manager>
       </div>
     </div>

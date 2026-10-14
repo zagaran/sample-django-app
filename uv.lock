@@ -625,7 +625,6 @@ wheels = [
 
 [[package]]
 name = "django-attachments-framework"
-version = "0.1.0"
 source = { editable = "../django-attachments-framework" }
 dependencies = [
     { name = "django" },

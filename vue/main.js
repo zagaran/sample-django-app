@@ -3,7 +3,7 @@ import components from "./components"
 import directives from "./directives"
 
 // START_FEATURE direct_upload
-import AttachmentsFramework from "attachments-framework"
+import AttachmentsFramework from "django-attachments-framework"
 // END_FEATURE direct_upload
 
 import "bootstrap"

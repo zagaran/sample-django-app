@@ -2,22 +2,9 @@
 import { defineConfig } from "vite"
 import vue from "@vitejs/plugin-vue"
 import { glob } from "glob"
-// START_FEATURE direct_upload
-import { execSync } from "node:child_process"
-// END_FEATURE direct_upload
 
 const SRC_LOCATION = "vue/pages"
 const DEST_LOCATION = "static/js/dist"
-
-// START_FEATURE direct_upload
-// The Vue sources ship inside the installed django-attachments-framework Python package
-// TODO: remove this when development is done
-const ATTACHMENTS_FRAMEWORK_LOCATION = execSync(
-  `${process.env.PYTHON || "uv run python"} -c "import attachments_framework, os; print(os.path.join(os.path.dirname(attachments_framework.__file__), 'frontend'))"`,
-)
-  .toString()
-  .trim()
-// END_FEATURE direct_upload
 
 export default defineConfig(({ mode }) => {
   const DEVELOPMENT = mode === "development"
@@ -25,14 +12,10 @@ export default defineConfig(({ mode }) => {
     plugins: [vue()],
     base: "/" + DEST_LOCATION,
     resolve: {
-      alias: [
-        { find: /^vue$/, replacement: "vue/dist/vue.esm-bundler.js" },
-        // START_FEATURE direct_upload
-        { find: "attachments-framework", replacement: ATTACHMENTS_FRAMEWORK_LOCATION },
-        // END_FEATURE direct_upload
-      ],
+      alias: [{ find: /^vue$/, replacement: "vue/dist/vue.esm-bundler.js" }],
       // START_FEATURE direct_upload
-      // The attachments sources live outside this project, so make sure they use this project's copy of Vue
+      // django-attachments-framework is linked from a local checkout (see package.json), whose node_modules has its
+      // own copy of Vue; make sure it uses this project's. Not needed once it is installed from npm.
       dedupe: ["vue"],
       // END_FEATURE direct_upload
     },
@@ -40,7 +23,6 @@ export default defineConfig(({ mode }) => {
       sourcemap: true,
       emptyOutDir: DEVELOPMENT,
       outDir: DEST_LOCATION,
-      minify: DEVELOPMENT ? false : "terser",
       rollupOptions: {
         input: glob.sync(`${SRC_LOCATION}/**/*.js`),
         preserveEntrySignatures: true,
@@ -50,6 +32,12 @@ export default defineConfig(({ mode }) => {
               // These files are imported by path and must be chunked individually
               return id.split("vue/")[1].split(".js")[0]
             }
+            // START_FEATURE direct_upload
+            if (id.includes("@zip.js")) {
+              // Lazy-loaded by django-attachments-framework when a zip is added; keep it in its own chunk
+              return
+            }
+            // END_FEATURE direct_upload
             // otherwise, add to combined chunk
             return "vue/main"
           },

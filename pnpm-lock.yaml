@@ -20,6 +20,9 @@ importers:
       bootstrap-icons:
         specifier: ^1.13.1
         version: 1.13.1
+      django-attachments-framework:
+        specifier: link:../django-attachments-framework
+        version: link:../django-attachments-framework
       django-react-loader:
         specifier: ^0.1.7
         version: 0.1.7
