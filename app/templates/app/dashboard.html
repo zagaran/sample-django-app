@@ -1,5 +1,8 @@
 {% extends "base_templates/base.html" %}
 {% load vue %}
+{# START_FEATURE direct_upload #}
+{% load attachments_framework %}
+{# END_FEATURE direct_upload #}
 
 
 {% block title %}Dashboard{% endblock %}
@@ -48,6 +51,11 @@
                   {% for attachment in sample_object.get_attachments %}
                   <span class="badge bg-info">{{ attachment.name }}</span>
                   {% endfor %}
+                  {% for sub_object in sample_object.sub_objects.all %}
+                  {% if sub_object.active_attachment %}
+                  <span class="badge bg-secondary" title="Sub Object attachment">{{ sub_object.attachment.name }}</span>
+                  {% endif %}
+                  {% endfor %}
                 </td>
                 <td>
                   <div class="d-flex gap-2">
@@ -78,11 +86,7 @@
     <div class="my-4 card">
       <div class="card-body">
         <h3 class="card-title">All Attachments</h3>
-        <attachment-manager
-          :files="{{ attachments|jsonify }}"
-          upload-start-url="{% url 'attachments_framework:upload_start' %}"
-          :extract-zips="true"
-        ></attachment-manager>
+        {% attachment_manager files=attachments google_drive=True extract_zips=True %}
       </div>
     </div>
     {# END_FEATURE direct_upload #}

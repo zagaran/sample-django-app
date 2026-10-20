@@ -44,9 +44,77 @@
     <div class="card-body">
       <h4 class="card-title">Attachments</h4>
       {# Lists this object's attachments; new uploads are linked to it #}
-      {% attachment_manager sample_object auto_proceed=False google_drive=True %}
+      {% attachment_manager sample_object auto_proceed=False google_drive=True extract_zips=True %}
     </div>
   </div>
   {# END_FEATURE direct_upload #}
+
+  <div class="my-4 card">
+    <div class="card-body">
+      <div class="d-flex gap-3">
+        <h4 class="card-title">Sub Objects</h4>
+        <a href="{% url 'sample-sub-object-create' sample_object.id %}">
+          <button class="btn btn-sm btn-success">
+            <i class="bi bi-plus"></i> Create
+          </button>
+        </a>
+      </div>
+      <div class="my-2">
+        {% if sub_objects %}
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Description</th>
+              {# START_FEATURE direct_upload #}
+              <th>Attachment</th>
+              {# END_FEATURE direct_upload #}
+              <th>Created By</th>
+              <th>Created On</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for sub_object in sub_objects %}
+            <tr>
+              <td style="white-space: pre-wrap">{{ sub_object.description }}</td>
+              {# START_FEATURE direct_upload #}
+              <td>
+                {% with attachment=sub_object.active_attachment %}
+                {% if attachment %}
+                <a href="{{ attachment.get_view_url }}" target="_blank">{{ attachment.name }}</a>
+                <a href="{{ attachment.get_download_url }}" class="ms-1" title="Download">
+                  <i class="bi bi-download"></i>
+                </a>
+                {% else %}
+                <span class="text-muted">Deleted</span>
+                {% endif %}
+                {% endwith %}
+              </td>
+              {# END_FEATURE direct_upload #}
+              <td>{{ sub_object.created_by }}</td>
+              <td>{{ sub_object.created_on }}</td>
+              <td>
+                <div class="d-flex gap-2">
+                  <a href="{% url 'sample-sub-object-edit' sample_object.id sub_object.id %}">
+                    <button class="btn btn-sm btn-secondary">Edit</button>
+                  </a>
+                  <a href="{% url 'sample-sub-object-delete' sample_object.id sub_object.id %}">
+                    <button class="btn btn-sm btn-danger">Delete</button>
+                  </a>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <div class="alert alert-light">
+          <i class="bi bi-exclamation-square me-2"></i>
+          No Sub Objects
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

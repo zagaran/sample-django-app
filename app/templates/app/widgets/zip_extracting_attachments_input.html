@@ -1,0 +1,20 @@
+{% load attachments_framework %}
+{# attachments_framework/widgets/attachments_input.html, plus `extract-zips` #}
+<attachment-manager
+  id="{{ widget.attrs.id }}"
+  name="{{ attachments.name }}"
+  :files="{{ attachments.files|jsonify }}"
+  :selected="{{ attachments.selected|jsonify }}"
+  upload-start-url="{{ attachments.upload_start_url }}"
+  :multiple="{{ attachments.multiple|jsonify }}"
+  :selectable="true"
+  :required="{{ attachments.required|jsonify }}"
+  :allowed-file-types="{{ attachments.allowed_file_types|jsonify }}"
+  :max-file-size="{{ attachments.max_file_size|jsonify }}"
+  :max-number-of-files="{{ attachments.max_number_of_files|jsonify }}"
+  :relations="{{ attachments.relations|jsonify }}"
+  :google-drive-config-url="{{ attachments.google_drive_config_url|jsonify }}"
+  :google-drive-import-url="{{ attachments.google_drive_import_url|jsonify }}"
+  :extract-zips="true"
+>
+</attachment-manager>
