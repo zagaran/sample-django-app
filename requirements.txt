@@ -113,7 +113,7 @@ libsass==0.23.0
     # via -r requirements.in
 matplotlib-inline==0.2.2
     # via ipython
-oauthlib==3.3.1
+oauthlib==4.0.0
     # via
     #   requests-oauthlib
     #   social-auth-core
